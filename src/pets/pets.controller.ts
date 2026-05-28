@@ -1,0 +1,41 @@
+import { Controller, Get, Post, Patch, Delete, Body, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { PetsService } from './pets.service';
+import { CreatePetDto } from './dto/create-pet.dto';
+import { UpdatePetDto } from './dto/update-pet.dto';
+import { JwtGuard } from '../auth/guards/jwt.guard';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+
+@UseGuards(JwtGuard)
+@Controller('pets')
+export class PetsController {
+  constructor(private readonly petsService: PetsService) {}
+
+  @Post()
+  create(@GetUser('id') userId: number, @Body() dto: CreatePetDto) {
+    return this.petsService.create(userId, dto);
+  }
+
+  @Get()
+  findAll(@GetUser('id') userId: number) {
+    return this.petsService.findAllByUser(userId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
+    return this.petsService.findOne(id, userId);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('id') userId: number,
+    @Body() dto: UpdatePetDto,
+  ) {
+    return this.petsService.update(id, userId, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
+    return this.petsService.remove(id, userId);
+  }
+}

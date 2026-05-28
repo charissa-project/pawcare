@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  USER
+}
+
+enum AppointmentStatus {
+  PENDING
+  APPROVED
+  COMPLETED
+  CANCELLED
+}
+
+enum ProductCategory {
+  MAKANAN
+  SUPLEMEN
+  GROOMING
+  AKSESORIS
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  fullname  String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor   Doctor?
+  pets     Pet[]
+  orders   Order[]
+  posts    Post[]
+  comments Comment[]
+}
+
+model Doctor {
+  id             Int     @id @default(autoincrement())
+  userId         Int     @unique
+  specialization String
+  experience     Int
+  schedule       String
+  rating         Float?
+  isAvailable    Boolean @default(true)
+
+  user           User          @relation(fields: [userId], references: [id])
+  appointments   Appointment[]
+  medicalRecords MedicalRecord[]
+}
+
+model Pet {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  name         String
+  species      String
+  breed        String
+  age          Int
+  gender       String
+  weight       Float
+  healthStatus String
+  lastVaccine  DateTime?
+  nextVaccine  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  owner          User            @relation(fields: [userId], references: [id])
+  appointments   Appointment[]
+  medicalRecords MedicalRecord[]
+  reminders      Reminder[]
+}
+
+model Appointment {
+  id              Int               @id @default(autoincrement())
+  petId           Int
+  doctorId        Int
+  appointmentDate DateTime
+  type            String            // "VIDEO_CALL" | "CHAT"
+  consultationFee Float?
+  status          AppointmentStatus @default(PENDING)
+
+  pet    Pet    @relation(fields: [petId], references: [id])
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model MedicalRecord {
+  id        Int      @id @default(autoincrement())
+  petId     Int
+  doctorId  Int
+  diagnosis String
+  treatment String
+  notes     String?
+  createdAt DateTime @default(now())
+
+  pet    Pet    @relation(fields: [petId], references: [id])
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model Reminder {
+  id           Int      @id @default(autoincrement())
+  petId        Int
+  title        String
+  type         String   // "VACCINE" | "MEDICINE" | "CONSULTATION"
+  reminderDate DateTime
+  isDone       Boolean  @default(false)
+
+  pet Pet @relation(fields: [petId], references: [id])
+}
+
+model Product {
+  id          Int             @id @default(autoincrement())
+  name        String
+  price       Float
+  category    ProductCategory
+  description String?
+  createdAt   DateTime        @default(now())
+
+  orderItems OrderItem[]
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  totalPrice Float
+  status     String   // "PENDING" | "SHIPPED" | "DELIVERED"
+  createdAt  DateTime @default(now())
+
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        Int   @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  content   String   @db.Text
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  userId    Int
+  content   String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}

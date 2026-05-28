@@ -1,0 +1,73 @@
+{
+  "users": [
+    {
+      "id": 4,
+      "fullname": "Charissa",
+      "email": "charissa@gmail.com",
+      "password": "$2b$10$QajnOW7ck3tUaS8MmWXGAOD1z6qZMynzKRa6R4RjlWIc4zVwaqGPm",
+      "role": "USER",
+      "createdAt": "2026-05-26T15:02:21.712Z",
+      "updatedAt": "2026-05-26T15:02:21.712Z"
+    },
+    {
+      "id": 5,
+      "fullname": "Admin",
+      "email": "admin1@gmail.com",
+      "password": "$2b$10$6eL7llngrGCjXG/MNq7X2O3nGbImod2d/E5i1At7i0/yR7tnMtPUq",
+      "role": "ADMIN",
+      "createdAt": "2026-05-26T15:02:55.935Z",
+      "updatedAt": "2026-05-26T15:02:55.935Z"
+    },
+    {
+      "id": 6,
+      "fullname": "Sarah Ahmad",
+      "email": "sarah@gmail.com",
+      "password": "$2b$10$0C/5PqTWwPKWw4I1.EENceJPR/rjC5lP7vfxeUoyUQbkvnD5EtGgu",
+      "role": "DOCTOR",
+      "createdAt": "2026-05-26T15:06:19.524Z",
+      "updatedAt": "2026-05-26T15:06:19.524Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Royal Canin Cat Food",
+      "price": 150000,
+      "category": "MAKANAN",
+      "description": "Makanan kucing premium",
+      "createdAt": "2026-05-27T13:01:36.502Z"
+    },
+    {
+      "id": 2,
+      "name": "Vitamin Kucing",
+      "price": 85000,
+      "category": "SUPLEMEN",
+      "description": "Vitamin kucing",
+      "createdAt": "2026-05-27T13:02:26.948Z"
+    },
+    {
+      "id": 3,
+      "name": "Kalung Custom Nama",
+      "price": 20000,
+      "category": "AKSESORIS",
+      "description": "Kalung nama untuk kucing yang bisa di custom",
+      "createdAt": "2026-05-27T13:03:08.358Z"
+    },
+    {
+      "id": 4,
+      "name": "Me-o Creamy Treats",
+      "price": 55000,
+      "category": "MAKANAN",
+      "description": "Makanan atau snack kucing",
+      "createdAt": "2026-05-27T13:04:14.913Z"
+    },
+    {
+      "id": 5,
+      "name": "Whiskas",
+      "price": 60000,
+      "category": "MAKANAN",
+      "description": "Makanan kucing",
+      "createdAt": "2026-05-27T13:04:36.379Z"
+    }
+  ]
+}

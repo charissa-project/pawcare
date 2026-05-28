@@ -1,0 +1,94 @@
+import { PostsService } from './posts.service';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { Role } from '@prisma/client';
+export declare class PostsController {
+    private readonly postsService;
+    constructor(postsService: PostsService);
+    create(userId: number, dto: CreatePostDto): Promise<{
+        user: {
+            id: number;
+            fullname: string;
+        };
+    } & {
+        id: number;
+        createdAt: Date;
+        userId: number;
+        content: string;
+        likes: number;
+    }>;
+    findAll(): Promise<({
+        comments: ({
+            user: {
+                id: number;
+                fullname: string;
+            };
+        } & {
+            id: number;
+            createdAt: Date;
+            userId: number;
+            content: string;
+            postId: number;
+        })[];
+        user: {
+            id: number;
+            fullname: string;
+        };
+    } & {
+        id: number;
+        createdAt: Date;
+        userId: number;
+        content: string;
+        likes: number;
+    })[]>;
+    findOne(id: number): Promise<{
+        comments: ({
+            user: {
+                id: number;
+                fullname: string;
+            };
+        } & {
+            id: number;
+            createdAt: Date;
+            userId: number;
+            content: string;
+            postId: number;
+        })[];
+        user: {
+            id: number;
+            fullname: string;
+        };
+    } & {
+        id: number;
+        createdAt: Date;
+        userId: number;
+        content: string;
+        likes: number;
+    }>;
+    update(id: number, userId: number, role: Role, dto: UpdatePostDto): Promise<{
+        user: {
+            id: number;
+            fullname: string;
+        };
+    } & {
+        id: number;
+        createdAt: Date;
+        userId: number;
+        content: string;
+        likes: number;
+    }>;
+    remove(id: number, userId: number, role: Role): Promise<{
+        id: number;
+        createdAt: Date;
+        userId: number;
+        content: string;
+        likes: number;
+    }>;
+    like(id: number): Promise<{
+        id: number;
+        createdAt: Date;
+        userId: number;
+        content: string;
+        likes: number;
+    }>;
+}

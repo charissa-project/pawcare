@@ -1,0 +1,127 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OrdersService = void 0;
+const common_1 = require("@nestjs/common");
+const prisma_service_1 = require("../prisma/prisma.service");
+const client_1 = require("@prisma/client");
+let OrdersService = class OrdersService {
+    prisma;
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+    async create(userId, dto) {
+        let totalPrice = 0;
+        const itemsData = [];
+        for (const item of dto.items) {
+            const product = await this.prisma.product.findUnique({
+                where: { id: item.productId },
+            });
+            if (!product) {
+                throw new common_1.NotFoundException(`Produk ID ${item.productId} tidak ditemukan`);
+            }
+            const subtotal = product.price * item.quantity;
+            totalPrice += subtotal;
+            itemsData.push({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: subtotal,
+            });
+        }
+        return this.prisma.order.create({
+            data: {
+                userId,
+                totalPrice,
+                status: 'PENDING',
+                orderItems: {
+                    create: itemsData,
+                },
+            },
+            include: {
+                orderItems: {
+                    include: {
+                        product: true,
+                    },
+                },
+            },
+        });
+    }
+    async findAllByUser(userId) {
+        return this.prisma.order.findMany({
+            where: { userId },
+            include: {
+                orderItems: { include: { product: true } },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+    async findAll() {
+        return this.prisma.order.findMany({
+            include: {
+                user: { select: { id: true, fullname: true, email: true } },
+                orderItems: { include: { product: true } },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+    async findOne(id, userId, role) {
+        const order = await this.prisma.order.findUnique({
+            where: { id },
+            include: {
+                user: { select: { id: true, fullname: true, email: true } },
+                orderItems: { include: { product: true } },
+            },
+        });
+        if (!order)
+            throw new common_1.NotFoundException('Order tidak ditemukan');
+        const isOwner = order.userId === userId;
+        const isAdmin = role === client_1.Role.ADMIN;
+        if (!isOwner && !isAdmin)
+            throw new common_1.ForbiddenException('Akses ditolak');
+        return order;
+    }
+    async updateStatus(id, status) {
+        const validStatus = ['PENDING', 'SHIPPED', 'DELIVERED'];
+        if (!validStatus.includes(status)) {
+            throw new common_1.BadRequestException('Status tidak valid');
+        }
+        const order = await this.prisma.order.findUnique({ where: { id } });
+        if (!order)
+            throw new common_1.NotFoundException('Order tidak ditemukan');
+        return this.prisma.order.update({
+            where: { id },
+            data: { status },
+            include: {
+                orderItems: { include: { product: true } },
+            },
+        });
+    }
+    async cancel(id, userId) {
+        const order = await this.prisma.order.findUnique({ where: { id } });
+        if (!order)
+            throw new common_1.NotFoundException('Order tidak ditemukan');
+        if (order.userId !== userId)
+            throw new common_1.ForbiddenException('Akses ditolak');
+        if (order.status !== 'PENDING') {
+            throw new common_1.BadRequestException('Order yang sudah diproses tidak bisa dibatalkan');
+        }
+        return this.prisma.order.update({
+            where: { id },
+            data: { status: 'CANCELLED' },
+        });
+    }
+};
+exports.OrdersService = OrdersService;
+exports.OrdersService = OrdersService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], OrdersService);
+//# sourceMappingURL=orders.service.js.map
