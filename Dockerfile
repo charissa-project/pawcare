@@ -11,4 +11,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npm run prisma:deploy && echo 'Starting NestJS...' && node dist/main.js 2>&1"]
+CMD ["node", "dist/main.js"]
