@@ -11,4 +11,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD npm run prisma:deploy && npm run start:prod
+CMD sh -c "npm run prisma:deploy && echo 'Migration done, starting server...' && npm run start:prod"
