@@ -7,14 +7,15 @@ export declare class RemindersController {
     create(userId: number, dto: CreateReminderDto): Promise<{
         id: number;
         petId: number;
-        title: string;
         type: string;
+        title: string;
         reminderDate: Date;
         isDone: boolean;
     }>;
     findAll(userId: number): Promise<({
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -31,40 +32,40 @@ export declare class RemindersController {
     } & {
         id: number;
         petId: number;
-        title: string;
         type: string;
+        title: string;
         reminderDate: Date;
         isDone: boolean;
     })[]>;
     findByPet(petId: number, userId: number): Promise<{
         id: number;
         petId: number;
-        title: string;
         type: string;
+        title: string;
         reminderDate: Date;
         isDone: boolean;
     }[]>;
     update(id: number, userId: number, dto: UpdateReminderDto): Promise<{
         id: number;
         petId: number;
-        title: string;
         type: string;
+        title: string;
         reminderDate: Date;
         isDone: boolean;
     }>;
     markDone(id: number, userId: number): Promise<{
         id: number;
         petId: number;
-        title: string;
         type: string;
+        title: string;
         reminderDate: Date;
         isDone: boolean;
     }>;
     remove(id: number, userId: number): Promise<{
         id: number;
         petId: number;
-        title: string;
         type: string;
+        title: string;
         reminderDate: Date;
         isDone: boolean;
     }>;

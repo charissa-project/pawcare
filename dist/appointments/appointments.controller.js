@@ -22,6 +22,9 @@ const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
+const common_2 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
+const upload_config_1 = require("../common/upload.config");
 let AppointmentsController = class AppointmentsController {
     appointmentsService;
     constructor(appointmentsService) {
@@ -47,6 +50,9 @@ let AppointmentsController = class AppointmentsController {
     }
     cancel(id, userId) {
         return this.appointmentsService.cancel(id, userId);
+    }
+    uploadPhoto(id, userId, file) {
+        return this.appointmentsService.updatePhoto(id, userId, file);
     }
 };
 exports.AppointmentsController = AppointmentsController;
@@ -111,6 +117,16 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], AppointmentsController.prototype, "cancel", null);
+__decorate([
+    (0, common_1.Patch)(':id/photo'),
+    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, get_user_decorator_1.GetUser)('id')),
+    __param(2, (0, common_2.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:returntype", void 0)
+], AppointmentsController.prototype, "uploadPhoto", null);
 exports.AppointmentsController = AppointmentsController = __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('appointments'),

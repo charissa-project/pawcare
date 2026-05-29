@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
@@ -26,4 +27,22 @@ export class UsersService {
       data: users,
     };
   }
+
+  async updatePhoto(userId: number, file: Express.Multer.File) {
+  if (!file) throw new BadRequestException('File tidak ditemukan');
+
+  const photoUrl = `/uploads/${file.filename}`;
+
+  const user = await this.prisma.user.update({
+    where: { id: userId },
+    data: { photoUrl },
+  });
+
+  return {
+    success: true,
+    message: 'Foto profil berhasil diupdate',
+    data: { photoUrl: user.photoUrl },
+  };
+}
+
 }

@@ -8,18 +8,23 @@ import { Role } from '@prisma/client';
 export class PostsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: number, dto: CreatePostDto) {
-    return this.prisma.post.create({
-      data: {
-        content: dto.content,
-        userId,
-      },
-      include: {
-        user: { select: { id: true, fullname: true } },
-        comments: false,
-      },
-    });
-  }
+ async create(userId: number, dto: CreatePostDto, file?: Express.Multer.File) {
+  const imageUrl = file ? `/uploads/${file.filename}` : null;
+
+  const post = await this.prisma.post.create({
+    data: {
+      userId,
+      content: dto.content,
+      imageUrl,
+    },
+  });
+
+  return {
+    success: true,
+    message: 'Post berhasil dibuat',
+    data: post,
+  };
+}
 
   // semua post (feed komunitas)
   async findAll() {

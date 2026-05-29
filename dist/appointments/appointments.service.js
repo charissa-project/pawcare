@@ -13,6 +13,7 @@ exports.AppointmentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const client_1 = require("@prisma/client");
+const common_2 = require("@nestjs/common");
 let AppointmentsService = class AppointmentsService {
     prisma;
     constructor(prisma) {
@@ -125,6 +126,28 @@ let AppointmentsService = class AppointmentsService {
             where: { id },
             data: { status: 'CANCELLED' },
         });
+    }
+    async updatePhoto(id, userId, file) {
+        if (!file)
+            throw new common_2.BadRequestException('File tidak ditemukan');
+        const appointment = await this.prisma.appointment.findFirst({
+            where: {
+                id,
+                pet: { userId },
+            },
+        });
+        if (!appointment)
+            throw new common_1.NotFoundException('Appointment tidak ditemukan');
+        const photoUrl = `/uploads/${file.filename}`;
+        const updated = await this.prisma.appointment.update({
+            where: { id },
+            data: { photoUrl },
+        });
+        return {
+            success: true,
+            message: 'Foto gejala berhasil diupload',
+            data: { photoUrl: updated.photoUrl },
+        };
     }
 };
 exports.AppointmentsService = AppointmentsService;

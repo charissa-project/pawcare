@@ -34,7 +34,6 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(client_1.Role),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "role", void 0);

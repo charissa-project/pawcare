@@ -6,6 +6,7 @@ export declare class PetsService {
     constructor(prisma: PrismaService);
     create(userId: number, dto: CreatePetDto): Promise<{
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -21,6 +22,7 @@ export declare class PetsService {
     }>;
     findAllByUser(userId: number): Promise<{
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -43,6 +45,7 @@ export declare class PetsService {
                     password: string;
                     role: import("@prisma/client").$Enums.Role;
                     id: number;
+                    photoUrl: string | null;
                     createdAt: Date;
                     updatedAt: Date;
                 };
@@ -67,13 +70,14 @@ export declare class PetsService {
         reminders: {
             id: number;
             petId: number;
-            title: string;
             type: string;
+            title: string;
             reminderDate: Date;
             isDone: boolean;
         }[];
     } & {
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -89,6 +93,7 @@ export declare class PetsService {
     }>;
     update(id: number, userId: number, dto: UpdatePetDto): Promise<{
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -114,6 +119,7 @@ export declare class PetsService {
                         password: string;
                         role: import("@prisma/client").$Enums.Role;
                         id: number;
+                        photoUrl: string | null;
                         createdAt: Date;
                         updatedAt: Date;
                     };
@@ -138,13 +144,14 @@ export declare class PetsService {
             reminders: {
                 id: number;
                 petId: number;
-                title: string;
                 type: string;
+                title: string;
                 reminderDate: Date;
                 isDone: boolean;
             }[];
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -157,6 +164,11 @@ export declare class PetsService {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+        };
+    }>;
+    updatePhoto(id: number, userId: number, file: Express.Multer.File): Promise<{
+        data: {
+            photoUrl: string | null;
         };
     }>;
 }

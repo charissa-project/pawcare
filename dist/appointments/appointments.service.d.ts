@@ -13,6 +13,7 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -27,6 +28,7 @@ export declare class AppointmentsService {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -42,10 +44,11 @@ export declare class AppointmentsService {
         };
     } & {
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -57,6 +60,7 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -76,11 +80,13 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -96,10 +102,11 @@ export declare class AppointmentsService {
         };
     } & {
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -111,6 +118,7 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -125,6 +133,7 @@ export declare class AppointmentsService {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -140,10 +149,11 @@ export declare class AppointmentsService {
         };
     } & {
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -155,6 +165,7 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -174,11 +185,13 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -194,10 +207,11 @@ export declare class AppointmentsService {
         };
     } & {
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -209,6 +223,7 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -228,11 +243,13 @@ export declare class AppointmentsService {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -248,29 +265,39 @@ export declare class AppointmentsService {
         };
     } & {
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
     updateStatus(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
     cancel(id: number, userId: number): Promise<{
         id: number;
+        photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+    }>;
+    updatePhoto(id: number, userId: number, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            photoUrl: string | null;
+        };
     }>;
 }

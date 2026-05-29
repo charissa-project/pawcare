@@ -9,6 +9,9 @@ import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role, ProductCategory } from '@prisma/client';
+import { UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from '../common/upload.config';
 
 @Controller('products')
 export class ProductsController {
@@ -47,4 +50,18 @@ export class ProductsController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
   }
+
+  // tambahkan endpoint ini di dalam class ProductsController yang sudah ada
+
+@Patch(':id/photo')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.ADMIN)
+@UseInterceptors(FileInterceptor('image', multerConfig))
+uploadPhoto(
+  @Param('id', ParseIntPipe) id: number,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  return this.productsService.updatePhoto(id, file);
+}
+
 }

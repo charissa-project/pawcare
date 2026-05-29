@@ -5,17 +5,17 @@ import { Role } from '@prisma/client';
 export declare class PostsService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(userId: number, dto: CreatePostDto): Promise<{
-        user: {
-            fullname: string;
+    create(userId: number, dto: CreatePostDto, file?: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
             id: number;
+            createdAt: Date;
+            userId: number;
+            imageUrl: string | null;
+            content: string;
+            likes: number;
         };
-    } & {
-        id: number;
-        createdAt: Date;
-        userId: number;
-        content: string;
-        likes: number;
     }>;
     findAll(): Promise<({
         comments: ({
@@ -38,6 +38,7 @@ export declare class PostsService {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     })[]>;
@@ -62,6 +63,7 @@ export declare class PostsService {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;
@@ -74,6 +76,7 @@ export declare class PostsService {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;
@@ -81,6 +84,7 @@ export declare class PostsService {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;
@@ -88,6 +92,7 @@ export declare class PostsService {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;

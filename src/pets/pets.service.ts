@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class PetsService {
@@ -69,4 +70,18 @@ export class PetsService {
     data: pet,
   };
 }
+
+async updatePhoto(id: number, userId: number, file: Express.Multer.File) {
+  if (!file) throw new BadRequestException('File tidak ditemukan');
+
+  const photoUrl = `/uploads/${file.filename}`;
+
+  const updated = await this.prisma.pet.update({
+    where: { id },
+    data: { photoUrl },
+  });
+
+  return { data: { photoUrl: updated.photoUrl } };
+}
+
 }

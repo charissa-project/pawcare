@@ -13,6 +13,7 @@ export declare class MedicalRecordsController {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -27,6 +28,7 @@ export declare class MedicalRecordsController {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -57,6 +59,7 @@ export declare class MedicalRecordsController {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -71,6 +74,7 @@ export declare class MedicalRecordsController {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -101,6 +105,7 @@ export declare class MedicalRecordsController {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -130,6 +135,7 @@ export declare class MedicalRecordsController {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -149,11 +155,13 @@ export declare class MedicalRecordsController {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
@@ -184,6 +192,7 @@ export declare class MedicalRecordsController {
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -198,6 +207,7 @@ export declare class MedicalRecordsController {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;

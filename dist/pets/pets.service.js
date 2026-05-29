@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PetsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const common_2 = require("@nestjs/common");
 let PetsService = class PetsService {
     prisma;
     constructor(prisma) {
@@ -71,6 +72,16 @@ let PetsService = class PetsService {
             message: 'Data pet berhasil dihapus',
             data: pet,
         };
+    }
+    async updatePhoto(id, userId, file) {
+        if (!file)
+            throw new common_2.BadRequestException('File tidak ditemukan');
+        const photoUrl = `/uploads/${file.filename}`;
+        const updated = await this.prisma.pet.update({
+            where: { id },
+            data: { photoUrl },
+        });
+        return { data: { photoUrl: updated.photoUrl } };
     }
 };
 exports.PetsService = PetsService;

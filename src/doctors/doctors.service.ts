@@ -66,8 +66,18 @@ export class DoctorsService{
    const doctors=
    await this.prisma.doctor.findMany({
 
-      include:{
-         user:true
+      select:{
+        id:true,
+        userId:true,
+        specialization:true,
+        experience:true,
+        schedule:true,
+        user:{
+          select:{
+            fullname:true,
+            email:true,
+          }
+        }
       }
 
    })

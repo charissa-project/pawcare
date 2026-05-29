@@ -19,24 +19,16 @@ export declare class DoctorsService {
     findAll(): Promise<{
         success: boolean;
         message: string;
-        data: ({
+        data: {
             user: {
                 fullname: string;
                 email: string;
-                password: string;
-                role: import("@prisma/client").$Enums.Role;
-                id: number;
-                createdAt: Date;
-                updatedAt: Date;
             };
-        } & {
             id: number;
             userId: number;
             specialization: string;
             experience: number;
             schedule: string;
-            rating: number | null;
-            isAvailable: boolean;
-        })[];
+        }[];
     }>;
 }

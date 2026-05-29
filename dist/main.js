@@ -5,6 +5,7 @@ const app_module_1 = require("./app.module");
 const http_exception_filter_1 = require("./common/filters/http-exception.filter");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const path_1 = require("path");
 require("dotenv/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
@@ -13,6 +14,9 @@ async function bootstrap() {
         whitelist: true,
         transform: true
     }));
+    app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), {
+        prefix: '/uploads',
+    });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('PawCare API')
         .setDescription('API documentation for PawCare')
@@ -21,6 +25,7 @@ async function bootstrap() {
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);
+    app.enableCors();
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

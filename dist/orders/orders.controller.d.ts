@@ -13,6 +13,7 @@ export declare class OrdersController {
                 price: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
+                imageUrl: string | null;
             };
         } & {
             id: number;
@@ -37,6 +38,7 @@ export declare class OrdersController {
                 price: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
+                imageUrl: string | null;
             };
         } & {
             id: number;
@@ -66,6 +68,7 @@ export declare class OrdersController {
                 price: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
+                imageUrl: string | null;
             };
         } & {
             id: number;
@@ -95,6 +98,7 @@ export declare class OrdersController {
                 price: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
+                imageUrl: string | null;
             };
         } & {
             id: number;
@@ -119,6 +123,7 @@ export declare class OrdersController {
                 price: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
+                imageUrl: string | null;
             };
         } & {
             id: number;

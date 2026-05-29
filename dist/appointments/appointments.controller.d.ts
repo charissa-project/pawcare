@@ -8,11 +8,12 @@ export declare class AppointmentsController {
     create(userId: number, dto: CreateAppointmentDto): Promise<{
         doctor: {
             user: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -27,10 +28,10 @@ export declare class AppointmentsController {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
-            userId: number;
             species: string;
             breed: string;
             age: number;
@@ -39,24 +40,27 @@ export declare class AppointmentsController {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+            userId: number;
         };
     } & {
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
     }>;
     findAll(): Promise<({
         doctor: {
             user: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -71,20 +75,21 @@ export declare class AppointmentsController {
         };
         pet: {
             owner: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
-            userId: number;
             species: string;
             breed: string;
             age: number;
@@ -93,24 +98,27 @@ export declare class AppointmentsController {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+            userId: number;
         };
     } & {
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
     })[]>;
     findMine(userId: number): Promise<({
         doctor: {
             user: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -125,10 +133,10 @@ export declare class AppointmentsController {
         };
         pet: {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
-            userId: number;
             species: string;
             breed: string;
             age: number;
@@ -137,24 +145,27 @@ export declare class AppointmentsController {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+            userId: number;
         };
     } & {
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
     })[]>;
     findByDoctor(userId: number): Promise<({
         doctor: {
             user: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -169,20 +180,21 @@ export declare class AppointmentsController {
         };
         pet: {
             owner: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
-            userId: number;
             species: string;
             breed: string;
             age: number;
@@ -191,24 +203,27 @@ export declare class AppointmentsController {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+            userId: number;
         };
     } & {
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
     })[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
         doctor: {
             user: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
@@ -223,20 +238,21 @@ export declare class AppointmentsController {
         };
         pet: {
             owner: {
+                id: number;
                 fullname: string;
                 email: string;
                 password: string;
                 role: import("@prisma/client").$Enums.Role;
-                id: number;
+                photoUrl: string | null;
                 createdAt: Date;
                 updatedAt: Date;
             };
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
-            userId: number;
             species: string;
             breed: string;
             age: number;
@@ -245,32 +261,43 @@ export declare class AppointmentsController {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+            userId: number;
         };
     } & {
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
     }>;
     updateStatus(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
     }>;
     cancel(id: number, userId: number): Promise<{
         id: number;
-        petId: number;
-        doctorId: number;
-        type: string;
+        photoUrl: string | null;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        petId: number;
+        doctorId: number;
+    }>;
+    uploadPhoto(id: number, userId: number, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            photoUrl: string | null;
+        };
     }>;
 }

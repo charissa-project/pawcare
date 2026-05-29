@@ -1,9 +1,15 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller, Get, Post, Patch, Delete,
+  Body, Param, ParseIntPipe, UseGuards,
+  UseInterceptors, UploadedFile,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
+import { multerConfig } from '../common/upload.config';
 
 @UseGuards(JwtGuard)
 @Controller('pets')
@@ -37,5 +43,16 @@ export class PetsController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
     return this.petsService.remove(id, userId);
+  }
+
+  // upload foto hewan
+  @Patch(':id/photo')
+  @UseInterceptors(FileInterceptor('photo', multerConfig))
+  uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('id') userId: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.petsService.updatePhoto(id, userId, file);
   }
 }

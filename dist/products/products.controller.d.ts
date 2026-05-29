@@ -12,6 +12,7 @@ export declare class ProductsController {
         price: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
+        imageUrl: string | null;
     }>;
     findAll(category?: ProductCategory): Promise<{
         id: number;
@@ -20,6 +21,7 @@ export declare class ProductsController {
         price: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
+        imageUrl: string | null;
     }[]>;
     findOne(id: number): Promise<{
         id: number;
@@ -28,6 +30,7 @@ export declare class ProductsController {
         price: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
+        imageUrl: string | null;
     }>;
     update(id: number, dto: UpdateProductDto): Promise<{
         id: number;
@@ -36,6 +39,7 @@ export declare class ProductsController {
         price: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
+        imageUrl: string | null;
     }>;
     remove(id: number): Promise<{
         id: number;
@@ -44,5 +48,13 @@ export declare class ProductsController {
         price: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
+        imageUrl: string | null;
+    }>;
+    uploadPhoto(id: number, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            imageUrl: string | null;
+        };
     }>;
 }

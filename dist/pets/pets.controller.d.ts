@@ -6,10 +6,10 @@ export declare class PetsController {
     constructor(petsService: PetsService);
     create(userId: number, dto: CreatePetDto): Promise<{
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
-        userId: number;
         species: string;
         breed: string;
         age: number;
@@ -18,13 +18,14 @@ export declare class PetsController {
         healthStatus: string;
         lastVaccine: Date | null;
         nextVaccine: Date | null;
+        userId: number;
     }>;
     findAll(userId: number): Promise<{
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
-        userId: number;
         species: string;
         breed: string;
         age: number;
@@ -33,16 +34,18 @@ export declare class PetsController {
         healthStatus: string;
         lastVaccine: Date | null;
         nextVaccine: Date | null;
+        userId: number;
     }[]>;
     findOne(id: number, userId: number): Promise<{
         medicalRecords: ({
             doctor: {
                 user: {
+                    id: number;
                     fullname: string;
                     email: string;
                     password: string;
                     role: import("@prisma/client").$Enums.Role;
-                    id: number;
+                    photoUrl: string | null;
                     createdAt: Date;
                     updatedAt: Date;
                 };
@@ -66,18 +69,18 @@ export declare class PetsController {
         })[];
         reminders: {
             id: number;
+            type: string;
             petId: number;
             title: string;
-            type: string;
             reminderDate: Date;
             isDone: boolean;
         }[];
     } & {
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
-        userId: number;
         species: string;
         breed: string;
         age: number;
@@ -86,13 +89,14 @@ export declare class PetsController {
         healthStatus: string;
         lastVaccine: Date | null;
         nextVaccine: Date | null;
+        userId: number;
     }>;
     update(id: number, userId: number, dto: UpdatePetDto): Promise<{
         id: number;
+        photoUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
         name: string;
-        userId: number;
         species: string;
         breed: string;
         age: number;
@@ -101,6 +105,7 @@ export declare class PetsController {
         healthStatus: string;
         lastVaccine: Date | null;
         nextVaccine: Date | null;
+        userId: number;
     }>;
     remove(id: number, userId: number): Promise<{
         success: boolean;
@@ -109,11 +114,12 @@ export declare class PetsController {
             medicalRecords: ({
                 doctor: {
                     user: {
+                        id: number;
                         fullname: string;
                         email: string;
                         password: string;
                         role: import("@prisma/client").$Enums.Role;
-                        id: number;
+                        photoUrl: string | null;
                         createdAt: Date;
                         updatedAt: Date;
                     };
@@ -137,18 +143,18 @@ export declare class PetsController {
             })[];
             reminders: {
                 id: number;
+                type: string;
                 petId: number;
                 title: string;
-                type: string;
                 reminderDate: Date;
                 isDone: boolean;
             }[];
         } & {
             id: number;
+            photoUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
             name: string;
-            userId: number;
             species: string;
             breed: string;
             age: number;
@@ -157,6 +163,12 @@ export declare class PetsController {
             healthStatus: string;
             lastVaccine: Date | null;
             nextVaccine: Date | null;
+            userId: number;
+        };
+    }>;
+    uploadPhoto(id: number, userId: number, file: Express.Multer.File): Promise<{
+        data: {
+            photoUrl: string | null;
         };
     }>;
 }

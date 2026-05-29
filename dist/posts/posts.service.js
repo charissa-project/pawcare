@@ -18,17 +18,20 @@ let PostsService = class PostsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(userId, dto) {
-        return this.prisma.post.create({
+    async create(userId, dto, file) {
+        const imageUrl = file ? `/uploads/${file.filename}` : null;
+        const post = await this.prisma.post.create({
             data: {
-                content: dto.content,
                 userId,
-            },
-            include: {
-                user: { select: { id: true, fullname: true } },
-                comments: false,
+                content: dto.content,
+                imageUrl,
             },
         });
+        return {
+            success: true,
+            message: 'Post berhasil dibuat',
+            data: post,
+        };
     }
     async findAll() {
         return this.prisma.post.findMany({

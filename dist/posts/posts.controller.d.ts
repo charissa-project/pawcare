@@ -5,23 +5,23 @@ import { Role } from '@prisma/client';
 export declare class PostsController {
     private readonly postsService;
     constructor(postsService: PostsService);
-    create(userId: number, dto: CreatePostDto): Promise<{
-        user: {
-            fullname: string;
+    create(userId: number, dto: CreatePostDto, file?: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
             id: number;
+            createdAt: Date;
+            userId: number;
+            imageUrl: string | null;
+            content: string;
+            likes: number;
         };
-    } & {
-        id: number;
-        createdAt: Date;
-        userId: number;
-        content: string;
-        likes: number;
     }>;
     findAll(): Promise<({
         comments: ({
             user: {
-                fullname: string;
                 id: number;
+                fullname: string;
             };
         } & {
             id: number;
@@ -31,21 +31,22 @@ export declare class PostsController {
             postId: number;
         })[];
         user: {
-            fullname: string;
             id: number;
+            fullname: string;
         };
     } & {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     })[]>;
     findOne(id: number): Promise<{
         comments: ({
             user: {
-                fullname: string;
                 id: number;
+                fullname: string;
             };
         } & {
             id: number;
@@ -55,25 +56,27 @@ export declare class PostsController {
             postId: number;
         })[];
         user: {
-            fullname: string;
             id: number;
+            fullname: string;
         };
     } & {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;
     update(id: number, userId: number, role: Role, dto: UpdatePostDto): Promise<{
         user: {
-            fullname: string;
             id: number;
+            fullname: string;
         };
     } & {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;
@@ -81,6 +84,7 @@ export declare class PostsController {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;
@@ -88,6 +92,7 @@ export declare class PostsController {
         id: number;
         createdAt: Date;
         userId: number;
+        imageUrl: string | null;
         content: string;
         likes: number;
     }>;

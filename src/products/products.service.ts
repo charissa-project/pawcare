@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductCategory } from '@prisma/client';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class ProductsService {
@@ -34,4 +35,25 @@ export class ProductsService {
     await this.findOne(id);
     return this.prisma.product.delete({ where: { id } });
   }
+
+  async updatePhoto(id: number, file: Express.Multer.File) {
+  if (!file) throw new BadRequestException('File tidak ditemukan');
+
+  const product = await this.prisma.product.findUnique({ where: { id } });
+  if (!product) throw new NotFoundException('Produk tidak ditemukan');
+
+  const imageUrl = `/uploads/${file.filename}`;
+
+  const updated = await this.prisma.product.update({
+    where: { id },
+    data: { imageUrl },
+  });
+
+  return {
+    success: true,
+    message: 'Foto produk berhasil diupload',
+    data: { imageUrl: updated.imageUrl },
+  };
+}
+
 }

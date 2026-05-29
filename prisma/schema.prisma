@@ -32,6 +32,7 @@ model User {
   email     String   @unique
   password  String
   role      Role     @default(USER)
+  photoUrl  String?  // <-- tambah ini
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -51,13 +52,13 @@ model Doctor {
   rating         Float?
   isAvailable    Boolean @default(true)
 
-  user           User          @relation(fields: [userId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
   appointments   Appointment[]
   medicalRecords MedicalRecord[]
 }
 
 model Pet {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   userId       Int
   name         String
   species      String
@@ -66,10 +67,11 @@ model Pet {
   gender       String
   weight       Float
   healthStatus String
+  photoUrl     String?   // <-- tambah ini
   lastVaccine  DateTime?
   nextVaccine  DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   owner          User            @relation(fields: [userId], references: [id])
   appointments   Appointment[]
@@ -82,8 +84,9 @@ model Appointment {
   petId           Int
   doctorId        Int
   appointmentDate DateTime
-  type            String            // "VIDEO_CALL" | "CHAT"
+  type            String
   consultationFee Float?
+  photoUrl        String?           // <-- tambah ini (foto gejala)
   status          AppointmentStatus @default(PENDING)
 
   pet    Pet    @relation(fields: [petId], references: [id])
@@ -107,7 +110,7 @@ model Reminder {
   id           Int      @id @default(autoincrement())
   petId        Int
   title        String
-  type         String   // "VACCINE" | "MEDICINE" | "CONSULTATION"
+  type         String
   reminderDate DateTime
   isDone       Boolean  @default(false)
 
@@ -120,6 +123,7 @@ model Product {
   price       Float
   category    ProductCategory
   description String?
+  imageUrl    String?         // <-- tambah ini
   createdAt   DateTime        @default(now())
 
   orderItems OrderItem[]
@@ -129,7 +133,7 @@ model Order {
   id         Int      @id @default(autoincrement())
   userId     Int
   totalPrice Float
-  status     String   // "PENDING" | "SHIPPED" | "DELIVERED"
+  status     String
   createdAt  DateTime @default(now())
 
   user       User        @relation(fields: [userId], references: [id])
@@ -151,6 +155,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   userId    Int
   content   String   @db.Text
+  imageUrl  String?  // <-- tambah ini
   likes     Int      @default(0)
   createdAt DateTime @default(now())
 

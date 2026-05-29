@@ -14,19 +14,21 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostsController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const posts_service_1 = require("./posts.service");
 const create_post_dto_1 = require("./dto/create-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
+const upload_config_1 = require("../common/upload.config");
 let PostsController = class PostsController {
     postsService;
     constructor(postsService) {
         this.postsService = postsService;
     }
-    create(userId, dto) {
-        return this.postsService.create(userId, dto);
+    create(userId, dto, file) {
+        return this.postsService.create(userId, dto, file);
     }
     findAll() {
         return this.postsService.findAll();
@@ -48,10 +50,12 @@ exports.PostsController = PostsController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_post_dto_1.CreatePostDto]),
+    __metadata("design:paramtypes", [Number, create_post_dto_1.CreatePostDto, Object]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "create", null);
 __decorate([

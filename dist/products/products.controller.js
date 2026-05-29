@@ -21,6 +21,9 @@ const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const client_1 = require("@prisma/client");
+const common_2 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
+const upload_config_1 = require("../common/upload.config");
 let ProductsController = class ProductsController {
     productsService;
     constructor(productsService) {
@@ -40,6 +43,9 @@ let ProductsController = class ProductsController {
     }
     remove(id) {
         return this.productsService.remove(id);
+    }
+    uploadPhoto(id, file) {
+        return this.productsService.updatePhoto(id, file);
     }
 };
 exports.ProductsController = ProductsController;
@@ -85,6 +91,17 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)(':id/photo'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_2.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], ProductsController.prototype, "uploadPhoto", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])

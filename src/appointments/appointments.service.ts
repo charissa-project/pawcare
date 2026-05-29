@@ -4,6 +4,7 @@ import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Role } from '@prisma/client';
 import { AppointmentStatus } from '@prisma/client';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class AppointmentsService {
@@ -133,4 +134,31 @@ async findAll() {
       data: { status: 'CANCELLED' },
     });
   }
+
+  async updatePhoto(id: number, userId: number, file: Express.Multer.File) {
+  if (!file) throw new BadRequestException('File tidak ditemukan');
+
+  const appointment = await this.prisma.appointment.findFirst({
+    where: {
+      id,
+      pet: { userId },
+    },
+  });
+
+  if (!appointment) throw new NotFoundException('Appointment tidak ditemukan');
+
+  const photoUrl = `/uploads/${file.filename}`;
+
+  const updated = await this.prisma.appointment.update({
+    where: { id },
+    data: { photoUrl },
+  });
+
+  return {
+    success: true,
+    message: 'Foto gejala berhasil diupload',
+    data: { photoUrl: updated.photoUrl },
+  };
+}
+
 }

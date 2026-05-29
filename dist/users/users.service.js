@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const common_2 = require("@nestjs/common");
 let UsersService = class UsersService {
     prisma;
     constructor(prisma) {
@@ -31,6 +32,20 @@ let UsersService = class UsersService {
             success: true,
             message: 'Data user berhasil diambil',
             data: users,
+        };
+    }
+    async updatePhoto(userId, file) {
+        if (!file)
+            throw new common_2.BadRequestException('File tidak ditemukan');
+        const photoUrl = `/uploads/${file.filename}`;
+        const user = await this.prisma.user.update({
+            where: { id: userId },
+            data: { photoUrl },
+        });
+        return {
+            success: true,
+            message: 'Foto profil berhasil diupdate',
+            data: { photoUrl: user.photoUrl },
         };
     }
 };

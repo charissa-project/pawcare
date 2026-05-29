@@ -14,11 +14,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PetsController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const pets_service_1 = require("./pets.service");
 const create_pet_dto_1 = require("./dto/create-pet.dto");
 const update_pet_dto_1 = require("./dto/update-pet.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
+const upload_config_1 = require("../common/upload.config");
 let PetsController = class PetsController {
     petsService;
     constructor(petsService) {
@@ -38,6 +40,9 @@ let PetsController = class PetsController {
     }
     remove(id, userId) {
         return this.petsService.remove(id, userId);
+    }
+    uploadPhoto(id, userId, file) {
+        return this.petsService.updatePhoto(id, userId, file);
     }
 };
 exports.PetsController = PetsController;
@@ -81,6 +86,16 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], PetsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)(':id/photo'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, get_user_decorator_1.GetUser)('id')),
+    __param(2, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:returntype", void 0)
+], PetsController.prototype, "uploadPhoto", null);
 exports.PetsController = PetsController = __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('pets'),

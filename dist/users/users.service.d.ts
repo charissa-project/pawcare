@@ -13,4 +13,11 @@ export declare class UsersService {
             createdAt: Date;
         }[];
     }>;
+    updatePhoto(userId: number, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            photoUrl: string | null;
+        };
+    }>;
 }
