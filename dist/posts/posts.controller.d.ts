@@ -20,8 +20,8 @@ export declare class PostsController {
     findAll(): Promise<({
         comments: ({
             user: {
-                id: number;
                 fullname: string;
+                id: number;
             };
         } & {
             id: number;
@@ -31,8 +31,8 @@ export declare class PostsController {
             postId: number;
         })[];
         user: {
-            id: number;
             fullname: string;
+            id: number;
         };
     } & {
         id: number;
@@ -45,8 +45,8 @@ export declare class PostsController {
     findOne(id: number): Promise<{
         comments: ({
             user: {
-                id: number;
                 fullname: string;
+                id: number;
             };
         } & {
             id: number;
@@ -56,8 +56,8 @@ export declare class PostsController {
             postId: number;
         })[];
         user: {
-            id: number;
             fullname: string;
+            id: number;
         };
     } & {
         id: number;
@@ -69,8 +69,8 @@ export declare class PostsController {
     }>;
     update(id: number, userId: number, role: Role, dto: UpdatePostDto): Promise<{
         user: {
-            id: number;
             fullname: string;
+            id: number;
         };
     } & {
         id: number;

@@ -6,10 +6,10 @@ export declare class UsersController {
         success: boolean;
         message: string;
         data: {
-            id: number;
             fullname: string;
             email: string;
             role: import("@prisma/client").$Enums.Role;
+            id: number;
             createdAt: Date;
         }[];
     }>;

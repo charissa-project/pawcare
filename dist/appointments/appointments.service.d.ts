@@ -47,8 +47,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -105,8 +105,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -152,8 +152,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -210,8 +210,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -268,8 +268,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -278,8 +278,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -288,8 +288,8 @@ export declare class AppointmentsService {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        appointmentDate: Date;
         type: string;
+        appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;

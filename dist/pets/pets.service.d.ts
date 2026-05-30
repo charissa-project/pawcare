@@ -70,8 +70,8 @@ export declare class PetsService {
         reminders: {
             id: number;
             petId: number;
-            type: string;
             title: string;
+            type: string;
             reminderDate: Date;
             isDone: boolean;
         }[];
@@ -144,8 +144,8 @@ export declare class PetsService {
             reminders: {
                 id: number;
                 petId: number;
-                type: string;
                 title: string;
+                type: string;
                 reminderDate: Date;
                 isDone: boolean;
             }[];
