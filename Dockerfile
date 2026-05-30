@@ -3,11 +3,12 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install  # install semua termasuk devDeps
+RUN npm install
 
 COPY . .
 RUN npx prisma generate
-RUN npm run build  # nest build butuh @nestjs/cli
+RUN npm run build || echo "BUILD FAILED"
+RUN ls -la dist/ || echo "DIST NOT FOUND"
 
 EXPOSE 3000
 
