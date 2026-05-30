@@ -12,4 +12,4 @@ RUN ls -la dist/ || echo "DIST NOT FOUND"
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]
