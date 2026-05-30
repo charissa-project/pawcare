@@ -8,6 +8,7 @@ import { join } from 'path';                                        // <-- tamba
 import 'dotenv/config';
 
 async function bootstrap() {
+   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const app = await NestFactory.create<NestExpressApplication>(AppModule); // <-- update
 
   app.useGlobalFilters(new HttpExceptionFilter());
@@ -33,5 +34,6 @@ async function bootstrap() {
   app.enableCors();
 
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`Application is running on port: ${process.env.PORT ?? 3000}`);
 }
 bootstrap();
