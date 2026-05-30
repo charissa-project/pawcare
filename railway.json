@@ -4,5 +4,8 @@
   },
   "deploy": {
     "startCommand": "node dist/main.js"
+  },
+  "environment": {
+    "NODE_VERSION": "20"
   }
 }
