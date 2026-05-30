@@ -8,32 +8,35 @@ import { join } from 'path';                                        // <-- tamba
 import 'dotenv/config';
 
 async function bootstrap() {
-   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const app = await NestFactory.create<NestExpressApplication>(AppModule); // <-- update
+  try {
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalPipes(new ValidationPipe({
+      whitelist: true,
+      transform: true
+    }));
 
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true
-  }));
+    app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+      prefix: '/uploads',
+    });
 
-  // serve folder uploads sebagai static files <-- tambah ini
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads',
-  });
+    const config = new DocumentBuilder()
+      .setTitle('PawCare API')
+      .setDescription('API documentation for PawCare')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
 
-  const config = new DocumentBuilder()
-    .setTitle('PawCare API')
-    .setDescription('API documentation for PawCare')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+    app.enableCors();
 
-  app.enableCors();
-
-  await app.listen(process.env.PORT ?? 3000);
-  console.log(`Application is running on port: ${process.env.PORT ?? 3000}`);
+    await app.listen(process.env.PORT ?? 3000);
+    console.log(`App running on port: ${process.env.PORT ?? 3000}`);
+  } catch (error) {
+    console.error('BOOTSTRAP ERROR:', error);
+    process.exit(1);
+  }
 }
 bootstrap();
