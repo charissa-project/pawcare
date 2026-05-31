@@ -18,9 +18,14 @@ export class AppointmentsController {
   
   // user buat appointment
   @Post()
-  create(@GetUser('id') userId: number, @Body() dto: CreateAppointmentDto) {
-    return this.appointmentsService.create(userId, dto);
-  }
+@UseInterceptors(FileInterceptor('photo', multerConfig))
+create(
+  @GetUser('id') userId: number,
+  @Body() dto: CreateAppointmentDto,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  return this.appointmentsService.create(userId, dto, file);
+}
 
 // admin lihat semua appointment
 @Get()

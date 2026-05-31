@@ -17,9 +17,14 @@ export class PetsController {
   constructor(private readonly petsService: PetsService) {}
 
   @Post()
-  create(@GetUser('id') userId: number, @Body() dto: CreatePetDto) {
-    return this.petsService.create(userId, dto);
-  }
+@UseInterceptors(FileInterceptor('photo', multerConfig))
+create(
+  @GetUser('id') userId: number,
+  @Body() dto: CreatePetDto,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  return this.petsService.create(userId, dto, file);
+}
 
   @Get()
   findAll(@GetUser('id') userId: number) {

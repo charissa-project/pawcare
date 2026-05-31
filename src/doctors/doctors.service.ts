@@ -17,49 +17,24 @@ export class DoctorsService{
   private prisma:PrismaService
  ){}
 
- async create(
- dto:CreateDoctorDto
- ){
+ async create(dto: CreateDoctorDto, file?: Express.Multer.File) {
+  const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
 
-   const user=
-   await this.prisma.user.findUnique({
+  if (!user) throw new NotFoundException({ success: false, message: 'User tidak ditemukan' });
 
-      where:{
-        id:dto.userId
-      }
+  const doctor = await this.prisma.doctor.create({
+    data: {
+      ...dto,
+      // doctor tidak punya photoUrl di schema, foto ada di user
+    },
+  });
 
-   })
-
-   if(!user){
-
-      throw new NotFoundException({
-
-        success:false,
-        message:
-        'User tidak ditemukan'
-
-      })
-
-   }
-
-   const doctor=
-   await this.prisma.doctor.create({
-
-      data:dto
-
-   })
-
-   return{
-
-      success:true,
-      message:
-      'Dokter berhasil ditambahkan',
-
-      data:doctor
-
-   }
-
- }
+  return {
+    success: true,
+    message: 'Dokter berhasil ditambahkan',
+    data: doctor,
+  };
+}
 
  async findAll(){
 

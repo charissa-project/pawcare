@@ -1,32 +1,25 @@
-import {
- IsInt,
- IsNotEmpty
-} from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
-import {
- ApiProperty
-} from '@nestjs/swagger';
+export class CreateDoctorDto {
+  @ApiProperty()
+  @Transform(({ value }) => parseInt(value))
+  @IsInt()
+  userId: number;
 
-export class CreateDoctorDto{
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  specialization: string;
 
- @ApiProperty()
- @IsInt()
+  @ApiProperty()
+  @Transform(({ value }) => parseInt(value))
+  @IsInt()
+  experience: number;
 
- userId:number;
-
- @ApiProperty()
- @IsNotEmpty()
-
- specialization:string;
-
- @ApiProperty()
- @IsInt()
-
- experience:number;
-
- @ApiProperty()
- @IsNotEmpty()
-
- schedule:string;
-
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  schedule: string;
 }

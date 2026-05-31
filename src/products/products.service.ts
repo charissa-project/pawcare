@@ -9,9 +9,16 @@ import { BadRequestException } from '@nestjs/common';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateProductDto) {
-    return this.prisma.product.create({ data: dto });
-  }
+  async create(dto: CreateProductDto, file?: Express.Multer.File) {
+  const imageUrl = file ? `/uploads/${file.filename}` : null;
+  
+  return this.prisma.product.create({
+    data: {
+      ...dto,
+      imageUrl,
+    },
+  });
+}
 
   async findAll(category?: ProductCategory) {
     return this.prisma.product.findMany({

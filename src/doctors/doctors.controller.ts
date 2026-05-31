@@ -21,8 +21,11 @@ export class DoctorsController{
 @UseGuards(JwtGuard, RolesGuard)
 @Roles('ADMIN')
 @UseInterceptors(FileInterceptor('photo', multerConfig))
-create(@Body() dto: CreateDoctorDto) {
-  return this.doctorService.create(dto);
+create(
+  @Body() dto: CreateDoctorDto,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  return this.doctorService.create(dto, file);
 }
 
  @Get()

@@ -10,30 +10,31 @@ import { BadRequestException } from '@nestjs/common';
 export class AppointmentsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: number, dto: CreateAppointmentDto) {
-    // pastikan pet milik user
-    const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
-    if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
-    if (pet.userId !== userId) throw new ForbiddenException('Akses ditolak');
+async create(userId: number, dto: CreateAppointmentDto, file?: Express.Multer.File) {
+  const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
+  if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
+  if (pet.userId !== userId) throw new ForbiddenException('Akses ditolak');
 
-    // pastikan doctor ada
-    const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
-    if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
+  const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
+  if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
 
-    return this.prisma.appointment.create({
-  data: {
-    petId: dto.petId,
-    doctorId: dto.doctorId,
-    appointmentDate: new Date(dto.appointmentDate),
-    type: dto.type as any,
-    consultationFee: dto.consultationFee,
-  },
-  include: {
-    pet: true,
-    doctor: { include: { user: true } },
-  },
-});
-  }
+  const photoUrl = file ? `/uploads/${file.filename}` : null;
+
+  return this.prisma.appointment.create({
+    data: {
+      petId: dto.petId,
+      doctorId: dto.doctorId,
+      appointmentDate: new Date(dto.appointmentDate),
+      type: dto.type as any,
+      consultationFee: dto.consultationFee,
+      photoUrl,
+    },
+    include: {
+      pet: true,
+      doctor: { include: { user: true } },
+    },
+  });
+}
 
 // tambah di sini
 async findAll() {

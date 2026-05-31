@@ -8,16 +8,19 @@ import { BadRequestException } from '@nestjs/common';
 export class PetsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: number, dto: CreatePetDto) {
-    return this.prisma.pet.create({
-      data: {
-        ...dto,
-        lastVaccine: dto.lastVaccine ? new Date(dto.lastVaccine) : null,
-        nextVaccine: dto.nextVaccine ? new Date(dto.nextVaccine) : null,
-        userId,
-      },
-    });
-  }
+ async create(userId: number, dto: CreatePetDto, file?: Express.Multer.File) {
+  const photoUrl = file ? `/uploads/${file.filename}` : null;
+  
+  return this.prisma.pet.create({
+    data: {
+      ...dto,
+      lastVaccine: dto.lastVaccine ? new Date(dto.lastVaccine) : null,
+      nextVaccine: dto.nextVaccine ? new Date(dto.nextVaccine) : null,
+      photoUrl,
+      userId,
+    },
+  });
+}
 
   async findAllByUser(userId: number) {
     return this.prisma.pet.findMany({

@@ -19,11 +19,15 @@ export class ProductsController {
 
   // admin buat produk
   @Post()
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  create(@Body() dto: CreateProductDto) {
-    return this.productsService.create(dto);
-  }
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.ADMIN)
+@UseInterceptors(FileInterceptor('image', multerConfig))
+create(
+  @Body() dto: CreateProductDto,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  return this.productsService.create(dto, file);
+}
 
   // semua orang bisa lihat produk (tidak perlu login)
   @Get()
