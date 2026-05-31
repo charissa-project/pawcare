@@ -1,4 +1,5 @@
 import { IsString, IsInt, IsNumber, IsOptional, IsDateString } from 'class-validator';
+import { Type } from 'class-transformer'; // ← tambah ini
 
 export class CreatePetDto {
   @IsString()
@@ -10,16 +11,18 @@ export class CreatePetDto {
   @IsString()
   breed: string;
 
+  @Type(() => Number) // ← tambah ini
   @IsInt()
   age: number;
 
   @IsString()
   gender: string;
 
+  @Type(() => Number) // ← tambah ini
   @IsNumber()
-weight: number;
+  weight: number;
 
-  @IsString() 
+  @IsString()
   healthStatus: string;
 
   @IsOptional()
