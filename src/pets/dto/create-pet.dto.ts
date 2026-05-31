@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsDateString } from 'class-validator';
-import { Type, Transform } from 'class-transformer';
+import { IsString, IsInt, IsNumber, IsOptional, IsDateString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreatePetDto {
   @IsString()
