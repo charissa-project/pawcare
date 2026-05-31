@@ -74,8 +74,16 @@ export class PetsService {
   };
 }
 
-async updatePhoto(id: number, userId: number, file: Express.Multer.File) {
-  if (!file) throw new BadRequestException('File tidak ditemukan');
+async updatePhoto(
+  id: number,
+  userId: number,
+  file: Express.Multer.File,
+) {
+  if (!file) {
+    throw new BadRequestException('File tidak ditemukan');
+  }
+
+  await this.findOne(id, userId); // cek kepemilikan
 
   const photoUrl = `/uploads/${file.filename}`;
 
@@ -84,7 +92,11 @@ async updatePhoto(id: number, userId: number, file: Express.Multer.File) {
     data: { photoUrl },
   });
 
-  return { data: { photoUrl: updated.photoUrl } };
+  return {
+    data: {
+      photoUrl: updated.photoUrl,
+    },
+  };
 }
 
 }
