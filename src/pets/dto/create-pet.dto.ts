@@ -1,5 +1,5 @@
-import { IsString, IsInt, IsNumber, IsOptional, IsDateString } from 'class-validator';
-import { Type } from 'class-transformer'; // ← tambah ini
+import { IsString, IsOptional, IsDateString } from 'class-validator';
+import { Type, Transform } from 'class-transformer';
 
 export class CreatePetDto {
   @IsString()
@@ -11,14 +11,14 @@ export class CreatePetDto {
   @IsString()
   breed: string;
 
-  @Type(() => Number) // ← tambah ini
+  @Transform(({ value }) => parseInt(value))  // ← ganti ini
   @IsInt()
   age: number;
 
   @IsString()
   gender: string;
 
-  @Type(() => Number) // ← tambah ini
+  @Transform(({ value }) => parseFloat(value))  // ← ganti ini
   @IsNumber()
   weight: number;
 
