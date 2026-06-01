@@ -7,6 +7,9 @@ import { CreateCommentDto } from '../comments/dto/create-comment.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { Role } from '@prisma/client';
+import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+
+@ApiBearerAuth() // ← tambah ini
 
 @Controller('posts/:postId/comments')
 export class CommentsController {

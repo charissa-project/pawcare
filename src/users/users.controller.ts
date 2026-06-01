@@ -10,6 +10,9 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { multerConfig } from '../common/upload.config';
+import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+
+@ApiBearerAuth() // ← tambah ini
 
 @Controller('users')
 export class UsersController {

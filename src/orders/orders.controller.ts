@@ -9,6 +9,9 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { Role } from '@prisma/client';
+import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+
+@ApiBearerAuth() // ← tambah ini
 
 @UseGuards(JwtGuard)
 @Controller('orders')

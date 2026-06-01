@@ -7,6 +7,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../common/upload.config';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+
+@ApiBearerAuth() // ← tambah ini
 
 @Controller('doctors')
 export class DoctorsController {

@@ -10,6 +10,9 @@ import { Role } from '@prisma/client';
 import { UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../common/upload.config';
+import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+
+@ApiBearerAuth() // ← tambah ini
 
 @UseGuards(JwtGuard)
 @Controller('appointments')

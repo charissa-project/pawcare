@@ -10,6 +10,9 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { multerConfig } from '../common/upload.config';
+import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+
+@ApiBearerAuth() // ← tambah ini
 
 @UseGuards(JwtGuard)
 @Controller('pets')
