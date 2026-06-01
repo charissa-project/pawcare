@@ -24,6 +24,7 @@ const client_1 = require("@prisma/client");
 const common_2 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const upload_config_1 = require("../common/upload.config");
+const swagger_1 = require("@nestjs/swagger");
 let ProductsController = class ProductsController {
     productsService;
     constructor(productsService) {
@@ -105,6 +106,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "uploadPhoto", null);
 exports.ProductsController = ProductsController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])
 ], ProductsController);

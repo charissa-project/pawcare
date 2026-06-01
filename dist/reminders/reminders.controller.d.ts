@@ -6,8 +6,8 @@ export declare class RemindersController {
     constructor(remindersService: RemindersService);
     create(userId: number, dto: CreateReminderDto): Promise<{
         id: number;
-        petId: number;
         type: string;
+        petId: number;
         title: string;
         reminderDate: Date;
         isDone: boolean;
@@ -31,40 +31,40 @@ export declare class RemindersController {
         };
     } & {
         id: number;
-        petId: number;
         type: string;
+        petId: number;
         title: string;
         reminderDate: Date;
         isDone: boolean;
     })[]>;
     findByPet(petId: number, userId: number): Promise<{
         id: number;
-        petId: number;
         type: string;
+        petId: number;
         title: string;
         reminderDate: Date;
         isDone: boolean;
     }[]>;
     update(id: number, userId: number, dto: UpdateReminderDto): Promise<{
         id: number;
-        petId: number;
         type: string;
+        petId: number;
         title: string;
         reminderDate: Date;
         isDone: boolean;
     }>;
     markDone(id: number, userId: number): Promise<{
         id: number;
-        petId: number;
         type: string;
+        petId: number;
         title: string;
         reminderDate: Date;
         isDone: boolean;
     }>;
     remove(id: number, userId: number): Promise<{
         id: number;
-        petId: number;
         type: string;
+        petId: number;
         title: string;
         reminderDate: Date;
         isDone: boolean;

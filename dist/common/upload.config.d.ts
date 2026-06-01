@@ -1,7 +1,7 @@
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 export declare const multerConfig: {
-    storage: import("multer").StorageEngine;
+    storage: CloudinaryStorage;
     limits: {
         fileSize: number;
     };
-    fileFilter: (req: any, file: any, cb: any) => any;
 };

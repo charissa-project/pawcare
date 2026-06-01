@@ -19,7 +19,7 @@ let ProductsService = class ProductsService {
         this.prisma = prisma;
     }
     async create(dto, file) {
-        const imageUrl = file ? `/uploads/${file.filename}` : null;
+        const imageUrl = file ? file.path : null;
         return this.prisma.product.create({
             data: {
                 ...dto,
@@ -53,7 +53,7 @@ let ProductsService = class ProductsService {
         const product = await this.prisma.product.findUnique({ where: { id } });
         if (!product)
             throw new common_1.NotFoundException('Produk tidak ditemukan');
-        const imageUrl = `/uploads/${file.filename}`;
+        const imageUrl = file.path;
         const updated = await this.prisma.product.update({
             where: { id },
             data: { imageUrl },

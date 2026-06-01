@@ -21,6 +21,7 @@ const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
+const swagger_1 = require("@nestjs/swagger");
 let OrdersController = class OrdersController {
     ordersService;
     constructor(ordersService) {
@@ -97,6 +98,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "cancel", null);
 exports.OrdersController = OrdersController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [orders_service_1.OrdersService])

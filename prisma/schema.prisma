@@ -55,6 +55,7 @@ model Doctor {
   user           User            @relation(fields: [userId], references: [id])
   appointments   Appointment[]
   medicalRecords MedicalRecord[]
+  schedules  Schedule[]
 }
 
 model Pet {
@@ -173,4 +174,14 @@ model Comment {
 
   post Post @relation(fields: [postId], references: [id])
   user User @relation(fields: [userId], references: [id])
+}
+
+model Schedule {
+  id        Int    @id @default(autoincrement())
+  doctorId  Int
+  day       String
+  startTime String
+  endTime   String
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
 }

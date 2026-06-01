@@ -21,6 +21,7 @@ const update_pet_dto_1 = require("./dto/update-pet.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const upload_config_1 = require("../common/upload.config");
+const swagger_1 = require("@nestjs/swagger");
 let PetsController = class PetsController {
     petsService;
     constructor(petsService) {
@@ -99,6 +100,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PetsController.prototype, "uploadPhoto", null);
 exports.PetsController = PetsController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('pets'),
     __metadata("design:paramtypes", [pets_service_1.PetsService])

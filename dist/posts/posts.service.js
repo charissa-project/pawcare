@@ -19,7 +19,7 @@ let PostsService = class PostsService {
         this.prisma = prisma;
     }
     async create(userId, dto, file) {
-        const imageUrl = file ? `/uploads/${file.filename}` : null;
+        const imageUrl = file ? file.path : null;
         const post = await this.prisma.post.create({
             data: {
                 userId,

@@ -6,20 +6,20 @@ export declare class UsersController {
         success: boolean;
         message: string;
         data: {
-            id: number;
             fullname: string;
             email: string;
             role: import("@prisma/client").$Enums.Role;
+            id: number;
             createdAt: Date;
         }[];
     }>;
     getMe(userId: number): Promise<{
         success: boolean;
         data: {
-            id: number;
             fullname: string;
             email: string;
             role: import("@prisma/client").$Enums.Role;
+            id: number;
             photoUrl: string | null;
             createdAt: Date;
         };
@@ -30,5 +30,21 @@ export declare class UsersController {
         data: {
             photoUrl: string | null;
         };
+    }>;
+    updateRole(id: number, body: {
+        role: string;
+    }): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            fullname: string;
+            email: string;
+            role: import("@prisma/client").$Enums.Role;
+            id: number;
+        };
+    }>;
+    remove(id: number): Promise<{
+        success: boolean;
+        message: string;
     }>;
 }

@@ -25,6 +25,7 @@ const client_1 = require("@prisma/client");
 const common_2 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const upload_config_1 = require("../common/upload.config");
+const swagger_1 = require("@nestjs/swagger");
 let AppointmentsController = class AppointmentsController {
     appointmentsService;
     constructor(appointmentsService) {
@@ -130,6 +131,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppointmentsController.prototype, "uploadPhoto", null);
 exports.AppointmentsController = AppointmentsController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('appointments'),
     __metadata("design:paramtypes", [appointments_service_1.AppointmentsService])

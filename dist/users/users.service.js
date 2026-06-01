@@ -37,7 +37,7 @@ let UsersService = class UsersService {
     async updatePhoto(userId, file) {
         if (!file)
             throw new common_2.BadRequestException('File tidak ditemukan');
-        const photoUrl = `/uploads/${file.filename}`;
+        const photoUrl = file.path;
         const user = await this.prisma.user.update({
             where: { id: userId },
             data: { photoUrl },
@@ -63,6 +63,24 @@ let UsersService = class UsersService {
         if (!user)
             throw new common_1.NotFoundException('User tidak ditemukan');
         return { success: true, data: user };
+    }
+    async updateRole(id, role) {
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        if (!user)
+            throw new common_1.NotFoundException('User tidak ditemukan');
+        const updated = await this.prisma.user.update({
+            where: { id },
+            data: { role: role },
+            select: { id: true, fullname: true, email: true, role: true },
+        });
+        return { success: true, message: 'Role berhasil diupdate', data: updated };
+    }
+    async remove(id) {
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        if (!user)
+            throw new common_1.NotFoundException('User tidak ditemukan');
+        await this.prisma.user.delete({ where: { id } });
+        return { success: true, message: 'User berhasil dihapus' };
     }
 };
 exports.UsersService = UsersService;

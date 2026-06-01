@@ -69,8 +69,8 @@ export declare class PetsService {
         })[];
         reminders: {
             id: number;
-            petId: number;
             type: string;
+            petId: number;
             title: string;
             reminderDate: Date;
             isDone: boolean;
@@ -143,8 +143,8 @@ export declare class PetsService {
             })[];
             reminders: {
                 id: number;
-                petId: number;
                 type: string;
+                petId: number;
                 title: string;
                 reminderDate: Date;
                 isDone: boolean;

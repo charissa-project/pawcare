@@ -53,14 +53,37 @@ export declare class DoctorsService {
     getSchedule(userId: number): Promise<{
         success: boolean;
         data: {
-            schedule: string;
+            schedules: any;
         };
     }>;
-    updateSchedule(userId: number, schedule: string): Promise<{
+    addSchedule(userId: number, body: {
+        day: string;
+        startTime: string;
+        endTime: string;
+    }): Promise<{
+        success: boolean;
+        message: string;
+        data: any;
+    }>;
+    removeSchedule(userId: number, scheduleId: number): Promise<{
+        success: boolean;
+        message: string;
+    }>;
+    update(id: number, dto: any): Promise<{
         success: boolean;
         message: string;
         data: {
+            id: number;
+            userId: number;
+            specialization: string;
+            experience: number;
             schedule: string;
+            rating: number | null;
+            isAvailable: boolean;
         };
+    }>;
+    remove(id: number): Promise<{
+        success: boolean;
+        message: string;
     }>;
 }

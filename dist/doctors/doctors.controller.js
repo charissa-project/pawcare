@@ -22,6 +22,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const upload_config_1 = require("../common/upload.config");
 const doctors_service_1 = require("./doctors.service");
 const create_doctor_dto_1 = require("./dto/create-doctor.dto");
+const swagger_1 = require("@nestjs/swagger");
 let DoctorsController = class DoctorsController {
     doctorService;
     constructor(doctorService) {
@@ -39,8 +40,17 @@ let DoctorsController = class DoctorsController {
     getSchedule(userId) {
         return this.doctorService.getSchedule(userId);
     }
-    updateSchedule(userId, body) {
-        return this.doctorService.updateSchedule(userId, body.schedule);
+    addSchedule(userId, body) {
+        return this.doctorService.addSchedule(userId, body);
+    }
+    removeSchedule(userId, scheduleId) {
+        return this.doctorService.removeSchedule(userId, scheduleId);
+    }
+    update(id, dto) {
+        return this.doctorService.update(id, dto);
+    }
+    remove(id) {
+        return this.doctorService.remove(id);
     }
 };
 exports.DoctorsController = DoctorsController;
@@ -88,8 +98,38 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", void 0)
-], DoctorsController.prototype, "updateSchedule", null);
+], DoctorsController.prototype, "addSchedule", null);
+__decorate([
+    (0, common_1.Delete)('me/schedule/:scheduleId'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('DOCTOR'),
+    __param(0, (0, get_user_decorator_1.GetUser)('id')),
+    __param(1, (0, common_1.Param)('scheduleId', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", void 0)
+], DoctorsController.prototype, "removeSchedule", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('ADMIN'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], DoctorsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('ADMIN'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], DoctorsController.prototype, "remove", null);
 exports.DoctorsController = DoctorsController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('doctors'),
     __metadata("design:paramtypes", [doctors_service_1.DoctorsService])
 ], DoctorsController);

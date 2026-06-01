@@ -45,10 +45,10 @@ export declare class AppointmentsController {
     } & {
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -103,10 +103,10 @@ export declare class AppointmentsController {
     } & {
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -150,10 +150,10 @@ export declare class AppointmentsController {
     } & {
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -208,10 +208,10 @@ export declare class AppointmentsController {
     } & {
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -266,30 +266,30 @@ export declare class AppointmentsController {
     } & {
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
     updateStatus(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
     cancel(id: number, userId: number): Promise<{
         id: number;
         photoUrl: string | null;
+        type: string;
         petId: number;
         doctorId: number;
         appointmentDate: Date;
-        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;

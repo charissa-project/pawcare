@@ -6,10 +6,10 @@ export declare class UsersService {
         success: boolean;
         message: string;
         data: {
-            id: number;
             fullname: string;
             email: string;
             role: import("@prisma/client").$Enums.Role;
+            id: number;
             createdAt: Date;
         }[];
     }>;
@@ -23,12 +23,26 @@ export declare class UsersService {
     findMe(userId: number): Promise<{
         success: boolean;
         data: {
-            id: number;
             fullname: string;
             email: string;
             role: import("@prisma/client").$Enums.Role;
+            id: number;
             photoUrl: string | null;
             createdAt: Date;
         };
+    }>;
+    updateRole(id: number, role: string): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            fullname: string;
+            email: string;
+            role: import("@prisma/client").$Enums.Role;
+            id: number;
+        };
+    }>;
+    remove(id: number): Promise<{
+        success: boolean;
+        message: string;
     }>;
 }

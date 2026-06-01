@@ -19,6 +19,7 @@ const create_reminder_dto_1 = require("./dto/create-reminder.dto");
 const update_reminder_dto_1 = require("./dto/update-reminder.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
+const swagger_1 = require("@nestjs/swagger");
 let RemindersController = class RemindersController {
     remindersService;
     constructor(remindersService) {
@@ -93,6 +94,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], RemindersController.prototype, "remove", null);
 exports.RemindersController = RemindersController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('reminders'),
     __metadata("design:paramtypes", [reminders_service_1.RemindersService])

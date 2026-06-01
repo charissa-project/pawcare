@@ -19,6 +19,7 @@ const create_comment_dto_1 = require("../comments/dto/create-comment.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
+const swagger_1 = require("@nestjs/swagger");
 let CommentsController = class CommentsController {
     commentsService;
     constructor(commentsService) {
@@ -63,6 +64,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CommentsController.prototype, "remove", null);
 exports.CommentsController = CommentsController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('posts/:postId/comments'),
     __metadata("design:paramtypes", [comments_service_1.CommentsService])
 ], CommentsController);

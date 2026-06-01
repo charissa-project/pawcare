@@ -85,19 +85,41 @@ async getSchedule(userId: number) {
   const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
   if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
 
-  return { success: true, data: { schedule: doctor.schedule } };
+  const schedules = await this.prisma.schedule.findMany({
+    where: { doctorId: doctor.id },
+  });
+
+  return { success: true, data: { schedules } };
 }
 
-async updateSchedule(userId: number, schedule: string) {
+async addSchedule(userId: number, body: { day: string; startTime: string; endTime: string }) {
   const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
   if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
 
-  const updated = await this.prisma.doctor.update({
-    where: { userId },
-    data: { schedule },
+  const schedule = await this.prisma.schedule.create({
+    data: {
+      doctorId: doctor.id,
+      day: body.day,
+      startTime: body.startTime,
+      endTime: body.endTime,
+    },
   });
 
-  return { success: true, message: 'Jadwal berhasil diupdate', data: { schedule: updated.schedule } };
+  return { success: true, message: 'Jadwal berhasil ditambahkan', data: schedule };
+}
+
+async removeSchedule(userId: number, scheduleId: number) {
+  const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
+  if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+
+  const schedule = await this.prisma.schedule.findFirst({
+    where: { id: scheduleId, doctorId: doctor.id },
+  });
+  if (!schedule) throw new NotFoundException('Jadwal tidak ditemukan');
+
+  await this.prisma.schedule.delete({ where: { id: scheduleId } });
+
+  return { success: true, message: 'Jadwal berhasil dihapus' };
 }
 
 async update(id: number, dto: any) {

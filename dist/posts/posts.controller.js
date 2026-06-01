@@ -22,6 +22,7 @@ const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
 const upload_config_1 = require("../common/upload.config");
+const swagger_1 = require("@nestjs/swagger");
 let PostsController = class PostsController {
     postsService;
     constructor(postsService) {
@@ -101,6 +102,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "like", null);
 exports.PostsController = PostsController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService])
 ], PostsController);

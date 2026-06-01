@@ -39,21 +39,31 @@ export class DoctorsController {
   }
 
   @Get('me/schedule')
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles('DOCTOR')
-  getSchedule(@GetUser('id') userId: number) {
-    return this.doctorService.getSchedule(userId);
-  }
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('DOCTOR')
+getSchedule(@GetUser('id') userId: number) {
+  return this.doctorService.getSchedule(userId);
+}
 
-  @Post('me/schedule')
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles('DOCTOR')
-  updateSchedule(
-    @GetUser('id') userId: number,
-    @Body() body: { schedule: string },
-  ) {
-    return this.doctorService.updateSchedule(userId, body.schedule);
-  }
+@Post('me/schedule')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('DOCTOR')
+addSchedule(
+  @GetUser('id') userId: number,
+  @Body() body: { day: string; startTime: string; endTime: string },
+) {
+  return this.doctorService.addSchedule(userId, body);
+}
+
+@Delete('me/schedule/:scheduleId')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('DOCTOR')
+removeSchedule(
+  @GetUser('id') userId: number,
+  @Param('scheduleId', ParseIntPipe) scheduleId: number,
+) {
+  return this.doctorService.removeSchedule(userId, scheduleId);
+}
 
   @Patch(':id')
 @UseGuards(JwtGuard, RolesGuard)
