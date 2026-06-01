@@ -16,6 +16,7 @@ const client_1 = require("@prisma/client");
 class CreateProductDto {
     name;
     price;
+    stock;
     category;
     description;
 }
@@ -29,6 +30,11 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "price", void 0);
+__decorate([
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value)),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "stock", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(client_1.ProductCategory),
     __metadata("design:type", String)

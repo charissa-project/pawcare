@@ -31,4 +31,36 @@ export declare class DoctorsService {
             schedule: string;
         }[];
     }>;
+    findMe(userId: number): Promise<{
+        success: boolean;
+        data: {
+            user: {
+                fullname: string;
+                email: string;
+                id: number;
+                photoUrl: string | null;
+            };
+        } & {
+            id: number;
+            userId: number;
+            specialization: string;
+            experience: number;
+            schedule: string;
+            rating: number | null;
+            isAvailable: boolean;
+        };
+    }>;
+    getSchedule(userId: number): Promise<{
+        success: boolean;
+        data: {
+            schedule: string;
+        };
+    }>;
+    updateSchedule(userId: number, schedule: string): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            schedule: string;
+        };
+    }>;
 }

@@ -29,6 +29,9 @@ let UsersController = class UsersController {
     findAll() {
         return this.usersService.findAll();
     }
+    getMe(userId) {
+        return this.usersService.findMe(userId);
+    }
     uploadPhoto(userId, file) {
         return this.usersService.updatePhoto(userId, file);
     }
@@ -42,6 +45,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('me'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    __param(0, (0, get_user_decorator_1.GetUser)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getMe", null);
 __decorate([
     (0, common_1.Patch)('me/photo'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),

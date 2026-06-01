@@ -48,6 +48,22 @@ let UsersService = class UsersService {
             data: { photoUrl: user.photoUrl },
         };
     }
+    async findMe(userId) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                fullname: true,
+                email: true,
+                role: true,
+                photoUrl: true,
+                createdAt: true,
+            },
+        });
+        if (!user)
+            throw new common_1.NotFoundException('User tidak ditemukan');
+        return { success: true, data: user };
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

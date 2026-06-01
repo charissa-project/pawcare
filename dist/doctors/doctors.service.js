@@ -54,6 +54,31 @@ let DoctorsService = class DoctorsService {
             data: doctors
         };
     }
+    async findMe(userId) {
+        const doctor = await this.prisma.doctor.findUnique({
+            where: { userId },
+            include: { user: { select: { id: true, fullname: true, email: true, photoUrl: true } } },
+        });
+        if (!doctor)
+            throw new common_1.NotFoundException('Profil dokter tidak ditemukan');
+        return { success: true, data: doctor };
+    }
+    async getSchedule(userId) {
+        const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
+        if (!doctor)
+            throw new common_1.NotFoundException('Profil dokter tidak ditemukan');
+        return { success: true, data: { schedule: doctor.schedule } };
+    }
+    async updateSchedule(userId, schedule) {
+        const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
+        if (!doctor)
+            throw new common_1.NotFoundException('Profil dokter tidak ditemukan');
+        const updated = await this.prisma.doctor.update({
+            where: { userId },
+            data: { schedule },
+        });
+        return { success: true, message: 'Jadwal berhasil diupdate', data: { schedule: updated.schedule } };
+    }
 };
 exports.DoctorsService = DoctorsService;
 exports.DoctorsService = DoctorsService = __decorate([
