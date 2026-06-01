@@ -9,7 +9,7 @@ export class PostsService {
   constructor(private prisma: PrismaService) {}
 
  async create(userId: number, dto: CreatePostDto, file?: Express.Multer.File) {
-  const imageUrl = file ? `/uploads/${file.filename}` : null;
+  const imageUrl = file ? file.path : null;
 
   const post = await this.prisma.post.create({
     data: {

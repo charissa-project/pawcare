@@ -31,7 +31,7 @@ export class UsersService {
   async updatePhoto(userId: number, file: Express.Multer.File) {
   if (!file) throw new BadRequestException('File tidak ditemukan');
 
-  const photoUrl = `/uploads/${file.filename}`;
+  const photoUrl = file.path;
 
   const user = await this.prisma.user.update({
     where: { id: userId },

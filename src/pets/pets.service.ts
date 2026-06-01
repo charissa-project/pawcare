@@ -9,7 +9,7 @@ export class PetsService {
   constructor(private prisma: PrismaService) {}
 
  async create(userId: number, dto: CreatePetDto, file?: Express.Multer.File) {
-  const photoUrl = file ? `/uploads/${file.filename}` : null;
+  const photoUrl = file ? file.path : null;
   
   return this.prisma.pet.create({
     data: {
@@ -85,7 +85,7 @@ async updatePhoto(
 
   await this.findOne(id, userId); // cek kepemilikan
 
-  const photoUrl = `/uploads/${file.filename}`;
+  const photoUrl = file.path;
 
   const updated = await this.prisma.pet.update({
     where: { id },

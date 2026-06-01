@@ -18,7 +18,7 @@ async create(userId: number, dto: CreateAppointmentDto, file?: Express.Multer.Fi
   const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
   if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
 
-  const photoUrl = file ? `/uploads/${file.filename}` : null;
+  const photoUrl = file ? file.path : null;
 
   return this.prisma.appointment.create({
     data: {
@@ -148,7 +148,7 @@ async findAll() {
 
   if (!appointment) throw new NotFoundException('Appointment tidak ditemukan');
 
-  const photoUrl = `/uploads/${file.filename}`;
+  const photoUrl = file.path;
 
   const updated = await this.prisma.appointment.update({
     where: { id },
