@@ -4,7 +4,7 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 export declare class PetsController {
     private readonly petsService;
     constructor(petsService: PetsService);
-    create(userId: number, dto: CreatePetDto): Promise<{
+    create(userId: number, dto: CreatePetDto, file: Express.Multer.File): Promise<{
         id: number;
         photoUrl: string | null;
         createdAt: Date;
@@ -70,8 +70,8 @@ export declare class PetsController {
         reminders: {
             id: number;
             petId: number;
-            title: string;
             type: string;
+            title: string;
             reminderDate: Date;
             isDone: boolean;
         }[];
@@ -144,8 +144,8 @@ export declare class PetsController {
             reminders: {
                 id: number;
                 petId: number;
-                title: string;
                 type: string;
+                title: string;
                 reminderDate: Date;
                 isDone: boolean;
             }[];

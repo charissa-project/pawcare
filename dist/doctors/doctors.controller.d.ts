@@ -3,7 +3,7 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 export declare class DoctorsController {
     private doctorService;
     constructor(doctorService: DoctorsService);
-    create(dto: CreateDoctorDto): Promise<{
+    create(dto: CreateDoctorDto, file: Express.Multer.File): Promise<{
         success: boolean;
         message: string;
         data: {

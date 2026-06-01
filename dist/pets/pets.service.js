@@ -18,12 +18,14 @@ let PetsService = class PetsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(userId, dto) {
+    async create(userId, dto, file) {
+        const photoUrl = file ? `/uploads/${file.filename}` : null;
         return this.prisma.pet.create({
             data: {
                 ...dto,
                 lastVaccine: dto.lastVaccine ? new Date(dto.lastVaccine) : null,
                 nextVaccine: dto.nextVaccine ? new Date(dto.nextVaccine) : null,
+                photoUrl,
                 userId,
             },
         });
@@ -74,14 +76,20 @@ let PetsService = class PetsService {
         };
     }
     async updatePhoto(id, userId, file) {
-        if (!file)
+        if (!file) {
             throw new common_2.BadRequestException('File tidak ditemukan');
+        }
+        await this.findOne(id, userId);
         const photoUrl = `/uploads/${file.filename}`;
         const updated = await this.prisma.pet.update({
             where: { id },
             data: { photoUrl },
         });
-        return { data: { photoUrl: updated.photoUrl } };
+        return {
+            data: {
+                photoUrl: updated.photoUrl,
+            },
+        };
     }
 };
 exports.PetsService = PetsService;

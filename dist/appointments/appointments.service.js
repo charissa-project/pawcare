@@ -19,7 +19,7 @@ let AppointmentsService = class AppointmentsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(userId, dto) {
+    async create(userId, dto, file) {
         const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
         if (!pet)
             throw new common_1.NotFoundException('Hewan tidak ditemukan');
@@ -28,6 +28,7 @@ let AppointmentsService = class AppointmentsService {
         const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
         if (!doctor)
             throw new common_1.NotFoundException('Dokter tidak ditemukan');
+        const photoUrl = file ? `/uploads/${file.filename}` : null;
         return this.prisma.appointment.create({
             data: {
                 petId: dto.petId,
@@ -35,6 +36,7 @@ let AppointmentsService = class AppointmentsService {
                 appointmentDate: new Date(dto.appointmentDate),
                 type: dto.type,
                 consultationFee: dto.consultationFee,
+                photoUrl,
             },
             include: {
                 pet: true,

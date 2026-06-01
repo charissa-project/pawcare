@@ -121,9 +121,10 @@ model Product {
   id          Int             @id @default(autoincrement())
   name        String
   price       Float
+  stock       Int             @default(0)  // ← tambah ini
   category    ProductCategory
   description String?
-  imageUrl    String?         // <-- tambah ini
+  imageUrl    String?
   createdAt   DateTime        @default(now())
 
   orderItems OrderItem[]

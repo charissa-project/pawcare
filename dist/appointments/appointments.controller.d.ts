@@ -5,7 +5,7 @@ import { Role } from '@prisma/client';
 export declare class AppointmentsController {
     private readonly appointmentsService;
     constructor(appointmentsService: AppointmentsService);
-    create(userId: number, dto: CreateAppointmentDto): Promise<{
+    create(userId: number, dto: CreateAppointmentDto, file: Express.Multer.File): Promise<{
         doctor: {
             user: {
                 fullname: string;
@@ -47,8 +47,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -105,8 +105,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -152,8 +152,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -210,8 +210,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     })[]>;
@@ -268,8 +268,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -278,8 +278,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
@@ -288,8 +288,8 @@ export declare class AppointmentsController {
         photoUrl: string | null;
         petId: number;
         doctorId: number;
-        type: string;
         appointmentDate: Date;
+        type: string;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;

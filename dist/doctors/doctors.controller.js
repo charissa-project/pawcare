@@ -19,15 +19,16 @@ const create_doctor_dto_1 = require("./dto/create-doctor.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
+const common_2 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
+const upload_config_1 = require("../common/upload.config");
 let DoctorsController = class DoctorsController {
     doctorService;
     constructor(doctorService) {
         this.doctorService = doctorService;
     }
-    create(dto) {
-        return this
-            .doctorService
-            .create(dto);
+    create(dto, file) {
+        return this.doctorService.create(dto, file);
     }
     findAll() {
         return this
@@ -40,9 +41,11 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('ADMIN'),
+    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_2.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_doctor_dto_1.CreateDoctorDto]),
+    __metadata("design:paramtypes", [create_doctor_dto_1.CreateDoctorDto, Object]),
     __metadata("design:returntype", void 0)
 ], DoctorsController.prototype, "create", null);
 __decorate([

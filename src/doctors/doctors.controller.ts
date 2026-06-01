@@ -1,38 +1,54 @@
-import {Body, Controller, Get, Post, UseGuards} from '@nestjs/common';
-
-import { DoctorsService } from './doctors.service';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { Body, Controller, Get, Post, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { GetUser } from '../auth/decorators/get-user.decorator';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../common/upload.config';
-
+import { DoctorsService } from './doctors.service';
+import { CreateDoctorDto } from './dto/create-doctor.dto';
 
 @Controller('doctors')
-export class DoctorsController{
- constructor(
-  private doctorService:
-  DoctorsService
- ){}
+export class DoctorsController {
+  constructor(private doctorService: DoctorsService) {}
 
- @Post()
-@UseGuards(JwtGuard, RolesGuard)
-@Roles('ADMIN')
-@UseInterceptors(FileInterceptor('photo', multerConfig))
-create(
-  @Body() dto: CreateDoctorDto,
-  @UploadedFile() file: Express.Multer.File,
-) {
-  return this.doctorService.create(dto, file);
-}
+  @Post()
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('ADMIN')
+  @UseInterceptors(FileInterceptor('photo', multerConfig))
+  create(
+    @Body() dto: CreateDoctorDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.doctorService.create(dto, file);
+  }
 
- @Get()
- findAll(){
-   return this
-   .doctorService
-   .findAll()
- }
+  @Get()
+  findAll() {
+    return this.doctorService.findAll();
+  }
 
+  @Get('me')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('DOCTOR')
+  getMe(@GetUser('id') userId: number) {
+    return this.doctorService.findMe(userId);
+  }
+
+  @Get('me/schedule')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('DOCTOR')
+  getSchedule(@GetUser('id') userId: number) {
+    return this.doctorService.getSchedule(userId);
+  }
+
+  @Post('me/schedule')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles('DOCTOR')
+  updateSchedule(
+    @GetUser('id') userId: number,
+    @Body() body: { schedule: string },
+  ) {
+    return this.doctorService.updateSchedule(userId, body.schedule);
+  }
 }

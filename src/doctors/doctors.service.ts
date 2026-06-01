@@ -70,4 +70,35 @@ export class DoctorsService{
 
  }
 
+async findMe(userId: number) {
+  const doctor = await this.prisma.doctor.findUnique({
+    where: { userId },
+    include: { user: { select: { id: true, fullname: true, email: true, photoUrl: true } } },
+  });
+
+  if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+
+  return { success: true, data: doctor };
+}
+
+async getSchedule(userId: number) {
+  const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
+  if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+
+  return { success: true, data: { schedule: doctor.schedule } };
+}
+
+async updateSchedule(userId: number, schedule: string) {
+  const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
+  if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+
+  const updated = await this.prisma.doctor.update({
+    where: { userId },
+    data: { schedule },
+  });
+
+  return { success: true, message: 'Jadwal berhasil diupdate', data: { schedule: updated.schedule } };
+}
+
+
 }

@@ -3,7 +3,7 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 export declare class DoctorsService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(dto: CreateDoctorDto): Promise<{
+    create(dto: CreateDoctorDto, file?: Express.Multer.File): Promise<{
         success: boolean;
         message: string;
         data: {

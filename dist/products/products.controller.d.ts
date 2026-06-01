@@ -5,7 +5,7 @@ import { ProductCategory } from '@prisma/client';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    create(dto: CreateProductDto): Promise<{
+    create(dto: CreateProductDto, file: Express.Multer.File): Promise<{
         id: number;
         createdAt: Date;
         name: string;

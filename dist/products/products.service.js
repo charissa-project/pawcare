@@ -18,8 +18,14 @@ let ProductsService = class ProductsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(dto) {
-        return this.prisma.product.create({ data: dto });
+    async create(dto, file) {
+        const imageUrl = file ? `/uploads/${file.filename}` : null;
+        return this.prisma.product.create({
+            data: {
+                ...dto,
+                imageUrl,
+            },
+        });
     }
     async findAll(category) {
         return this.prisma.product.findMany({

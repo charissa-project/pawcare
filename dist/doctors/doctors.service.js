@@ -17,25 +17,19 @@ let DoctorsService = class DoctorsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(dto) {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                id: dto.userId
-            }
-        });
-        if (!user) {
-            throw new common_1.NotFoundException({
-                success: false,
-                message: 'User tidak ditemukan'
-            });
-        }
+    async create(dto, file) {
+        const user = await this.prisma.user.findUnique({ where: { id: dto.userId } });
+        if (!user)
+            throw new common_1.NotFoundException({ success: false, message: 'User tidak ditemukan' });
         const doctor = await this.prisma.doctor.create({
-            data: dto
+            data: {
+                ...dto,
+            },
         });
         return {
             success: true,
             message: 'Dokter berhasil ditambahkan',
-            data: doctor
+            data: doctor,
         };
     }
     async findAll() {

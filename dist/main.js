@@ -8,25 +8,32 @@ const swagger_1 = require("@nestjs/swagger");
 const path_1 = require("path");
 require("dotenv/config");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
-    app.useGlobalPipes(new common_1.ValidationPipe({
-        whitelist: true,
-        transform: true
-    }));
-    app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), {
-        prefix: '/uploads',
-    });
-    const config = new swagger_1.DocumentBuilder()
-        .setTitle('PawCare API')
-        .setDescription('API documentation for PawCare')
-        .setVersion('1.0')
-        .addBearerAuth()
-        .build();
-    const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api', app, document);
-    app.enableCors();
-    await app.listen(process.env.PORT ?? 3000);
+    try {
+        const app = await core_1.NestFactory.create(app_module_1.AppModule);
+        app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
+        app.useGlobalPipes(new common_1.ValidationPipe({
+            whitelist: true,
+            transform: true
+        }));
+        app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), {
+            prefix: '/uploads',
+        });
+        const config = new swagger_1.DocumentBuilder()
+            .setTitle('PawCare API')
+            .setDescription('API documentation for PawCare')
+            .setVersion('1.0')
+            .addBearerAuth()
+            .build();
+        const document = swagger_1.SwaggerModule.createDocument(app, config);
+        swagger_1.SwaggerModule.setup('api', app, document);
+        app.enableCors();
+        await app.listen(process.env.PORT ?? 3000);
+        console.log(`App running on port: ${process.env.PORT ?? 3000}`);
+    }
+    catch (error) {
+        console.error('BOOTSTRAP ERROR:', error);
+        process.exit(1);
+    }
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

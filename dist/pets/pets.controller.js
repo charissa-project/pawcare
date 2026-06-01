@@ -26,8 +26,8 @@ let PetsController = class PetsController {
     constructor(petsService) {
         this.petsService = petsService;
     }
-    create(userId, dto) {
-        return this.petsService.create(userId, dto);
+    create(userId, dto, file) {
+        return this.petsService.create(userId, dto, file);
     }
     findAll(userId) {
         return this.petsService.findAllByUser(userId);
@@ -48,10 +48,12 @@ let PetsController = class PetsController {
 exports.PetsController = PetsController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_pet_dto_1.CreatePetDto]),
+    __metadata("design:paramtypes", [Number, create_pet_dto_1.CreatePetDto, Object]),
     __metadata("design:returntype", void 0)
 ], PetsController.prototype, "create", null);
 __decorate([

@@ -22,6 +22,12 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('me')
+@UseGuards(JwtGuard)
+getMe(@GetUser('id') userId: number) {
+  return this.usersService.findMe(userId);
+}
+
   // upload foto profil user
   @Patch('me/photo')
   @UseGuards(JwtGuard)

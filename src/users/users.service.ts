@@ -45,4 +45,22 @@ export class UsersService {
   };
 }
 
+async findMe(userId: number) {
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      fullname: true,
+      email: true,
+      role: true,
+      photoUrl: true,
+      createdAt: true,
+    },
+  });
+
+  if (!user) throw new NotFoundException('User tidak ditemukan');
+
+  return { success: true, data: user };
+}
+
 }

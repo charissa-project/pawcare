@@ -30,8 +30,8 @@ let AppointmentsController = class AppointmentsController {
     constructor(appointmentsService) {
         this.appointmentsService = appointmentsService;
     }
-    create(userId, dto) {
-        return this.appointmentsService.create(userId, dto);
+    create(userId, dto, file) {
+        return this.appointmentsService.create(userId, dto, file);
     }
     findAll() {
         return this.appointmentsService.findAll();
@@ -58,10 +58,12 @@ let AppointmentsController = class AppointmentsController {
 exports.AppointmentsController = AppointmentsController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_2.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_appointment_dto_1.CreateAppointmentDto]),
+    __metadata("design:paramtypes", [Number, create_appointment_dto_1.CreateAppointmentDto, Object]),
     __metadata("design:returntype", void 0)
 ], AppointmentsController.prototype, "create", null);
 __decorate([

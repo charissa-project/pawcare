@@ -29,8 +29,8 @@ let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
     }
-    create(dto) {
-        return this.productsService.create(dto);
+    create(dto, file) {
+        return this.productsService.create(dto, file);
     }
     findAll(category) {
         return this.productsService.findAll(category);
@@ -53,9 +53,11 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_2.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
+    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto, Object]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "create", null);
 __decorate([
