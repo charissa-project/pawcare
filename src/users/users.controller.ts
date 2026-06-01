@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Patch,
+  Controller, Get, Patch, Delete, Param, ParseIntPipe, Body,
   UseGuards, UseInterceptors,
   UploadedFile, Req,
 } from '@nestjs/common';
@@ -38,4 +38,21 @@ getMe(@GetUser('id') userId: number) {
   ) {
     return this.usersService.updatePhoto(userId, file);
   }
+
+  @Patch(':id/role')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('ADMIN')
+updateRole(
+  @Param('id', ParseIntPipe) id: number,
+  @Body() body: { role: string },
+) {
+  return this.usersService.updateRole(id, body.role);
+}
+
+@Delete(':id')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('ADMIN')
+remove(@Param('id', ParseIntPipe) id: number) {
+  return this.usersService.remove(id);
+}
 }

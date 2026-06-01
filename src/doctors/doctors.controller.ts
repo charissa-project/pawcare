@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UseInterceptors, UploadedFile, Delete, Patch, Param, ParseIntPipe, } from '@nestjs/common';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -51,4 +51,21 @@ export class DoctorsController {
   ) {
     return this.doctorService.updateSchedule(userId, body.schedule);
   }
+
+  @Patch(':id')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('ADMIN')
+update(
+  @Param('id', ParseIntPipe) id: number,
+  @Body() dto: any,
+) {
+  return this.doctorService.update(id, dto);
+}
+
+@Delete(':id')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles('ADMIN')
+remove(@Param('id', ParseIntPipe) id: number) {
+  return this.doctorService.remove(id);
+}
 }

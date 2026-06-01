@@ -63,4 +63,27 @@ async findMe(userId: number) {
   return { success: true, data: user };
 }
 
+async updateRole(id: number, role: string) {
+  const user = await this.prisma.user.findUnique({ where: { id } });
+  if (!user) throw new NotFoundException('User tidak ditemukan');
+
+  const updated = await this.prisma.user.update({
+    where: { id },
+    data: { role: role as any },
+    select: { id: true, fullname: true, email: true, role: true },
+  });
+
+  return { success: true, message: 'Role berhasil diupdate', data: updated };
+}
+
+async remove(id: number) {
+  const user = await this.prisma.user.findUnique({ where: { id } });
+  if (!user) throw new NotFoundException('User tidak ditemukan');
+
+  await this.prisma.user.delete({ where: { id } });
+
+  return { success: true, message: 'User berhasil dihapus' };
+}
+
+
 }

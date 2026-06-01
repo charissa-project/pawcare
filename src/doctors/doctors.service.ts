@@ -100,5 +100,25 @@ async updateSchedule(userId: number, schedule: string) {
   return { success: true, message: 'Jadwal berhasil diupdate', data: { schedule: updated.schedule } };
 }
 
+async update(id: number, dto: any) {
+  const doctor = await this.prisma.doctor.findUnique({ where: { id } });
+  if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
+
+  const updated = await this.prisma.doctor.update({
+    where: { id },
+    data: dto,
+  });
+
+  return { success: true, message: 'Data dokter berhasil diupdate', data: updated };
+}
+
+async remove(id: number) {
+  const doctor = await this.prisma.doctor.findUnique({ where: { id } });
+  if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
+
+  await this.prisma.doctor.delete({ where: { id } });
+
+  return { success: true, message: 'Dokter berhasil dihapus' };
+}
 
 }
