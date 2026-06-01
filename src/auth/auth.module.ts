@@ -18,11 +18,11 @@ import { PassportModule } from '@nestjs/passport';
     PassportModule,
 
     JwtModule.register({
-      secret: 'rahasia123',
-      signOptions: {
-        expiresIn: '1d',
-      },
-    }),
+  secret: process.env.JWT_SECRET || 'rahasia123',
+  signOptions: {
+    expiresIn: '1d',
+  },
+}),
   ],
 
   controllers: [AuthController],
