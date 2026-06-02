@@ -78,23 +78,23 @@ export class DoctorsService {
   }
 
   async getSchedule(userId: number) {
-    const doctor = await this.prisma.doctor.findUnique({
-      where: { userId },
-    });
+  const doctor = await this.prisma.doctor.findFirst({
+    where: { userId },
+  });
 
-    if (!doctor) {
-      throw new NotFoundException('Profil dokter tidak ditemukan');
-    }
-
-    const schedules = await this.prisma.schedule.findMany({
-      where: { doctorId: doctor.id },
-    });
-
-    return {
-      success: true,
-      data: schedules,
-    };
+  if (!doctor) {
+    throw new NotFoundException('Profil dokter tidak ditemukan');
   }
+
+  const schedules = await this.prisma.schedule.findMany({
+    where: { doctorId: doctor.id },
+  });
+
+  return {
+    success: true,
+    data: schedules,
+  };
+}
 
   async addSchedule(
     userId: number,
