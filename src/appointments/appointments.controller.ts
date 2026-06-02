@@ -62,18 +62,18 @@ findAll() {
     return this.appointmentsService.findOne(id, userId, role);
   }
 
-  // doctor/admin update status
-  @Patch(':id/status')
-  @UseGuards(RolesGuard)
-  @Roles(Role.DOCTOR, Role.ADMIN)
-  updateStatus(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') userId: number,
-    @GetUser('role') role: Role,
-    @Body() dto: UpdateAppointmentDto,
-  ) {
-    return this.appointmentsService.updateStatus(id, userId, role, dto);
-  }
+    // doctor/admin update status
+    @Patch(':id/status')
+    @UseGuards(RolesGuard)
+    @Roles(Role.DOCTOR, Role.ADMIN)
+    updateStatus(
+      @Param('id', ParseIntPipe) id: number,
+      @GetUser('id') userId: number,
+      @GetUser('role') role: Role,
+      @Body() dto: UpdateAppointmentDto,
+    ) {
+      return this.appointmentsService.updateStatus(id, userId, role, dto);
+    }
 
   // user cancel appointment
   @Patch(':id/cancel')

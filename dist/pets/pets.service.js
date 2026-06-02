@@ -36,6 +36,12 @@ let PetsService = class PetsService {
             orderBy: { createdAt: 'desc' },
         });
     }
+    async findAll() {
+        return this.prisma.pet.findMany({
+            include: { owner: true },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
     async findOne(id, userId) {
         const pet = await this.prisma.pet.findUnique({
             where: { id },

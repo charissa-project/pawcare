@@ -29,6 +29,13 @@ export class PetsService {
     });
   }
 
+  async findAll() {
+  return this.prisma.pet.findMany({
+    include: { owner: true },
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
   async findOne(id: number, userId: number) {
     const pet = await this.prisma.pet.findUnique({
       where: { id },

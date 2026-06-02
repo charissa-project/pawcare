@@ -11,6 +11,8 @@ import { JwtGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { multerConfig } from '../common/upload.config';
 import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiBearerAuth() // ← tambah ini
 
@@ -33,6 +35,13 @@ create(
   findAll(@GetUser('id') userId: number) {
     return this.petsService.findAllByUser(userId);
   }
+
+  @Get('all')
+@UseGuards(RolesGuard)
+@Roles('ADMIN')
+findAllAdmin() {
+  return this.petsService.findAll();
+}
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {

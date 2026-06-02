@@ -33,6 +33,9 @@ let PetsController = class PetsController {
     findAll(userId) {
         return this.petsService.findAllByUser(userId);
     }
+    findAllAdmin() {
+        return this.petsService.findAll();
+    }
     findOne(id, userId) {
         return this.petsService.findOne(id, userId);
     }
@@ -64,6 +67,14 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], PetsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('all'),
+    (0, common_1.UseGuards)(RolesGuard),
+    Roles('ADMIN'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], PetsController.prototype, "findAllAdmin", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

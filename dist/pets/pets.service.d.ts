@@ -36,6 +36,33 @@ export declare class PetsService {
         lastVaccine: Date | null;
         nextVaccine: Date | null;
     }[]>;
+    findAll(): Promise<({
+        owner: {
+            fullname: string;
+            email: string;
+            password: string;
+            role: import("@prisma/client").$Enums.Role;
+            id: number;
+            photoUrl: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    } & {
+        id: number;
+        photoUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        userId: number;
+        species: string;
+        breed: string;
+        age: number;
+        gender: string;
+        weight: number;
+        healthStatus: string;
+        lastVaccine: Date | null;
+        nextVaccine: Date | null;
+    })[]>;
     findOne(id: number, userId: number): Promise<{
         medicalRecords: ({
             doctor: {
