@@ -27,6 +27,13 @@ export class MedicalRecordsController {
     return this.medicalRecordsService.create(userId, dto);
   }
 
+@Get('all')
+@UseGuards(RolesGuard)
+@Roles(Role.ADMIN)
+findAllAdmin() {
+  return this.medicalRecordsService.findAll();
+}
+
   // user lihat semua rekam medis pet miliknya
   @Get()
   findAll(@GetUser('id') userId: number) {

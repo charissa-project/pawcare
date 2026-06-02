@@ -28,6 +28,16 @@ export class MedicalRecordsService {
     });
   }
 
+async findAll() {
+  return this.prisma.medicalRecord.findMany({
+    include: {
+      pet: { include: { owner: true } },
+      doctor: { include: { user: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
   // user: lihat rekam medis semua pet miliknya
   async findAllByUser(userId: number) {
     return this.prisma.medicalRecord.findMany({
