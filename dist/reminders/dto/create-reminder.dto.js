@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateReminderDto = void 0;
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 class CreateReminderDto {
     petId;
     title;
@@ -19,19 +20,23 @@ class CreateReminderDto {
 }
 exports.CreateReminderDto = CreateReminderDto;
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateReminderDto.prototype, "petId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateReminderDto.prototype, "title", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsIn)(['VACCINE', 'MEDICINE', 'CONSULTATION']),
     __metadata("design:type", String)
 ], CreateReminderDto.prototype, "type", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], CreateReminderDto.prototype, "reminderDate", void 0);

@@ -22,6 +22,7 @@ const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
 const swagger_1 = require("@nestjs/swagger");
+const update_order_dto_1 = require("./dto/update-order.dto");
 let OrdersController = class OrdersController {
     ordersService;
     constructor(ordersService) {
@@ -39,11 +40,14 @@ let OrdersController = class OrdersController {
     findOne(id, userId, role) {
         return this.ordersService.findOne(id, userId, role);
     }
-    updateStatus(id, status) {
-        return this.ordersService.updateStatus(id, status);
+    updateStatus(id, body) {
+        return this.ordersService.updateStatus(id, body.status);
     }
     cancel(id, userId) {
         return this.ordersService.cancel(id, userId);
+    }
+    verifyPayment(id) {
+        return this.ordersService.verifyPayment(id);
     }
 };
 exports.OrdersController = OrdersController;
@@ -84,9 +88,9 @@ __decorate([
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, common_1.Body)('status')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:paramtypes", [Number, update_order_dto_1.UpdateOrderStatusDto]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "updateStatus", null);
 __decorate([
@@ -97,6 +101,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "cancel", null);
+__decorate([
+    (0, common_1.Patch)(':id/verify-payment'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "verifyPayment", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),

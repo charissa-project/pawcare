@@ -8,7 +8,7 @@ import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
-import { Role } from '@prisma/client';
+import { Role, OrderStatus } from '@prisma/client';
 import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
 import { UpdateOrderStatusDto } from './dto/update-order.dto'; // ← tambah import
 
@@ -55,7 +55,10 @@ updateStatus(
   @Param('id', ParseIntPipe) id: number,
   @Body() body: UpdateOrderStatusDto,
 ) {
-  return this.ordersService.updateStatus(id, body.status);
+  return this.ordersService.updateStatus(
+    id,
+    body.status as OrderStatus,
+  );
 }
 
   // user cancel order

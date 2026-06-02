@@ -9,35 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateMedicalRecordDto = void 0;
+exports.UpdateOrderStatusDto = void 0;
 const class_validator_1 = require("class-validator");
+const client_1 = require("@prisma/client");
 const swagger_1 = require("@nestjs/swagger");
-class CreateMedicalRecordDto {
-    petId;
-    diagnosis;
-    treatment;
-    notes;
+class UpdateOrderStatusDto {
+    status;
 }
-exports.CreateMedicalRecordDto = CreateMedicalRecordDto;
+exports.UpdateOrderStatusDto = UpdateOrderStatusDto;
 __decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateMedicalRecordDto.prototype, "petId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
+    (0, swagger_1.ApiProperty)({ example: 'SHIPPED', enum: ['PENDING', 'SHIPPED', 'DELIVERED'] }),
+    (0, class_validator_1.IsEnum)(client_1.OrderStatus),
     __metadata("design:type", String)
-], CreateMedicalRecordDto.prototype, "diagnosis", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateMedicalRecordDto.prototype, "treatment", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateMedicalRecordDto.prototype, "notes", void 0);
-//# sourceMappingURL=create-medical-record.dto.js.map
+], UpdateOrderStatusDto.prototype, "status", void 0);
+//# sourceMappingURL=update-order.dto.js.map

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateAppointmentDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
+const swagger_1 = require("@nestjs/swagger");
 class CreateAppointmentDto {
     petId;
     doctorId;
@@ -22,24 +23,29 @@ class CreateAppointmentDto {
 exports.CreateAppointmentDto = CreateAppointmentDto;
 __decorate([
     (0, class_transformer_1.Type)(() => Number),
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateAppointmentDto.prototype, "petId", void 0);
 __decorate([
     (0, class_transformer_1.Type)(() => Number),
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateAppointmentDto.prototype, "doctorId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], CreateAppointmentDto.prototype, "appointmentDate", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsIn)(['VIDEO_CALL', 'CHAT']),
     __metadata("design:type", String)
 ], CreateAppointmentDto.prototype, "type", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsNumber)(),

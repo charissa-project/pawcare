@@ -79,7 +79,7 @@ let OrdersService = class OrdersService {
         return order;
     }
     async updateStatus(id, status) {
-        const validStatus = ['PENDING', 'SHIPPED', 'DELIVERED'];
+        const validStatus = Object.values(client_1.OrderStatus);
         if (!validStatus.includes(status))
             throw new common_1.BadRequestException('Status tidak valid');
         const order = await this.prisma.order.findUnique({ where: { id } });
@@ -111,6 +111,20 @@ let OrdersService = class OrdersService {
         return this.prisma.order.update({
             where: { id },
             data: { status: 'CANCELLED' },
+        });
+    }
+    async verifyPayment(id) {
+        const order = await this.prisma.order.findUnique({
+            where: { id },
+        });
+        if (!order) {
+            throw new common_1.NotFoundException('Order tidak ditemukan');
+        }
+        return this.prisma.order.update({
+            where: { id },
+            data: {
+                paymentStatus: 'PAID',
+            },
         });
     }
 };
