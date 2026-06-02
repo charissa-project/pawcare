@@ -94,14 +94,6 @@ export declare class PetsController {
             treatment: string;
             notes: string | null;
         })[];
-        reminders: {
-            id: number;
-            type: string;
-            petId: number;
-            title: string;
-            reminderDate: Date;
-            isDone: boolean;
-        }[];
     } & {
         id: number;
         photoUrl: string | null;
@@ -168,14 +160,6 @@ export declare class PetsController {
                 treatment: string;
                 notes: string | null;
             })[];
-            reminders: {
-                id: number;
-                type: string;
-                petId: number;
-                title: string;
-                reminderDate: Date;
-                isDone: boolean;
-            }[];
         } & {
             id: number;
             photoUrl: string | null;

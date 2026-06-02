@@ -14,7 +14,6 @@ const users_module_1 = require("./users/users.module");
 const doctors_module_1 = require("./doctors/doctors.module");
 const pets_module_1 = require("./pets/pets.module");
 const appointments_module_1 = require("./appointments/appointments.module");
-const reminders_module_1 = require("./reminders/reminders.module");
 const medical_records_module_1 = require("./medical-records/medical-records.module");
 const products_module_1 = require("./products/products.module");
 const orders_module_1 = require("./orders/orders.module");
@@ -33,7 +32,6 @@ exports.AppModule = AppModule = __decorate([
             doctors_module_1.DoctorsModule,
             pets_module_1.PetsModule,
             appointments_module_1.AppointmentsModule,
-            reminders_module_1.RemindersModule,
             medical_records_module_1.MedicalRecordsModule,
             products_module_1.ProductsModule,
             orders_module_1.OrdersModule,

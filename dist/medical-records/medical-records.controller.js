@@ -31,6 +31,9 @@ let MedicalRecordsController = class MedicalRecordsController {
     create(userId, dto) {
         return this.medicalRecordsService.create(userId, dto);
     }
+    findAllAdmin() {
+        return this.medicalRecordsService.findAll();
+    }
     findAll(userId) {
         return this.medicalRecordsService.findAllByUser(userId);
     }
@@ -58,6 +61,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, create_medical_record_dto_1.CreateMedicalRecordDto]),
     __metadata("design:returntype", void 0)
 ], MedicalRecordsController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)('all'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('ADMIN', 'DOCTOR'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], MedicalRecordsController.prototype, "findAllAdmin", null);
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
@@ -98,7 +109,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.DOCTOR),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, get_user_decorator_1.GetUser)('id')),
     __param(2, (0, get_user_decorator_1.GetUser)('role')),

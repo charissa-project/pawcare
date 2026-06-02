@@ -52,27 +52,6 @@ async function main() {
   }
   console.log('✅ Medical Records imported');
 
-  // 7. Reminder (butuh Pet)
-  for (const reminder of data.reminders ?? []) {
-    await prisma.reminder.upsert({ where: { id: reminder.id }, update: {}, create: {
-      ...reminder,
-      reminderDate: new Date(reminder.reminderDate),
-    }});
-  }
-  console.log('✅ Reminders imported');
-
-  // 8. Order (butuh User)
-  for (const order of data.orders ?? []) {
-    await prisma.order.upsert({ where: { id: order.id }, update: {}, create: order });
-  }
-  console.log('✅ Orders imported');
-
-  // 9. OrderItem (butuh Order & Product)
-  for (const item of data.orderItems ?? []) {
-    await prisma.orderItem.upsert({ where: { id: item.id }, update: {}, create: item });
-  }
-  console.log('✅ Order Items imported');
-
   // 10. Post (butuh User)
   for (const post of data.posts ?? []) {
     await prisma.post.upsert({ where: { id: post.id }, update: {}, create: post });

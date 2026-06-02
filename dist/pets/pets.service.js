@@ -46,7 +46,6 @@ let PetsService = class PetsService {
         const pet = await this.prisma.pet.findUnique({
             where: { id },
             include: {
-                reminders: true,
                 medicalRecords: {
                     include: { doctor: { include: { user: true } } },
                     orderBy: { createdAt: 'desc' },

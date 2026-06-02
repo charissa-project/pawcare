@@ -36,6 +36,15 @@ let MedicalRecordsService = class MedicalRecordsService {
             },
         });
     }
+    async findAll() {
+        return this.prisma.medicalRecord.findMany({
+            include: {
+                pet: { include: { owner: true } },
+                doctor: { include: { user: true } },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
     async findAllByUser(userId) {
         return this.prisma.medicalRecord.findMany({
             where: {

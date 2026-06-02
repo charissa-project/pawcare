@@ -22,6 +22,8 @@ const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const upload_config_1 = require("../common/upload.config");
 const swagger_1 = require("@nestjs/swagger");
+const roles_guard_1 = require("../auth/guards/roles.guard");
+const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 let PetsController = class PetsController {
     petsService;
     constructor(petsService) {
@@ -69,8 +71,8 @@ __decorate([
 ], PetsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('all'),
-    (0, common_1.UseGuards)(RolesGuard),
-    Roles('ADMIN'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('ADMIN', 'DOCTOR'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
