@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
+const update_payment_dto_1 = require("./dto/update-payment.dto");
 const swagger_1 = require("@nestjs/swagger");
 const orders_service_1 = require("./orders.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
@@ -113,7 +114,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Number, update_payment_dto_1.UpdatePaymentStatusDto]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "updatePaymentStatus", null);
 __decorate([

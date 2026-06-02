@@ -42,6 +42,9 @@ let DoctorsController = class DoctorsController {
     addSchedule(userId, body) {
         return this.doctorService.addSchedule(userId, body);
     }
+    updateSchedule(userId, scheduleId, body) {
+        return this.doctorService.updateSchedule(userId, scheduleId, body);
+    }
     removeSchedule(userId, scheduleId) {
         return this.doctorService.removeSchedule(userId, scheduleId);
     }
@@ -90,6 +93,17 @@ __decorate([
     __metadata("design:paramtypes", [Number, add_schedule_dto_1.AddScheduleDto]),
     __metadata("design:returntype", void 0)
 ], DoctorsController.prototype, "addSchedule", null);
+__decorate([
+    (0, common_1.Patch)('me/schedule/:scheduleId'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.DOCTOR),
+    __param(0, (0, get_user_decorator_1.GetUser)('id')),
+    __param(1, (0, common_1.Param)('scheduleId', common_1.ParseIntPipe)),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, add_schedule_dto_1.AddScheduleDto]),
+    __metadata("design:returntype", void 0)
+], DoctorsController.prototype, "updateSchedule", null);
 __decorate([
     (0, common_1.Delete)('me/schedule/:scheduleId'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),

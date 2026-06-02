@@ -22,6 +22,8 @@ const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const upload_config_1 = require("../common/upload.config");
 const swagger_1 = require("@nestjs/swagger");
+const create_user_dto_1 = require("../users/dto/create-user.dto");
+const update_user_dto_1 = require("../users/dto/update-user.dto");
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
@@ -35,6 +37,12 @@ let UsersController = class UsersController {
     }
     uploadPhoto(userId, file) {
         return this.usersService.updatePhoto(userId, file);
+    }
+    create(dto) {
+        return this.usersService.create(dto);
+    }
+    update(id, dto) {
+        return this.usersService.update(id, dto);
     }
     updateRole(id, body) {
         return this.usersService.updateRole(id, body.role);
@@ -71,9 +79,29 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "uploadPhoto", null);
 __decorate([
+    (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('ADMIN'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('ADMIN'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "update", null);
+__decorate([
     (0, common_1.Patch)(':id/role'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('ADMIN'),
+    (0, swagger_1.ApiBody)({ schema: { type: 'object', properties: { role: { type: 'string', enum: ['ADMIN', 'DOCTOR', 'USER'] } } } }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

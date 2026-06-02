@@ -1,3 +1,4 @@
+import { UpdatePaymentStatusDto } from './dto/update-payment.dto';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order.dto';
@@ -95,61 +96,37 @@ export declare class OrdersController {
         paymentProof: string | null;
     })[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
-        doctor: {
-            user: {
-                fullname: string;
-                email: string;
-                password: string;
-                role: import("@prisma/client").$Enums.Role;
-                id: number;
-                photoUrl: string | null;
-                createdAt: Date;
-                updatedAt: Date;
-            };
-        } & {
-            schedule: string;
+        user: {
+            fullname: string;
+            email: string;
             id: number;
-            userId: number;
-            specialization: string;
-            experience: number;
-            rating: number | null;
-            isAvailable: boolean;
         };
-        pet: {
-            owner: {
-                fullname: string;
-                email: string;
-                password: string;
-                role: import("@prisma/client").$Enums.Role;
+        orderItems: ({
+            product: {
                 id: number;
-                photoUrl: string | null;
                 createdAt: Date;
-                updatedAt: Date;
+                name: string;
+                description: string | null;
+                price: number;
+                stock: number;
+                category: import("@prisma/client").$Enums.ProductCategory;
+                imageUrl: string | null;
             };
         } & {
             id: number;
-            photoUrl: string | null;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            userId: number;
-            species: string;
-            breed: string;
-            age: number;
-            gender: string;
-            weight: number;
-            healthStatus: string;
-            lastVaccine: Date | null;
-            nextVaccine: Date | null;
-        };
+            price: number;
+            productId: number;
+            quantity: number;
+            orderId: number;
+        })[];
     } & {
         id: number;
         createdAt: Date;
-        doctorId: number;
-        petId: number;
-        diagnosis: string;
-        treatment: string;
-        notes: string | null;
+        userId: number;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        totalPrice: number;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+        paymentProof: string | null;
     }>;
     updateStatus(id: number, body: UpdateOrderStatusDto): Promise<{
         orderItems: ({
@@ -188,9 +165,7 @@ export declare class OrdersController {
         paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
     }>;
-    updatePaymentStatus(id: number, body: {
-        paymentStatus: 'PAID' | 'REJECTED';
-    }): Promise<{
+    updatePaymentStatus(id: number, body: UpdatePaymentStatusDto): Promise<{
         id: number;
         createdAt: Date;
         userId: number;

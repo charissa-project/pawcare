@@ -11,9 +11,9 @@ export declare class PostsService {
         data: {
             id: number;
             createdAt: Date;
+            content: string;
             userId: number;
             imageUrl: string | null;
-            content: string;
             likes: number;
         };
     }>;
@@ -26,8 +26,8 @@ export declare class PostsService {
         } & {
             id: number;
             createdAt: Date;
-            userId: number;
             content: string;
+            userId: number;
             postId: number;
         })[];
         user: {
@@ -37,9 +37,9 @@ export declare class PostsService {
     } & {
         id: number;
         createdAt: Date;
+        content: string;
         userId: number;
         imageUrl: string | null;
-        content: string;
         likes: number;
     })[]>;
     findOne(id: number): Promise<{
@@ -51,8 +51,8 @@ export declare class PostsService {
         } & {
             id: number;
             createdAt: Date;
-            userId: number;
             content: string;
+            userId: number;
             postId: number;
         })[];
         user: {
@@ -62,9 +62,9 @@ export declare class PostsService {
     } & {
         id: number;
         createdAt: Date;
+        content: string;
         userId: number;
         imageUrl: string | null;
-        content: string;
         likes: number;
     }>;
     update(id: number, userId: number, role: Role, dto: UpdatePostDto): Promise<{
@@ -75,25 +75,25 @@ export declare class PostsService {
     } & {
         id: number;
         createdAt: Date;
+        content: string;
         userId: number;
         imageUrl: string | null;
-        content: string;
         likes: number;
     }>;
     remove(id: number, userId: number, role: Role): Promise<{
         id: number;
         createdAt: Date;
+        content: string;
         userId: number;
         imageUrl: string | null;
-        content: string;
         likes: number;
     }>;
     like(id: number): Promise<{
         id: number;
         createdAt: Date;
+        content: string;
         userId: number;
         imageUrl: string | null;
-        content: string;
         likes: number;
     }>;
 }

@@ -65,23 +65,20 @@ let OrdersService = class OrdersService {
         });
     }
     async findOne(id, userId, role) {
-        const record = await this.prisma.medicalRecord.findUnique({
+        const order = await this.prisma.order.findUnique({
             where: { id },
             include: {
-                pet: { include: { owner: true } },
-                doctor: { include: { user: true } },
+                user: { select: { id: true, fullname: true, email: true } },
+                orderItems: { include: { product: true } },
             },
         });
-        if (!record) {
-            throw new common_1.NotFoundException('Rekam medis tidak ditemukan');
-        }
-        const isOwner = record.pet.userId === userId;
-        const isDoctor = record.doctor.userId === userId || record.doctorId === userId;
+        if (!order)
+            throw new common_1.NotFoundException('Order tidak ditemukan');
+        const isOwner = order.userId === userId;
         const isAdmin = role === client_1.Role.ADMIN;
-        if (!isOwner && !isDoctor && !isAdmin) {
+        if (!isOwner && !isAdmin)
             throw new common_1.ForbiddenException('Akses ditolak');
-        }
-        return record;
+        return order;
     }
     async updateStatus(id, status) {
         const validStatus = Object.values(client_1.OrderStatus);
@@ -128,29 +125,21 @@ let OrdersService = class OrdersService {
         });
     }
     async uploadProof(id, userId, file) {
-        if (!file) {
+        if (!file)
             throw new common_1.BadRequestException('File tidak ditemukan');
-        }
-        const order = await this.prisma.order.findUnique({
-            where: { id },
-        });
-        if (!order) {
+        const order = await this.prisma.order.findUnique({ where: { id } });
+        if (!order)
             throw new common_1.NotFoundException('Order tidak ditemukan');
-        }
-        if (order.userId !== userId) {
+        if (order.userId !== userId)
             throw new common_1.ForbiddenException('Akses ditolak');
-        }
-        const paymentProof = file.path;
         const updated = await this.prisma.order.update({
             where: { id },
-            data: { paymentProof },
+            data: { paymentProof: file.path },
         });
         return {
             success: true,
             message: 'Bukti transfer berhasil diupload',
-            data: {
-                paymentProof: updated.paymentProof,
-            },
+            data: { paymentProof: updated.paymentProof },
         };
     }
 };

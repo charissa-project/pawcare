@@ -59,6 +59,17 @@ export declare class DoctorsController {
             doctorId: number;
         };
     }>;
+    updateSchedule(userId: number, scheduleId: number, body: AddScheduleDto): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            id: number;
+            day: string;
+            startTime: string;
+            endTime: string;
+            doctorId: number;
+        };
+    }>;
     removeSchedule(userId: number, scheduleId: number): Promise<{
         success: boolean;
         message: string;

@@ -12,8 +12,8 @@ export declare class CommentsController {
     } & {
         id: number;
         createdAt: Date;
-        userId: number;
         content: string;
+        userId: number;
         postId: number;
     }>;
     findByPost(postId: number): Promise<({
@@ -24,15 +24,15 @@ export declare class CommentsController {
     } & {
         id: number;
         createdAt: Date;
-        userId: number;
         content: string;
+        userId: number;
         postId: number;
     })[]>;
     remove(id: number, userId: number, role: Role): Promise<{
         id: number;
         createdAt: Date;
-        userId: number;
         content: string;
+        userId: number;
         postId: number;
     }>;
 }
