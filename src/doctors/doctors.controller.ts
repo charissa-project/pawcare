@@ -23,6 +23,7 @@ import { multerConfig } from '../common/upload.config';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { AddScheduleDto } from './dto/add-schedule.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
@@ -101,15 +102,15 @@ export class DoctorsController {
   }
 
   // UPDATE DOCTOR (ADMIN)
-  @Patch(':id')
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: any,
-  ) {
-    return this.doctorService.update(id, dto);
-  }
+@Patch(':id')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.ADMIN)
+update(
+  @Param('id', ParseIntPipe) id: number,
+  @Body() dto: UpdateDoctorDto,
+) {
+  return this.doctorService.update(id, dto);
+}
 
   // DELETE DOCTOR (ADMIN)
   @Delete(':id')

@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { AddScheduleDto } from './dto/add-schedule.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Injectable()
 export class DoctorsService {
@@ -137,18 +138,17 @@ export class DoctorsService {
   }
 
   // UPDATE DOCTOR (ADMIN)
-  async update(id: number, dto: any) {
-    const doctor = await this.prisma.doctor.findUnique({ where: { id: Number(id) } });
+ async update(id: number, dto: UpdateDoctorDto) {
+  const doctor = await this.prisma.doctor.findUnique({ where: { id: Number(id) } });
+  if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
 
-    if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
+  const updated = await this.prisma.doctor.update({
+    where: { id: Number(id) },
+    data: dto,
+  });
 
-    const updated = await this.prisma.doctor.update({
-      where: { id: Number(id) },
-      data: dto,
-    });
-
-    return { success: true, message: 'Dokter berhasil diperbarui', data: updated };
-  }
+  return { success: true, message: 'Dokter berhasil diperbarui', data: updated };
+}
 
   // DELETE DOCTOR (ADMIN)
   async remove(id: number) {
