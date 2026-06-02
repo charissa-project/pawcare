@@ -22,7 +22,7 @@ enum AppointmentStatus {
 enum PaymentStatus {
   PENDING
   PAID
-  REJECTED  // ← tambah ini
+  REJECTED
 }
 
 enum OrderStatus {
