@@ -85,26 +85,28 @@ export class DoctorsService {
   }
 
   // GET SCHEDULE (FIXED 🔥)
-  async getSchedule(userId: number) {
-    const doctor = await this.prisma.doctor.findFirst({
-      where: { userId },
-    });
+ async getSchedule(userId: number) {
+  const doctor = await this.prisma.doctor.findFirst({
+    where: { userId: Number(userId) },
+  });
 
-    if (!doctor) {
-      throw new NotFoundException('Profil dokter tidak ditemukan');
-    }
-
-    const schedules = await this.prisma.schedule.findMany({
-      where: { doctorId: doctor.id },
-      orderBy: { id: 'asc' },
-    });
-
+  if (!doctor) {
     return {
-      success: true,
-      data: schedules,
+      success: false,
+      message: 'Doctor tidak ditemukan',
+      data: [],
     };
   }
 
+  const schedules = await this.prisma.schedule.findMany({
+    where: { doctorId: doctor.id },
+  });
+
+  return {
+    success: true,
+    data: schedules,
+  };
+}
   // ADD SCHEDULE (FIXED)
   async addSchedule(
     userId: number,
