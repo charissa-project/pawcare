@@ -10,6 +10,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { Role } from '@prisma/client';
 import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+import { UpdateOrderStatusDto } from './dto/update-order.dto'; // ← tambah import
 
 @ApiBearerAuth() // ← tambah ini
 
@@ -47,15 +48,15 @@ export class OrdersController {
   }
 
   // admin update status
-  @Patch(':id/status')
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
-  updateStatus(
-    @Param('id', ParseIntPipe) id: number,
-    @Body('status') status: string,
-  ) {
-    return this.ordersService.updateStatus(id, status);
-  }
+@Patch(':id/status')
+@UseGuards(RolesGuard)
+@Roles(Role.ADMIN)
+updateStatus(
+  @Param('id', ParseIntPipe) id: number,
+  @Body() body: UpdateOrderStatusDto,
+) {
+  return this.ordersService.updateStatus(id, body.status);
+}
 
   // user cancel order
   @Patch(':id/cancel')
