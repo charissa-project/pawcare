@@ -45,7 +45,7 @@ model User {
   email     String   @unique
   password  String
   role      Role     @default(USER)
-  photoUrl  String?  // <-- tambah ini
+  photoUrl  String? // <-- tambah ini
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -54,6 +54,7 @@ model User {
   orders   Order[]
   posts    Post[]
   comments Comment[]
+  cart     Cart?
 }
 
 model Doctor {
@@ -68,7 +69,7 @@ model Doctor {
   user           User            @relation(fields: [userId], references: [id])
   appointments   Appointment[]
   medicalRecords MedicalRecord[]
-  schedules  Schedule[]
+  schedules      Schedule[]
 }
 
 model Pet {
@@ -81,7 +82,7 @@ model Pet {
   gender       String
   weight       Float
   healthStatus String
-  photoUrl     String?   // <-- tambah ini
+  photoUrl     String? // <-- tambah ini
   lastVaccine  DateTime?
   nextVaccine  DateTime?
   createdAt    DateTime  @default(now())
@@ -99,7 +100,7 @@ model Appointment {
   appointmentDate DateTime
   type            String
   consultationFee Float?
-  photoUrl        String?           // <-- tambah ini (foto gejala)
+  photoUrl        String? // <-- tambah ini (foto gejala)
   status          AppointmentStatus @default(PENDING)
 
   pet    Pet    @relation(fields: [petId], references: [id])
@@ -123,29 +124,30 @@ model Product {
   id          Int             @id @default(autoincrement())
   name        String
   price       Float
-  stock       Int             @default(0)  // ← tambah ini
+  stock       Int             @default(0) // ← tambah ini
   category    ProductCategory
   description String?
   imageUrl    String?
   createdAt   DateTime        @default(now())
 
   orderItems OrderItem[]
+  cartItems  CartItem[]
 }
 
 model Order {
-  id            Int           @id @default(autoincrement())
-  userId        Int
-  totalPrice    Float
+  id         Int   @id @default(autoincrement())
+  userId     Int
+  totalPrice Float
 
   paymentStatus PaymentStatus @default(PENDING)
   status        OrderStatus   @default(PENDING)
 
-  paymentProof  String?
+  paymentProof String?
 
-  createdAt     DateTime      @default(now())
+  createdAt DateTime @default(now())
 
-  user          User          @relation(fields: [userId], references: [id])
-  orderItems    OrderItem[]
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
 }
 
 model OrderItem {
@@ -163,7 +165,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   userId    Int
   content   String   @db.Text
-  imageUrl  String?  // <-- tambah ini
+  imageUrl  String? // <-- tambah ini
   likes     Int      @default(0)
   createdAt DateTime @default(now())
 
@@ -190,4 +192,22 @@ model Schedule {
   endTime   String
 
   doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model Cart {
+  id     Int @id @default(autoincrement())
+  userId Int @unique
+
+  user  User       @relation(fields: [userId], references: [id])
+  items CartItem[]
+}
+
+model CartItem {
+  id        Int @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int
+
+  cart    Cart    @relation(fields: [cartId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }

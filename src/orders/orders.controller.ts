@@ -120,4 +120,10 @@ uploadProof(
   return this.ordersService.uploadProof(id, userId, file);
 }
 
+@UseGuards(JwtGuard)
+@Post('checkout')
+checkout(@GetUser('id') userId: number) {
+  return this.ordersService.checkout(userId);
+}
+
 }

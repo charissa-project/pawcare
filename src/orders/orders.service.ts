@@ -145,4 +145,80 @@ export class OrdersService {
       data: { paymentProof: updated.paymentProof },
     };
   }
+
+async checkout(userId: number) {
+  const cart = await this.prisma.cart.findUnique({
+    where: { userId },
+    include: {
+      items: {
+        include: { product: true }
+      }
+    }
+  });
+
+  if (!cart || cart.items.length === 0) {
+    throw new BadRequestException('Cart kosong');
+  }
+
+  let totalPrice = 0;
+
+  const itemsData: { productId: number; quantity: number; price: number }[] = [];
+
+  for (const item of cart.items) {
+    const product = item.product;
+
+    if (product.stock < item.quantity) {
+      throw new BadRequestException(`Stok ${product.name} tidak cukup`);
+    }
+
+    const subtotal = product.price * item.quantity;
+    totalPrice += subtotal;
+
+    itemsData.push({
+      productId: item.productId,
+      quantity: item.quantity,
+      price: subtotal
+    });
+  }
+
+  const order = await this.prisma.order.create({
+    data: {
+      userId,
+      totalPrice,
+      status: 'PENDING',
+      orderItems: {
+        create: itemsData
+      }
+    },
+    include: {
+      orderItems: {
+        include: { product: true }
+      }
+    }
+  });
+
+  // kurangi stock
+  for (const item of cart.items) {
+    await this.prisma.product.update({
+      where: { id: item.productId },
+      data: {
+        stock: {
+          decrement: item.quantity
+        }
+      }
+    });
+  }
+
+  // kosongkan cart
+  await this.prisma.cartItem.deleteMany({
+    where: { cartId: cart.id }
+  });
+
+  return {
+    success: true,
+    message: 'Checkout berhasil',
+    data: order
+  };
+}
+
 }
