@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMedicalRecordDto } from './dto/create-medical-record.dto';
 import { UpdateMedicalRecordDto } from './dto/update-medical-record.dto';
@@ -8,13 +12,23 @@ import { Role } from '@prisma/client';
 export class MedicalRecordsService {
   constructor(private prisma: PrismaService) {}
 
-  // hanya doctor yang bisa buat rekam medis
+  // CREATE (DOCTOR ONLY - dari controller guard)
   async create(userId: number, dto: CreateMedicalRecordDto) {
-    const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
-    if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+    const doctor = await this.prisma.doctor.findUnique({
+      where: { userId },
+    });
 
-    const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
-    if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
+    if (!doctor) {
+      throw new NotFoundException('Profil dokter tidak ditemukan');
+    }
+
+    const pet = await this.prisma.pet.findUnique({
+      where: { id: dto.petId },
+    });
+
+    if (!pet) {
+      throw new NotFoundException('Hewan tidak ditemukan');
+    }
 
     return this.prisma.medicalRecord.create({
       data: {
@@ -28,17 +42,18 @@ export class MedicalRecordsService {
     });
   }
 
-async findAll() {
-  return this.prisma.medicalRecord.findMany({
-    include: {
-      pet: { include: { owner: true } },
-      doctor: { include: { user: true } },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
-}
+  // ADMIN: semua data
+  async findAll() {
+    return this.prisma.medicalRecord.findMany({
+      include: {
+        pet: { include: { owner: true } },
+        doctor: { include: { user: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 
-  // user: lihat rekam medis semua pet miliknya
+  // USER: hanya pet miliknya
   async findAllByUser(userId: number) {
     return this.prisma.medicalRecord.findMany({
       where: {
@@ -52,12 +67,16 @@ async findAll() {
     });
   }
 
-  // rekam medis by pet tertentu
+  // BY PET
   async findByPet(petId: number, userId: number, role: Role) {
-    const pet = await this.prisma.pet.findUnique({ where: { id: petId } });
-    if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
+    const pet = await this.prisma.pet.findUnique({
+      where: { id: petId },
+    });
 
-    // user hanya bisa lihat pet miliknya, doctor & admin bisa lihat semua
+    if (!pet) {
+      throw new NotFoundException('Hewan tidak ditemukan');
+    }
+
     if (role === Role.USER && pet.userId !== userId) {
       throw new ForbiddenException('Akses ditolak');
     }
@@ -71,6 +90,7 @@ async findAll() {
     });
   }
 
+  // DETAIL RECORD (FIXED AUTH 🔥)
   async findOne(id: number, userId: number, role: Role) {
     const record = await this.prisma.medicalRecord.findUnique({
       where: { id },
@@ -80,10 +100,12 @@ async findAll() {
       },
     });
 
-    if (!record) throw new NotFoundException('Rekam medis tidak ditemukan');
+    if (!record) {
+      throw new NotFoundException('Rekam medis tidak ditemukan');
+    }
 
     const isOwner = record.pet.userId === userId;
-    const isDoctor = record.doctor.userId === userId;
+    const isDoctor = role === Role.DOCTOR;
     const isAdmin = role === Role.ADMIN;
 
     if (!isOwner && !isDoctor && !isAdmin) {
@@ -93,15 +115,22 @@ async findAll() {
     return record;
   }
 
-  // hanya doctor yang membuat atau admin yang bisa update
-  async update(id: number, userId: number, role: Role, dto: UpdateMedicalRecordDto) {
+  // UPDATE (DOCTOR + ADMIN)
+  async update(
+    id: number,
+    userId: number,
+    role: Role,
+    dto: UpdateMedicalRecordDto,
+  ) {
     const record = await this.findOne(id, userId, role);
 
-    const isDoctor = record.doctor.userId === userId;
+    const isDoctor = role === Role.DOCTOR;
     const isAdmin = role === Role.ADMIN;
 
     if (!isDoctor && !isAdmin) {
-      throw new ForbiddenException('Hanya dokter atau admin yang bisa mengubah rekam medis');
+      throw new ForbiddenException(
+        'Hanya dokter atau admin yang bisa mengubah rekam medis',
+      );
     }
 
     return this.prisma.medicalRecord.update({
@@ -114,18 +143,21 @@ async findAll() {
     });
   }
 
+  // DELETE (DOCTOR + ADMIN)
   async remove(id: number, userId: number, role: Role) {
-  await this.findOne(id, userId, role);
+    await this.findOne(id, userId, role);
 
-  const isAdmin = role === Role.ADMIN;
-  const isDoctor = role === Role.DOCTOR;
+    const isDoctor = role === Role.DOCTOR;
+    const isAdmin = role === Role.ADMIN;
 
-  if (!isAdmin && !isDoctor) {
-    throw new ForbiddenException('Hanya dokter atau admin yang bisa menghapus rekam medis');
+    if (!isDoctor && !isAdmin) {
+      throw new ForbiddenException(
+        'Hanya dokter atau admin yang bisa menghapus rekam medis',
+      );
+    }
+
+    return this.prisma.medicalRecord.delete({
+      where: { id },
+    });
   }
-
-  return this.prisma.medicalRecord.delete({
-    where: { id },
-  });
-}
 }
