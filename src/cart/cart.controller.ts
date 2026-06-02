@@ -6,7 +6,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
-  UseGuards,
+  UseGuards, Patch
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -15,6 +15,7 @@ import { CartService } from './cart.service';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { AddToCartDto } from './dto/add-to-cart.dto';
+import { UpdateCartDto } from './dto/update-cart.dto';
 
 @ApiTags('Cart')
 @ApiBearerAuth()
@@ -46,4 +47,12 @@ export class CartController {
   ) {
     return this.cartService.remove(userId, id);
   }
+
+@Patch(':id')
+updateCart(
+  @Param('id', ParseIntPipe) id: number,
+  @Body() dto: UpdateCartDto,
+) {
+  return this.cartService.updateQty(id, dto.quantity);
+}
 }

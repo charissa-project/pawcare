@@ -72,4 +72,11 @@ export class CartService {
       where: { id: cartItemId },
     });
   }
+
+async updateQty(cartItemId: number, quantity: number) {
+  return this.prisma.cartItem.update({
+    where: { id: cartItemId },
+    data: { quantity },
+  });
+}
 }
