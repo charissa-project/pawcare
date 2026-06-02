@@ -38,7 +38,7 @@ create(
 
   @Get('all')
 @UseGuards(RolesGuard)
-@Roles('ADMIN, DOCTOR')
+@Roles('ADMIN', 'DOCTOR')
 findAllAdmin() {
   return this.petsService.findAll();
 }
