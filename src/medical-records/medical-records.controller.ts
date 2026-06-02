@@ -76,7 +76,7 @@ findAllAdmin() {
   // hanya admin yang bisa hapus
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.DOCTOR)
   remove(
     @Param('id', ParseIntPipe) id: number,
     @GetUser('id') userId: number,
