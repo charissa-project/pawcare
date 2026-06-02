@@ -1,9 +1,9 @@
-import { IsString, IsIn } from 'class-validator';
+import { IsEnum } from 'class-validator';
+import { OrderStatus } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateOrderStatusDto {
-  @ApiProperty({ example: 'SHIPPED', enum: ['PENDING', 'SHIPPED', 'DELIVERED'] })
-  @IsString()
-  @IsIn(['PENDING', 'SHIPPED', 'DELIVERED'])
-  status: string;
+@ApiProperty({ example: 'SHIPPED', enum: ['PENDING', 'SHIPPED', 'DELIVERED'] })
+  @IsEnum(OrderStatus)
+  status: OrderStatus;
 }
