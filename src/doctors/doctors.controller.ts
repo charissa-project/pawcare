@@ -32,8 +32,6 @@ import { Role } from '@prisma/client';
 export class DoctorsController {
   constructor(private doctorService: DoctorsService) {}
 
-  // ✅ STATIC ROUTES FIRST — must come before any :param routes
-
   // GET ALL DOCTORS (PUBLIC)
   @Get()
   findAll() {
@@ -48,7 +46,7 @@ export class DoctorsController {
     return this.doctorService.findMe(userId);
   }
 
-  // GET SCHEDULE ✅ defined before :id routes
+  // GET SCHEDULE
   @Get('me/schedule')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.DOCTOR)
@@ -57,15 +55,27 @@ export class DoctorsController {
   }
 
   // ADD SCHEDULE
-@Post('me/schedule')
-@UseGuards(JwtGuard, RolesGuard)
-@Roles(Role.DOCTOR)
-addSchedule(
-  @GetUser('id') userId: number,
-  @Body() body: AddScheduleDto,  // ← pakai DTO
-) {
-  return this.doctorService.addSchedule(userId, body);
-}
+  @Post('me/schedule')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.DOCTOR)
+  addSchedule(
+    @GetUser('id') userId: number,
+    @Body() body: AddScheduleDto,
+  ) {
+    return this.doctorService.addSchedule(userId, body);
+  }
+
+  // EDIT SCHEDULE ← baru
+  @Patch('me/schedule/:scheduleId')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.DOCTOR)
+  updateSchedule(
+    @GetUser('id') userId: number,
+    @Param('scheduleId', ParseIntPipe) scheduleId: number,
+    @Body() body: AddScheduleDto,
+  ) {
+    return this.doctorService.updateSchedule(userId, scheduleId, body);
+  }
 
   // DELETE SCHEDULE
   @Delete('me/schedule/:scheduleId')
@@ -89,8 +99,6 @@ addSchedule(
   ) {
     return this.doctorService.create(dto, file);
   }
-
-  // ✅ PARAMETERIZED ROUTES LAST
 
   // UPDATE DOCTOR (ADMIN)
   @Patch(':id')

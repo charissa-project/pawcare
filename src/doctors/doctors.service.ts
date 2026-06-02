@@ -1,7 +1,6 @@
 import {
   Injectable,
   NotFoundException,
-  InternalServerErrorException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -18,19 +17,13 @@ export class DoctorsService {
       where: { id: Number(dto.userId) },
     });
 
-    if (!user) {
-      throw new NotFoundException('User tidak ditemukan');
-    }
+    if (!user) throw new NotFoundException('User tidak ditemukan');
 
     const doctor = await this.prisma.doctor.create({
       data: { ...dto },
     });
 
-    return {
-      success: true,
-      message: 'Dokter berhasil ditambahkan',
-      data: doctor,
-    };
+    return { success: true, message: 'Dokter berhasil ditambahkan', data: doctor };
   }
 
   // GET ALL DOCTORS
@@ -42,67 +35,41 @@ export class DoctorsService {
         specialization: true,
         experience: true,
         schedule: true,
-        user: {
-          select: {
-            fullname: true,
-            email: true,
-          },
-        },
+        user: { select: { fullname: true, email: true } },
       },
     });
 
-    return {
-      success: true,
-      message: 'Data dokter berhasil diambil',
-      data: doctors,
-    };
+    return { success: true, message: 'Data dokter berhasil diambil', data: doctors };
   }
 
-  // GET DOCTOR PROFILE (LOGIN USER)
+  // GET DOCTOR PROFILE
   async findMe(userId: number) {
     const doctor = await this.prisma.doctor.findFirst({
       where: { userId: Number(userId) },
       include: {
-        user: {
-          select: {
-            id: true,
-            fullname: true,
-            email: true,
-            photoUrl: true,
-          },
-        },
+        user: { select: { id: true, fullname: true, email: true, photoUrl: true } },
       },
     });
 
-    if (!doctor) {
-      throw new NotFoundException('Profil dokter tidak ditemukan');
-    }
+    if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
 
-    return {
-      success: true,
-      data: doctor,
-    };
+    return { success: true, data: doctor };
   }
 
   // GET SCHEDULE
   async getSchedule(userId: number) {
-  const doctor = await this.prisma.doctor.findFirst({
-    where: { userId: Number(userId) },
-  });
+    const doctor = await this.prisma.doctor.findFirst({
+      where: { userId: Number(userId) },
+    });
 
-  if (!doctor) {
-    throw new NotFoundException('Profil dokter tidak ditemukan');
+    if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+
+    const schedules = await this.prisma.schedule.findMany({
+      where: { doctorId: doctor.id },
+    });
+
+    return { success: true, data: schedules };
   }
-
-  const schedules = await this.prisma.schedule.findMany({
-    where: { doctorId: doctor.id },
-  });
-
-  return {
-    success: true,
-    data: schedules,
-  };
-}
 
   // ADD SCHEDULE
   async addSchedule(userId: number, body: AddScheduleDto) {
@@ -110,9 +77,7 @@ export class DoctorsService {
       where: { userId: Number(userId) },
     });
 
-    if (!doctor) {
-      throw new NotFoundException('Profil dokter tidak ditemukan');
-    }
+    if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
 
     const schedule = await this.prisma.schedule.create({
       data: {
@@ -123,11 +88,33 @@ export class DoctorsService {
       },
     });
 
-    return {
-      success: true,
-      message: 'Jadwal berhasil ditambahkan',
-      data: schedule,
-    };
+    return { success: true, message: 'Jadwal berhasil ditambahkan', data: schedule };
+  }
+
+  // UPDATE SCHEDULE ← baru
+  async updateSchedule(userId: number, scheduleId: number, body: AddScheduleDto) {
+    const doctor = await this.prisma.doctor.findFirst({
+      where: { userId: Number(userId) },
+    });
+
+    if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
+
+    const schedule = await this.prisma.schedule.findFirst({
+      where: { id: Number(scheduleId), doctorId: doctor.id },
+    });
+
+    if (!schedule) throw new NotFoundException('Jadwal tidak ditemukan');
+
+    const updated = await this.prisma.schedule.update({
+      where: { id: Number(scheduleId) },
+      data: {
+        day: body.day,
+        startTime: body.startTime,
+        endTime: body.endTime,
+      },
+    });
+
+    return { success: true, message: 'Jadwal berhasil diupdate', data: updated };
   }
 
   // REMOVE SCHEDULE
@@ -136,70 +123,41 @@ export class DoctorsService {
       where: { userId: Number(userId) },
     });
 
-    if (!doctor) {
-      throw new NotFoundException('Profil dokter tidak ditemukan');
-    }
+    if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
 
     const schedule = await this.prisma.schedule.findFirst({
-      where: {
-        id: Number(scheduleId),
-        doctorId: doctor.id,
-      },
+      where: { id: Number(scheduleId), doctorId: doctor.id },
     });
 
-    if (!schedule) {
-      throw new NotFoundException('Jadwal tidak ditemukan');
-    }
+    if (!schedule) throw new NotFoundException('Jadwal tidak ditemukan');
 
-    await this.prisma.schedule.delete({
-      where: { id: Number(scheduleId) },
-    });
+    await this.prisma.schedule.delete({ where: { id: Number(scheduleId) } });
 
-    return {
-      success: true,
-      message: 'Jadwal berhasil dihapus',
-    };
+    return { success: true, message: 'Jadwal berhasil dihapus' };
   }
 
-  // UPDATE DOCTOR
+  // UPDATE DOCTOR (ADMIN)
   async update(id: number, dto: any) {
-    const doctor = await this.prisma.doctor.findUnique({
-      where: { id: Number(id) },
-    });
+    const doctor = await this.prisma.doctor.findUnique({ where: { id: Number(id) } });
 
-    if (!doctor) {
-      throw new NotFoundException('Dokter tidak ditemukan');
-    }
+    if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
 
     const updated = await this.prisma.doctor.update({
       where: { id: Number(id) },
       data: dto,
     });
 
-    return {
-      success: true,
-      message: 'Dokter berhasil diperbarui',
-      data: updated,
-    };
+    return { success: true, message: 'Dokter berhasil diperbarui', data: updated };
   }
 
-  // DELETE DOCTOR
+  // DELETE DOCTOR (ADMIN)
   async remove(id: number) {
-    const doctor = await this.prisma.doctor.findUnique({
-      where: { id: Number(id) },
-    });
+    const doctor = await this.prisma.doctor.findUnique({ where: { id: Number(id) } });
 
-    if (!doctor) {
-      throw new NotFoundException('Dokter tidak ditemukan');
-    }
+    if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
 
-    await this.prisma.doctor.delete({
-      where: { id: Number(id) },
-    });
+    await this.prisma.doctor.delete({ where: { id: Number(id) } });
 
-    return {
-      success: true,
-      message: 'Dokter berhasil dihapus',
-    };
+    return { success: true, message: 'Dokter berhasil dihapus' };
   }
 }
