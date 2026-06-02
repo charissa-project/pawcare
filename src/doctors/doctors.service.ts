@@ -85,29 +85,23 @@ export class DoctorsService {
 
   // GET SCHEDULE
   async getSchedule(userId: number) {
-    try {
-      const doctor = await this.prisma.doctor.findFirst({
-        where: { userId: Number(userId) },
-      });
+  const doctor = await this.prisma.doctor.findFirst({
+    where: { userId: Number(userId) },
+  });
 
-      if (!doctor) {
-        throw new NotFoundException('Profil dokter tidak ditemukan');
-      }
-
-      const schedules = await this.prisma.schedule.findMany({
-        where: { doctorId: doctor.id },
-      });
-
-      return {
-        success: true,
-        data: schedules,
-      };
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      console.error('getSchedule error:', error);
-      throw new InternalServerErrorException('Gagal mengambil jadwal');
-    }
+  if (!doctor) {
+    throw new NotFoundException('Profil dokter tidak ditemukan');
   }
+
+  const schedules = await this.prisma.schedule.findMany({
+    where: { doctorId: doctor.id },
+  });
+
+  return {
+    success: true,
+    data: schedules,
+  };
+}
 
   // ADD SCHEDULE
   async addSchedule(
