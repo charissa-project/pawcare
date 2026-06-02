@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 
@@ -6,6 +10,7 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 export class DoctorsService {
   constructor(private prisma: PrismaService) {}
 
+  // CREATE DOCTOR
   async create(dto: CreateDoctorDto, file?: Express.Multer.File) {
     const user = await this.prisma.user.findUnique({
       where: { id: dto.userId },
@@ -28,6 +33,7 @@ export class DoctorsService {
     };
   }
 
+  // GET ALL DOCTORS
   async findAll() {
     const doctors = await this.prisma.doctor.findMany({
       select: {
@@ -52,8 +58,9 @@ export class DoctorsService {
     };
   }
 
+  // GET DOCTOR PROFILE (LOGIN USER)
   async findMe(userId: number) {
-    const doctor = await this.prisma.doctor.findUnique({
+    const doctor = await this.prisma.doctor.findFirst({
       where: { userId },
       include: {
         user: {
@@ -77,30 +84,33 @@ export class DoctorsService {
     };
   }
 
+  // GET SCHEDULE (FIXED 🔥)
   async getSchedule(userId: number) {
-  const doctor = await this.prisma.doctor.findFirst({
-    where: { userId },
-  });
+    const doctor = await this.prisma.doctor.findFirst({
+      where: { userId },
+    });
 
-  if (!doctor) {
-    throw new NotFoundException('Profil dokter tidak ditemukan');
+    if (!doctor) {
+      throw new NotFoundException('Profil dokter tidak ditemukan');
+    }
+
+    const schedules = await this.prisma.schedule.findMany({
+      where: { doctorId: doctor.id },
+      orderBy: { id: 'asc' },
+    });
+
+    return {
+      success: true,
+      data: schedules,
+    };
   }
 
-  const schedules = await this.prisma.schedule.findMany({
-    where: { doctorId: doctor.id },
-  });
-
-  return {
-    success: true,
-    data: schedules,
-  };
-}
-
+  // ADD SCHEDULE (FIXED)
   async addSchedule(
     userId: number,
     body: { day: string; startTime: string; endTime: string },
   ) {
-    const doctor = await this.prisma.doctor.findUnique({
+    const doctor = await this.prisma.doctor.findFirst({
       where: { userId },
     });
 
@@ -124,8 +134,9 @@ export class DoctorsService {
     };
   }
 
+  // REMOVE SCHEDULE (FIXED)
   async removeSchedule(userId: number, scheduleId: number) {
-    const doctor = await this.prisma.doctor.findUnique({
+    const doctor = await this.prisma.doctor.findFirst({
       where: { userId },
     });
 
@@ -154,6 +165,7 @@ export class DoctorsService {
     };
   }
 
+  // UPDATE DOCTOR
   async update(id: number, dto: any) {
     const doctor = await this.prisma.doctor.findUnique({
       where: { id },
@@ -169,6 +181,7 @@ export class DoctorsService {
     });
   }
 
+  // DELETE DOCTOR
   async remove(id: number) {
     const doctor = await this.prisma.doctor.findUnique({
       where: { id },
