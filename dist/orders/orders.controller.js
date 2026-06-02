@@ -48,8 +48,8 @@ let OrdersController = class OrdersController {
     cancel(id, userId) {
         return this.ordersService.cancel(id, userId);
     }
-    verifyPayment(id) {
-        return this.ordersService.verifyPayment(id);
+    updatePaymentStatus(id, body) {
+        return this.ordersService.updatePaymentStatus(id, body.paymentStatus);
     }
     uploadProof(id, userId, file) {
         return this.ordersService.uploadProof(id, userId, file);
@@ -107,14 +107,15 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "cancel", null);
 __decorate([
-    (0, common_1.Patch)(':id/verify-payment'),
+    (0, common_1.Patch)(':id/payment-status'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "verifyPayment", null);
+], OrdersController.prototype, "updatePaymentStatus", null);
 __decorate([
     (0, common_1.Patch)(':id/upload-proof'),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),

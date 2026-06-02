@@ -22,6 +22,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const upload_config_1 = require("../common/upload.config");
 const doctors_service_1 = require("./doctors.service");
 const create_doctor_dto_1 = require("./dto/create-doctor.dto");
+const add_schedule_dto_1 = require("./dto/add-schedule.dto");
 const swagger_1 = require("@nestjs/swagger");
 const client_1 = require("@prisma/client");
 let DoctorsController = class DoctorsController {
@@ -86,7 +87,7 @@ __decorate([
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Number, add_schedule_dto_1.AddScheduleDto]),
     __metadata("design:returntype", void 0)
 ], DoctorsController.prototype, "addSchedule", null);
 __decorate([

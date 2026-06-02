@@ -187,7 +187,7 @@ export declare class OrdersService {
         paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
     }>;
-    verifyPayment(id: number): Promise<{
+    updatePaymentStatus(id: number, paymentStatus: 'PAID' | 'REJECTED'): Promise<{
         id: number;
         createdAt: Date;
         userId: number;

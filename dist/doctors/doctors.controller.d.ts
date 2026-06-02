@@ -1,5 +1,6 @@
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { AddScheduleDto } from './dto/add-schedule.dto';
 export declare class DoctorsController {
     private doctorService;
     constructor(doctorService: DoctorsService);
@@ -42,24 +43,20 @@ export declare class DoctorsController {
         data: {
             id: number;
             day: string;
-            doctorId: number;
             startTime: string;
             endTime: string;
+            doctorId: number;
         }[];
     }>;
-    addSchedule(userId: number, body: {
-        day: string;
-        startTime: string;
-        endTime: string;
-    }): Promise<{
+    addSchedule(userId: number, body: AddScheduleDto): Promise<{
         success: boolean;
         message: string;
         data: {
             id: number;
             day: string;
-            doctorId: number;
             startTime: string;
             endTime: string;
+            doctorId: number;
         };
     }>;
     removeSchedule(userId: number, scheduleId: number): Promise<{

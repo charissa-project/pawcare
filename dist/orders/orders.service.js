@@ -118,18 +118,13 @@ let OrdersService = class OrdersService {
             data: { status: 'CANCELLED' },
         });
     }
-    async verifyPayment(id) {
-        const order = await this.prisma.order.findUnique({
-            where: { id },
-        });
-        if (!order) {
+    async updatePaymentStatus(id, paymentStatus) {
+        const order = await this.prisma.order.findUnique({ where: { id } });
+        if (!order)
             throw new common_1.NotFoundException('Order tidak ditemukan');
-        }
         return this.prisma.order.update({
             where: { id },
-            data: {
-                paymentStatus: 'PAID',
-            },
+            data: { paymentStatus },
         });
     }
     async uploadProof(id, userId, file) {

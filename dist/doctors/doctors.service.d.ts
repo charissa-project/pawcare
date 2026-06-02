@@ -1,5 +1,6 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { AddScheduleDto } from './dto/add-schedule.dto';
 export declare class DoctorsService {
     private prisma;
     constructor(prisma: PrismaService);
@@ -55,24 +56,20 @@ export declare class DoctorsService {
         data: {
             id: number;
             day: string;
-            doctorId: number;
             startTime: string;
             endTime: string;
+            doctorId: number;
         }[];
     }>;
-    addSchedule(userId: number, body: {
-        day: string;
-        startTime: string;
-        endTime: string;
-    }): Promise<{
+    addSchedule(userId: number, body: AddScheduleDto): Promise<{
         success: boolean;
         message: string;
         data: {
             id: number;
             day: string;
-            doctorId: number;
             startTime: string;
             endTime: string;
+            doctorId: number;
         };
     }>;
     removeSchedule(userId: number, scheduleId: number): Promise<{

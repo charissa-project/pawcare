@@ -87,13 +87,14 @@ updateStatus(
     return this.ordersService.cancel(id, userId);
   }
 
-@Patch(':id/verify-payment')
+@Patch(':id/payment-status')
 @UseGuards(RolesGuard)
 @Roles(Role.ADMIN)
-verifyPayment(
+updatePaymentStatus(
   @Param('id', ParseIntPipe) id: number,
+  @Body() body: { paymentStatus: 'PAID' | 'REJECTED' },
 ) {
-  return this.ordersService.verifyPayment(id);
+  return this.ordersService.updatePaymentStatus(id, body.paymentStatus);
 }
 
 @Patch(':id/upload-proof')

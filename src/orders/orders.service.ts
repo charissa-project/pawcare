@@ -123,20 +123,14 @@ export class OrdersService {
     });
   }
 
-async verifyPayment(id: number) {
-  const order = await this.prisma.order.findUnique({
-    where: { id },
-  });
+async updatePaymentStatus(id: number, paymentStatus: 'PAID' | 'REJECTED') {
+  const order = await this.prisma.order.findUnique({ where: { id } });
 
-  if (!order) {
-    throw new NotFoundException('Order tidak ditemukan');
-  }
+  if (!order) throw new NotFoundException('Order tidak ditemukan');
 
   return this.prisma.order.update({
     where: { id },
-    data: {
-      paymentStatus: 'PAID',
-    },
+    data: { paymentStatus },
   });
 }
 
