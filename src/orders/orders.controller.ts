@@ -1,6 +1,6 @@
 import {
   Controller, Get, Post, Patch,
-  Body, Param, ParseIntPipe, UseGuards,
+  Body, Param, ParseIntPipe, UseGuards, 
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -63,4 +63,14 @@ updateStatus(
   cancel(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
     return this.ordersService.cancel(id, userId);
   }
+
+@Patch(':id/verify-payment')
+@UseGuards(RolesGuard)
+@Roles(Role.ADMIN)
+verifyPayment(
+  @Param('id', ParseIntPipe) id: number,
+) {
+  return this.ordersService.verifyPayment(id);
+}
+
 }

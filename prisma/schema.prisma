@@ -19,6 +19,18 @@ enum AppointmentStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 enum ProductCategory {
   MAKANAN
   SUPLEMEN
@@ -132,14 +144,19 @@ model Product {
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  totalPrice Float
-  status     String
-  createdAt  DateTime @default(now())
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  totalPrice    Float
 
-  user       User        @relation(fields: [userId], references: [id])
-  orderItems OrderItem[]
+  paymentStatus PaymentStatus @default(PENDING)
+  status        OrderStatus   @default(PENDING)
+
+  paymentProof  String?
+
+  createdAt     DateTime      @default(now())
+
+  user          User          @relation(fields: [userId], references: [id])
+  orderItems    OrderItem[]
 }
 
 model OrderItem {

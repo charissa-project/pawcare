@@ -110,4 +110,22 @@ export class OrdersService {
       data: { status: 'CANCELLED' },
     });
   }
+
+async verifyPayment(id: number) {
+  const order = await this.prisma.order.findUnique({
+    where: { id },
+  });
+
+  if (!order) {
+    throw new NotFoundException('Order tidak ditemukan');
+  }
+
+  return this.prisma.order.update({
+    where: { id },
+    data: {
+      paymentStatus: 'PAID',
+    },
+  });
+}
+
 }
