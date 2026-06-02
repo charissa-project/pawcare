@@ -73,15 +73,14 @@ findAllAdmin() {
     return this.medicalRecordsService.update(id, userId, role, dto);
   }
 
-  // hanya admin yang bisa hapus
   @Delete(':id')
-  @UseGuards(RolesGuard)
- @Roles('ADMIN', 'DOCTOR')
-  remove(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') userId: number,
-    @GetUser('role') role: Role,
-  ) {
-    return this.medicalRecordsService.remove(id, userId, role);
-  }
+@UseGuards(RolesGuard)
+@Roles(Role.DOCTOR, Role.ADMIN)
+remove(
+  @Param('id', ParseIntPipe) id: number,
+  @GetUser('id') userId: number,
+  @GetUser('role') role: Role,
+) {
+  return this.medicalRecordsService.remove(id, userId, role);
+}
 }

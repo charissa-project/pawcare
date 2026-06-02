@@ -115,12 +115,17 @@ async findAll() {
   }
 
   async remove(id: number, userId: number, role: Role) {
-    await this.findOne(id, userId, role);
+  await this.findOne(id, userId, role);
 
-    if (role !== Role.ADMIN) {
-      throw new ForbiddenException('Hanya admin yang bisa menghapus rekam medis');
-    }
+  const isAdmin = role === Role.ADMIN;
+  const isDoctor = role === Role.DOCTOR;
 
-    return this.prisma.medicalRecord.delete({ where: { id } });
+  if (!isAdmin && !isDoctor) {
+    throw new ForbiddenException('Hanya dokter atau admin yang bisa menghapus rekam medis');
   }
+
+  return this.prisma.medicalRecord.delete({
+    where: { id },
+  });
+}
 }
