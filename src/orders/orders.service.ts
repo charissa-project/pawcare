@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { Role } from '@prisma/client';
+import { Role, OrderStatus } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
@@ -74,8 +74,8 @@ export class OrdersService {
     return order;
   }
 
-  async updateStatus(id: number, status: string) {
-    const validStatus = ['PENDING', 'SHIPPED', 'DELIVERED'];
+  async updateStatus(id: number, status: OrderStatus) {
+    const validStatus = Object.values(OrderStatus);
     if (!validStatus.includes(status)) throw new BadRequestException('Status tidak valid');
 
     const order = await this.prisma.order.findUnique({ where: { id } });
