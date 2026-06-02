@@ -31,17 +31,7 @@ import { Role } from '@prisma/client';
 export class DoctorsController {
   constructor(private doctorService: DoctorsService) {}
 
-  // CREATE DOCTOR (ADMIN ONLY)
-  @Post()
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  @UseInterceptors(FileInterceptor('photo', multerConfig))
-  create(
-    @Body() dto: CreateDoctorDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.doctorService.create(dto, file);
-  }
+  // ✅ STATIC ROUTES FIRST — must come before any :param routes
 
   // GET ALL DOCTORS (PUBLIC)
   @Get()
@@ -57,7 +47,7 @@ export class DoctorsController {
     return this.doctorService.findMe(userId);
   }
 
-  // GET SCHEDULE
+  // GET SCHEDULE ✅ defined before :id routes
   @Get('me/schedule')
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.DOCTOR)
@@ -86,6 +76,20 @@ export class DoctorsController {
   ) {
     return this.doctorService.removeSchedule(userId, scheduleId);
   }
+
+  // CREATE DOCTOR (ADMIN ONLY)
+  @Post()
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseInterceptors(FileInterceptor('photo', multerConfig))
+  create(
+    @Body() dto: CreateDoctorDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.doctorService.create(dto, file);
+  }
+
+  // ✅ PARAMETERIZED ROUTES LAST
 
   // UPDATE DOCTOR (ADMIN)
   @Patch(':id')

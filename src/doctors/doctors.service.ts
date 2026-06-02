@@ -1,6 +1,7 @@
 import {
   Injectable,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
@@ -13,7 +14,7 @@ export class DoctorsService {
   // CREATE DOCTOR
   async create(dto: CreateDoctorDto, file?: Express.Multer.File) {
     const user = await this.prisma.user.findUnique({
-      where: { id: dto.userId },
+      where: { id: Number(dto.userId) },
     });
 
     if (!user) {
@@ -21,9 +22,7 @@ export class DoctorsService {
     }
 
     const doctor = await this.prisma.doctor.create({
-      data: {
-        ...dto,
-      },
+      data: { ...dto },
     });
 
     return {
@@ -61,7 +60,7 @@ export class DoctorsService {
   // GET DOCTOR PROFILE (LOGIN USER)
   async findMe(userId: number) {
     const doctor = await this.prisma.doctor.findFirst({
-      where: { userId },
+      where: { userId: Number(userId) },
       include: {
         user: {
           select: {
@@ -84,36 +83,39 @@ export class DoctorsService {
     };
   }
 
-  // GET SCHEDULE (FIXED 🔥)
- async getSchedule(userId: number) {
-  const doctor = await this.prisma.doctor.findFirst({
-    where: { userId: Number(userId) },
-  });
+  // GET SCHEDULE
+  async getSchedule(userId: number) {
+    try {
+      const doctor = await this.prisma.doctor.findFirst({
+        where: { userId: Number(userId) },
+      });
 
-  if (!doctor) {
-    return {
-      success: false,
-      message: 'Doctor tidak ditemukan',
-      data: [],
-    };
+      if (!doctor) {
+        throw new NotFoundException('Profil dokter tidak ditemukan');
+      }
+
+      const schedules = await this.prisma.schedule.findMany({
+        where: { doctorId: doctor.id },
+      });
+
+      return {
+        success: true,
+        data: schedules,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      console.error('getSchedule error:', error);
+      throw new InternalServerErrorException('Gagal mengambil jadwal');
+    }
   }
 
-  const schedules = await this.prisma.schedule.findMany({
-    where: { doctorId: doctor.id },
-  });
-
-  return {
-    success: true,
-    data: schedules,
-  };
-}
-  // ADD SCHEDULE (FIXED)
+  // ADD SCHEDULE
   async addSchedule(
     userId: number,
     body: { day: string; startTime: string; endTime: string },
   ) {
     const doctor = await this.prisma.doctor.findFirst({
-      where: { userId },
+      where: { userId: Number(userId) },
     });
 
     if (!doctor) {
@@ -136,10 +138,10 @@ export class DoctorsService {
     };
   }
 
-  // REMOVE SCHEDULE (FIXED)
+  // REMOVE SCHEDULE
   async removeSchedule(userId: number, scheduleId: number) {
     const doctor = await this.prisma.doctor.findFirst({
-      where: { userId },
+      where: { userId: Number(userId) },
     });
 
     if (!doctor) {
@@ -148,7 +150,7 @@ export class DoctorsService {
 
     const schedule = await this.prisma.schedule.findFirst({
       where: {
-        id: scheduleId,
+        id: Number(scheduleId),
         doctorId: doctor.id,
       },
     });
@@ -158,7 +160,7 @@ export class DoctorsService {
     }
 
     await this.prisma.schedule.delete({
-      where: { id: scheduleId },
+      where: { id: Number(scheduleId) },
     });
 
     return {
@@ -170,23 +172,29 @@ export class DoctorsService {
   // UPDATE DOCTOR
   async update(id: number, dto: any) {
     const doctor = await this.prisma.doctor.findUnique({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     if (!doctor) {
       throw new NotFoundException('Dokter tidak ditemukan');
     }
 
-    return this.prisma.doctor.update({
-      where: { id },
+    const updated = await this.prisma.doctor.update({
+      where: { id: Number(id) },
       data: dto,
     });
+
+    return {
+      success: true,
+      message: 'Dokter berhasil diperbarui',
+      data: updated,
+    };
   }
 
   // DELETE DOCTOR
   async remove(id: number) {
     const doctor = await this.prisma.doctor.findUnique({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     if (!doctor) {
@@ -194,7 +202,7 @@ export class DoctorsService {
     }
 
     await this.prisma.doctor.delete({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     return {
