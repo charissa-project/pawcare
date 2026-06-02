@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdatePaymentStatusDto } from './dto/update-payment.dto';
 
 import {
   ApiBearerAuth,
@@ -92,7 +93,7 @@ updateStatus(
 @Roles(Role.ADMIN)
 updatePaymentStatus(
   @Param('id', ParseIntPipe) id: number,
-  @Body() body: { paymentStatus: 'PAID' | 'REJECTED' },
+  @Body() body: UpdatePaymentStatusDto,
 ) {
   return this.ordersService.updatePaymentStatus(id, body.paymentStatus);
 }
