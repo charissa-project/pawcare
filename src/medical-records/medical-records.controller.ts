@@ -29,7 +29,7 @@ export class MedicalRecordsController {
 
 @Get('all')
 @UseGuards(RolesGuard)
-@Roles(Role.ADMIN)
+@Roles('ADMIN', 'DOCTOR')
 findAllAdmin() {
   return this.medicalRecordsService.findAll();
 }
