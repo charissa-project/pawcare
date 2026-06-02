@@ -10,7 +10,7 @@ export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateProductDto, file?: Express.Multer.File) {
-  const imageUrl = file?.secure_url || file?.path;
+  const imageUrl = file?.path;
 
   return this.prisma.product.create({
     data: {
@@ -49,8 +49,8 @@ export class ProductsService {
   const product = await this.prisma.product.findUnique({ where: { id } });
   if (!product) throw new NotFoundException('Produk tidak ditemukan');
 
-  const imageUrl = file?.secure_url || file?.path;
-
+ const imageUrl = file?.path;
+ 
   const updated = await this.prisma.product.update({
     where: { id },
     data: { imageUrl },

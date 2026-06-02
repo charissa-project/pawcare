@@ -19,6 +19,7 @@ const cart_service_1 = require("./cart.service");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const add_to_cart_dto_1 = require("./dto/add-to-cart.dto");
+const update_cart_dto_1 = require("./dto/update-cart.dto");
 let CartController = class CartController {
     cartService;
     constructor(cartService) {
@@ -32,6 +33,9 @@ let CartController = class CartController {
     }
     removeItem(id, userId) {
         return this.cartService.remove(userId, id);
+    }
+    updateCart(id, dto) {
+        return this.cartService.updateQty(id, dto.quantity);
     }
 };
 exports.CartController = CartController;
@@ -61,6 +65,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], CartController.prototype, "removeItem", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_cart_dto_1.UpdateCartDto]),
+    __metadata("design:returntype", void 0)
+], CartController.prototype, "updateCart", null);
 exports.CartController = CartController = __decorate([
     (0, swagger_1.ApiTags)('Cart'),
     (0, swagger_1.ApiBearerAuth)(),

@@ -5,27 +5,27 @@ export declare class CartService {
     constructor(prisma: PrismaService);
     add(userId: number, dto: AddToCartDto): Promise<{
         id: number;
-        cartId: number;
         productId: number;
         quantity: number;
+        cartId: number;
     }>;
     getCart(userId: number): Promise<({
         items: ({
             product: {
                 id: number;
+                createdAt: Date;
                 name: string;
+                description: string | null;
                 price: number;
                 stock: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
-                description: string | null;
                 imageUrl: string | null;
-                createdAt: Date;
             };
         } & {
             id: number;
-            cartId: number;
             productId: number;
             quantity: number;
+            cartId: number;
         })[];
     } & {
         id: number;
@@ -33,8 +33,14 @@ export declare class CartService {
     }) | null>;
     remove(userId: number, cartItemId: number): Promise<{
         id: number;
-        cartId: number;
         productId: number;
         quantity: number;
+        cartId: number;
+    }>;
+    updateQty(cartItemId: number, quantity: number): Promise<{
+        id: number;
+        productId: number;
+        quantity: number;
+        cartId: number;
     }>;
 }
