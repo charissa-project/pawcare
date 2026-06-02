@@ -179,4 +179,36 @@ export declare class OrdersService {
             paymentProof: string | null;
         };
     }>;
+    checkout(userId: number): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            orderItems: ({
+                product: {
+                    id: number;
+                    createdAt: Date;
+                    name: string;
+                    description: string | null;
+                    price: number;
+                    stock: number;
+                    category: import("@prisma/client").$Enums.ProductCategory;
+                    imageUrl: string | null;
+                };
+            } & {
+                id: number;
+                price: number;
+                productId: number;
+                quantity: number;
+                orderId: number;
+            })[];
+        } & {
+            id: number;
+            createdAt: Date;
+            userId: number;
+            status: import("@prisma/client").$Enums.OrderStatus;
+            totalPrice: number;
+            paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
+            paymentProof: string | null;
+        };
+    }>;
 }

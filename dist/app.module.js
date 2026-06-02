@@ -19,6 +19,7 @@ const products_module_1 = require("./products/products.module");
 const orders_module_1 = require("./orders/orders.module");
 const posts_module_1 = require("./posts/posts.module");
 const comments_module_1 = require("./comments/comments.module");
+const cart_module_1 = require("./cart/cart.module");
 require("dotenv/config");
 let AppModule = class AppModule {
 };
@@ -36,7 +37,8 @@ exports.AppModule = AppModule = __decorate([
             products_module_1.ProductsModule,
             orders_module_1.OrdersModule,
             posts_module_1.PostsModule,
-            comments_module_1.CommentsModule
+            comments_module_1.CommentsModule,
+            cart_module_1.CartModule
         ]
     })
 ], AppModule);

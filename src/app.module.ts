@@ -10,6 +10,7 @@ import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
+import { CartModule } from './cart/cart.module';
 import 'dotenv/config';
 
 @Module({
@@ -24,7 +25,8 @@ import 'dotenv/config';
    ProductsModule,
    OrdersModule,
    PostsModule,
-   CommentsModule
+   CommentsModule,
+   CartModule
  ]
 })
 export class AppModule {}

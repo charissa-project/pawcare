@@ -55,6 +55,9 @@ let OrdersController = class OrdersController {
     uploadProof(id, userId, file) {
         return this.ordersService.uploadProof(id, userId, file);
     }
+    checkout(userId) {
+        return this.ordersService.checkout(userId);
+    }
 };
 exports.OrdersController = OrdersController;
 __decorate([
@@ -139,6 +142,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number, Object]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "uploadProof", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, common_1.Post)('checkout'),
+    __param(0, (0, get_user_decorator_1.GetUser)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "checkout", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
