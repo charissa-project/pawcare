@@ -1,60 +1,37 @@
 import {
- CanActivate,
- ExecutionContext,
- Injectable
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  ForbiddenException,
 } from '@nestjs/common';
-
-import { Reflector }
-from '@nestjs/core';
-
-import { ROLES_KEY }
-from '../decorators/roles.decorator';
+import { Reflector } from '@nestjs/core';
+import { ROLES_KEY } from '../decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @Injectable()
-export class RolesGuard
-implements CanActivate{
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
 
- constructor(
-   private reflector:Reflector
- ){}
-
- canActivate(
-   context:ExecutionContext
- ){
-
-   const roles=
-   this.reflector.getAllAndOverride<
-   string[]
-   >(
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(
       ROLES_KEY,
-      [
-       context.getHandler(),
-       context.getClass()
-      ]
-   )
+      [context.getHandler(), context.getClass()],
+    );
 
-   if(!roles){
-      return true
-   }
+    if (!requiredRoles) return true;
 
-   const request=
-   context
-   .switchToHttp()
-   .getRequest()
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
 
-   const user=
-   request.user
+    if (!user?.role) {
+      throw new ForbiddenException('Role tidak ditemukan');
+    }
 
-   if(
-      user.role==='ADMIN'
-   ){
-      return true
-   }
+    // ADMIN bypass
+    if (user.role === Role.ADMIN) {
+      return true;
+    }
 
-   return roles.includes(
-      user.role
-   )
-
- }
-
+    return requiredRoles.includes(user.role);
+  }
 }
