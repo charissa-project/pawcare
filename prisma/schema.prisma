@@ -89,7 +89,6 @@ model Pet {
   owner          User            @relation(fields: [userId], references: [id])
   appointments   Appointment[]
   medicalRecords MedicalRecord[]
-  reminders      Reminder[]
 }
 
 model Appointment {
@@ -117,17 +116,6 @@ model MedicalRecord {
 
   pet    Pet    @relation(fields: [petId], references: [id])
   doctor Doctor @relation(fields: [doctorId], references: [id])
-}
-
-model Reminder {
-  id           Int      @id @default(autoincrement())
-  petId        Int
-  title        String
-  type         String
-  reminderDate DateTime
-  isDone       Boolean  @default(false)
-
-  pet Pet @relation(fields: [petId], references: [id])
 }
 
 model Product {
