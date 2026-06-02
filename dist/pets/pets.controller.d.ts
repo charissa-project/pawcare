@@ -50,19 +50,19 @@ export declare class PetsController {
                     updatedAt: Date;
                 };
             } & {
+                schedule: string;
                 id: number;
                 userId: number;
                 specialization: string;
                 experience: number;
-                schedule: string;
                 rating: number | null;
                 isAvailable: boolean;
             };
         } & {
             id: number;
             createdAt: Date;
-            petId: number;
             doctorId: number;
+            petId: number;
             diagnosis: string;
             treatment: string;
             notes: string | null;
@@ -124,19 +124,19 @@ export declare class PetsController {
                         updatedAt: Date;
                     };
                 } & {
+                    schedule: string;
                     id: number;
                     userId: number;
                     specialization: string;
                     experience: number;
-                    schedule: string;
                     rating: number | null;
                     isAvailable: boolean;
                 };
             } & {
                 id: number;
                 createdAt: Date;
-                petId: number;
                 doctorId: number;
+                petId: number;
                 diagnosis: string;
                 treatment: string;
                 notes: string | null;

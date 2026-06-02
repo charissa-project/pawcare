@@ -7,11 +7,11 @@ export declare class DoctorsController {
         success: boolean;
         message: string;
         data: {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -24,11 +24,11 @@ export declare class DoctorsController {
                 fullname: string;
                 email: string;
             };
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
         }[];
     }>;
     getMe(userId: number): Promise<{
@@ -41,11 +41,11 @@ export declare class DoctorsController {
                 photoUrl: string | null;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -53,7 +53,13 @@ export declare class DoctorsController {
     getSchedule(userId: number): Promise<{
         success: boolean;
         data: {
-            schedules: any;
+            schedules: {
+                id: number;
+                day: string;
+                doctorId: number;
+                startTime: string;
+                endTime: string;
+            }[];
         };
     }>;
     addSchedule(userId: number, body: {
@@ -63,7 +69,13 @@ export declare class DoctorsController {
     }): Promise<{
         success: boolean;
         message: string;
-        data: any;
+        data: {
+            id: number;
+            day: string;
+            doctorId: number;
+            startTime: string;
+            endTime: string;
+        };
     }>;
     removeSchedule(userId: number, scheduleId: number): Promise<{
         success: boolean;
@@ -73,11 +85,11 @@ export declare class DoctorsController {
         success: boolean;
         message: string;
         data: {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };

@@ -1,8 +1,6 @@
 import {
-  Controller, Get, Patch, Delete, Param, ParseIntPipe, Body,
-  UseGuards, UseInterceptors,
-  UploadedFile, Req,
-} from '@nestjs/common';
+  Controller, Get, Patch, Delete, Param, ParseIntPipe, Body, UseGuards, UseInterceptors,
+  UploadedFile, Req,} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { JwtGuard } from '../auth/guards/jwt.guard';
@@ -10,7 +8,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { multerConfig } from '../common/upload.config';
-import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+import { ApiBearerAuth } from '@nestjs/swagger'; 
 
 @ApiBearerAuth() // ← tambah ini
 

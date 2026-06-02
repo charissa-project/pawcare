@@ -18,11 +18,11 @@ export declare class AppointmentsController {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -46,8 +46,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
@@ -65,11 +65,11 @@ export declare class AppointmentsController {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -104,8 +104,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
@@ -123,11 +123,11 @@ export declare class AppointmentsController {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -151,8 +151,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
@@ -170,11 +170,11 @@ export declare class AppointmentsController {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -209,8 +209,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
@@ -228,11 +228,11 @@ export declare class AppointmentsController {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -267,8 +267,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
@@ -277,8 +277,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
@@ -287,8 +287,8 @@ export declare class AppointmentsController {
         id: number;
         photoUrl: string | null;
         type: string;
-        petId: number;
         doctorId: number;
+        petId: number;
         appointmentDate: Date;
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;

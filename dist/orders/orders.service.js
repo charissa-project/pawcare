@@ -22,44 +22,36 @@ let OrdersService = class OrdersService {
         let totalPrice = 0;
         const itemsData = [];
         for (const item of dto.items) {
-            const product = await this.prisma.product.findUnique({
-                where: { id: item.productId },
-            });
-            if (!product) {
+            const product = await this.prisma.product.findUnique({ where: { id: item.productId } });
+            if (!product)
                 throw new common_1.NotFoundException(`Produk ID ${item.productId} tidak ditemukan`);
-            }
+            if (product.stock < item.quantity)
+                throw new common_1.BadRequestException(`Stok produk ${product.name} tidak cukup`);
             const subtotal = product.price * item.quantity;
             totalPrice += subtotal;
-            itemsData.push({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: subtotal,
-            });
+            itemsData.push({ productId: item.productId, quantity: item.quantity, price: subtotal });
         }
-        return this.prisma.order.create({
+        const order = await this.prisma.order.create({
             data: {
                 userId,
                 totalPrice,
                 status: 'PENDING',
-                orderItems: {
-                    create: itemsData,
-                },
+                orderItems: { create: itemsData },
             },
-            include: {
-                orderItems: {
-                    include: {
-                        product: true,
-                    },
-                },
-            },
+            include: { orderItems: { include: { product: true } } },
         });
+        for (const item of dto.items) {
+            await this.prisma.product.update({
+                where: { id: item.productId },
+                data: { stock: { decrement: item.quantity } },
+            });
+        }
+        return order;
     }
     async findAllByUser(userId) {
         return this.prisma.order.findMany({
             where: { userId },
-            include: {
-                orderItems: { include: { product: true } },
-            },
+            include: { orderItems: { include: { product: true } } },
             orderBy: { createdAt: 'desc' },
         });
     }
@@ -82,36 +74,39 @@ let OrdersService = class OrdersService {
         });
         if (!order)
             throw new common_1.NotFoundException('Order tidak ditemukan');
-        const isOwner = order.userId === userId;
-        const isAdmin = role === client_1.Role.ADMIN;
-        if (!isOwner && !isAdmin)
+        if (order.userId !== userId && role !== client_1.Role.ADMIN)
             throw new common_1.ForbiddenException('Akses ditolak');
         return order;
     }
     async updateStatus(id, status) {
         const validStatus = ['PENDING', 'SHIPPED', 'DELIVERED'];
-        if (!validStatus.includes(status)) {
+        if (!validStatus.includes(status))
             throw new common_1.BadRequestException('Status tidak valid');
-        }
         const order = await this.prisma.order.findUnique({ where: { id } });
         if (!order)
             throw new common_1.NotFoundException('Order tidak ditemukan');
         return this.prisma.order.update({
             where: { id },
             data: { status },
-            include: {
-                orderItems: { include: { product: true } },
-            },
+            include: { orderItems: { include: { product: true } } },
         });
     }
     async cancel(id, userId) {
-        const order = await this.prisma.order.findUnique({ where: { id } });
+        const order = await this.prisma.order.findUnique({
+            where: { id },
+            include: { orderItems: true },
+        });
         if (!order)
             throw new common_1.NotFoundException('Order tidak ditemukan');
         if (order.userId !== userId)
             throw new common_1.ForbiddenException('Akses ditolak');
-        if (order.status !== 'PENDING') {
+        if (order.status !== 'PENDING')
             throw new common_1.BadRequestException('Order yang sudah diproses tidak bisa dibatalkan');
+        for (const item of order.orderItems) {
+            await this.prisma.product.update({
+                where: { id: item.productId },
+                data: { stock: { increment: item.quantity } },
+            });
         }
         return this.prisma.order.update({
             where: { id },

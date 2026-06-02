@@ -7,67 +7,48 @@ import { Role } from '@prisma/client';
 export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
-async create(userId: number, dto: CreateOrderDto) {
-  let totalPrice = 0;
+  async create(userId: number, dto: CreateOrderDto) {
+    let totalPrice = 0;
+    const itemsData: { productId: number; quantity: number; price: number }[] = [];
 
-  const itemsData: {
-    productId: number;
-    quantity: number;
-    price: number;
-  }[] = [];
+    for (const item of dto.items) {
+      const product = await this.prisma.product.findUnique({ where: { id: item.productId } });
+      if (!product) throw new NotFoundException(`Produk ID ${item.productId} tidak ditemukan`);
+      if (product.stock < item.quantity) throw new BadRequestException(`Stok produk ${product.name} tidak cukup`);
 
-  for (const item of dto.items) {
-    const product = await this.prisma.product.findUnique({
-      where: { id: item.productId },
-    });
-
-    if (!product) {
-      throw new NotFoundException(
-        `Produk ID ${item.productId} tidak ditemukan`,
-      );
+      const subtotal = product.price * item.quantity;
+      totalPrice += subtotal;
+      itemsData.push({ productId: item.productId, quantity: item.quantity, price: subtotal });
     }
 
-    const subtotal = product.price * item.quantity;
-    totalPrice += subtotal;
-
-    itemsData.push({
-      productId: item.productId,
-      quantity: item.quantity,
-      price: subtotal,
+    const order = await this.prisma.order.create({
+      data: {
+        userId,
+        totalPrice,
+        status: 'PENDING',
+        orderItems: { create: itemsData },
+      },
+      include: { orderItems: { include: { product: true } } },
     });
+
+    for (const item of dto.items) {
+      await this.prisma.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      });
+    }
+
+    return order;
   }
 
-  return this.prisma.order.create({
-    data: {
-      userId,
-      totalPrice,
-      status: 'PENDING',
-      orderItems: {
-        create: itemsData,
-      },
-    },
-    include: {
-      orderItems: {
-        include: {
-          product: true,
-        },
-      },
-    },
-  });
-}
-
-  // user lihat order miliknya
   async findAllByUser(userId: number) {
     return this.prisma.order.findMany({
       where: { userId },
-      include: {
-        orderItems: { include: { product: true } },
-      },
+      include: { orderItems: { include: { product: true } } },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  // admin lihat semua order
   async findAll() {
     return this.prisma.order.findMany({
       include: {
@@ -88,21 +69,14 @@ async create(userId: number, dto: CreateOrderDto) {
     });
 
     if (!order) throw new NotFoundException('Order tidak ditemukan');
-
-    const isOwner = order.userId === userId;
-    const isAdmin = role === Role.ADMIN;
-
-    if (!isOwner && !isAdmin) throw new ForbiddenException('Akses ditolak');
+    if (order.userId !== userId && role !== Role.ADMIN) throw new ForbiddenException('Akses ditolak');
 
     return order;
   }
 
-  // admin update status order
   async updateStatus(id: number, status: string) {
     const validStatus = ['PENDING', 'SHIPPED', 'DELIVERED'];
-    if (!validStatus.includes(status)) {
-      throw new BadRequestException('Status tidak valid');
-    }
+    if (!validStatus.includes(status)) throw new BadRequestException('Status tidak valid');
 
     const order = await this.prisma.order.findUnique({ where: { id } });
     if (!order) throw new NotFoundException('Order tidak ditemukan');
@@ -110,19 +84,25 @@ async create(userId: number, dto: CreateOrderDto) {
     return this.prisma.order.update({
       where: { id },
       data: { status },
-      include: {
-        orderItems: { include: { product: true } },
-      },
+      include: { orderItems: { include: { product: true } } },
     });
   }
 
-  // user cancel order (hanya kalau masih PENDING)
   async cancel(id: number, userId: number) {
-    const order = await this.prisma.order.findUnique({ where: { id } });
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+      include: { orderItems: true },
+    });
+
     if (!order) throw new NotFoundException('Order tidak ditemukan');
     if (order.userId !== userId) throw new ForbiddenException('Akses ditolak');
-    if (order.status !== 'PENDING') {
-      throw new BadRequestException('Order yang sudah diproses tidak bisa dibatalkan');
+    if (order.status !== 'PENDING') throw new BadRequestException('Order yang sudah diproses tidak bisa dibatalkan');
+
+    for (const item of order.orderItems) {
+      await this.prisma.product.update({
+        where: { id: item.productId },
+        data: { stock: { increment: item.quantity } },
+      });
     }
 
     return this.prisma.order.update({

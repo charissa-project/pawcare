@@ -11,6 +11,7 @@ export declare class OrdersService {
                 createdAt: Date;
                 name: string;
                 price: number;
+                stock: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
                 imageUrl: string | null;
@@ -36,6 +37,7 @@ export declare class OrdersService {
                 createdAt: Date;
                 name: string;
                 price: number;
+                stock: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
                 imageUrl: string | null;
@@ -66,6 +68,7 @@ export declare class OrdersService {
                 createdAt: Date;
                 name: string;
                 price: number;
+                stock: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
                 imageUrl: string | null;
@@ -96,6 +99,7 @@ export declare class OrdersService {
                 createdAt: Date;
                 name: string;
                 price: number;
+                stock: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
                 imageUrl: string | null;
@@ -121,6 +125,7 @@ export declare class OrdersService {
                 createdAt: Date;
                 name: string;
                 price: number;
+                stock: number;
                 category: import("@prisma/client").$Enums.ProductCategory;
                 description: string | null;
                 imageUrl: string | null;

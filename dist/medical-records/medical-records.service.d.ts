@@ -18,11 +18,11 @@ export declare class MedicalRecordsService {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -45,8 +45,8 @@ export declare class MedicalRecordsService {
     } & {
         id: number;
         createdAt: Date;
-        petId: number;
         doctorId: number;
+        petId: number;
         diagnosis: string;
         treatment: string;
         notes: string | null;
@@ -64,11 +64,11 @@ export declare class MedicalRecordsService {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -91,8 +91,8 @@ export declare class MedicalRecordsService {
     } & {
         id: number;
         createdAt: Date;
-        petId: number;
         doctorId: number;
+        petId: number;
         diagnosis: string;
         treatment: string;
         notes: string | null;
@@ -110,19 +110,19 @@ export declare class MedicalRecordsService {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
     } & {
         id: number;
         createdAt: Date;
-        petId: number;
         doctorId: number;
+        petId: number;
         diagnosis: string;
         treatment: string;
         notes: string | null;
@@ -140,11 +140,11 @@ export declare class MedicalRecordsService {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -178,8 +178,8 @@ export declare class MedicalRecordsService {
     } & {
         id: number;
         createdAt: Date;
-        petId: number;
         doctorId: number;
+        petId: number;
         diagnosis: string;
         treatment: string;
         notes: string | null;
@@ -197,11 +197,11 @@ export declare class MedicalRecordsService {
                 updatedAt: Date;
             };
         } & {
+            schedule: string;
             id: number;
             userId: number;
             specialization: string;
             experience: number;
-            schedule: string;
             rating: number | null;
             isAvailable: boolean;
         };
@@ -224,8 +224,8 @@ export declare class MedicalRecordsService {
     } & {
         id: number;
         createdAt: Date;
-        petId: number;
         doctorId: number;
+        petId: number;
         diagnosis: string;
         treatment: string;
         notes: string | null;
@@ -233,8 +233,8 @@ export declare class MedicalRecordsService {
     remove(id: number, userId: number, role: Role): Promise<{
         id: number;
         createdAt: Date;
-        petId: number;
         doctorId: number;
+        petId: number;
         diagnosis: string;
         treatment: string;
         notes: string | null;

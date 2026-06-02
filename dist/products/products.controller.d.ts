@@ -10,6 +10,7 @@ export declare class ProductsController {
         createdAt: Date;
         name: string;
         price: number;
+        stock: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
         imageUrl: string | null;
@@ -19,6 +20,7 @@ export declare class ProductsController {
         createdAt: Date;
         name: string;
         price: number;
+        stock: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
         imageUrl: string | null;
@@ -28,6 +30,7 @@ export declare class ProductsController {
         createdAt: Date;
         name: string;
         price: number;
+        stock: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
         imageUrl: string | null;
@@ -37,6 +40,7 @@ export declare class ProductsController {
         createdAt: Date;
         name: string;
         price: number;
+        stock: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
         imageUrl: string | null;
@@ -46,6 +50,7 @@ export declare class ProductsController {
         createdAt: Date;
         name: string;
         price: number;
+        stock: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         description: string | null;
         imageUrl: string | null;
