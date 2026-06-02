@@ -23,13 +23,11 @@ const upload_config_1 = require("../common/upload.config");
 const doctors_service_1 = require("./doctors.service");
 const create_doctor_dto_1 = require("./dto/create-doctor.dto");
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 let DoctorsController = class DoctorsController {
     doctorService;
     constructor(doctorService) {
         this.doctorService = doctorService;
-    }
-    create(dto, file) {
-        return this.doctorService.create(dto, file);
     }
     findAll() {
         return this.doctorService.findAll();
@@ -46,6 +44,9 @@ let DoctorsController = class DoctorsController {
     removeSchedule(userId, scheduleId) {
         return this.doctorService.removeSchedule(userId, scheduleId);
     }
+    create(dto, file) {
+        return this.doctorService.create(dto, file);
+    }
     update(id, dto) {
         return this.doctorService.update(id, dto);
     }
@@ -55,17 +56,6 @@ let DoctorsController = class DoctorsController {
 };
 exports.DoctorsController = DoctorsController;
 __decorate([
-    (0, common_1.Post)(),
-    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('ADMIN'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.UploadedFile)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_doctor_dto_1.CreateDoctorDto, Object]),
-    __metadata("design:returntype", void 0)
-], DoctorsController.prototype, "create", null);
-__decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -74,7 +64,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('me'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('DOCTOR'),
+    (0, roles_decorator_1.Roles)(client_1.Role.DOCTOR),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -83,7 +73,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('me/schedule'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('DOCTOR'),
+    (0, roles_decorator_1.Roles)(client_1.Role.DOCTOR),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -92,7 +82,7 @@ __decorate([
 __decorate([
     (0, common_1.Post)('me/schedule'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('DOCTOR'),
+    (0, roles_decorator_1.Roles)(client_1.Role.DOCTOR),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -102,7 +92,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)('me/schedule/:scheduleId'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('DOCTOR'),
+    (0, roles_decorator_1.Roles)(client_1.Role.DOCTOR),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Param)('scheduleId', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -110,9 +100,20 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DoctorsController.prototype, "removeSchedule", null);
 __decorate([
+    (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_doctor_dto_1.CreateDoctorDto, Object]),
+    __metadata("design:returntype", void 0)
+], DoctorsController.prototype, "create", null);
+__decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('ADMIN'),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -122,7 +123,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('ADMIN'),
+    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

@@ -3,19 +3,6 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 export declare class DoctorsController {
     private doctorService;
     constructor(doctorService: DoctorsService);
-    create(dto: CreateDoctorDto, file: Express.Multer.File): Promise<{
-        success: boolean;
-        message: string;
-        data: {
-            schedule: string;
-            id: number;
-            userId: number;
-            specialization: string;
-            experience: number;
-            rating: number | null;
-            isAvailable: boolean;
-        };
-    }>;
     findAll(): Promise<{
         success: boolean;
         message: string;
@@ -53,14 +40,12 @@ export declare class DoctorsController {
     getSchedule(userId: number): Promise<{
         success: boolean;
         data: {
-            schedules: {
-                id: number;
-                day: string;
-                doctorId: number;
-                startTime: string;
-                endTime: string;
-            }[];
-        };
+            id: number;
+            day: string;
+            doctorId: number;
+            startTime: string;
+            endTime: string;
+        }[];
     }>;
     addSchedule(userId: number, body: {
         day: string;
@@ -80,6 +65,19 @@ export declare class DoctorsController {
     removeSchedule(userId: number, scheduleId: number): Promise<{
         success: boolean;
         message: string;
+    }>;
+    create(dto: CreateDoctorDto, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            schedule: string;
+            id: number;
+            userId: number;
+            specialization: string;
+            experience: number;
+            rating: number | null;
+            isAvailable: boolean;
+        };
     }>;
     update(id: number, dto: any): Promise<{
         success: boolean;

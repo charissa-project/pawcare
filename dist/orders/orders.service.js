@@ -65,18 +65,23 @@ let OrdersService = class OrdersService {
         });
     }
     async findOne(id, userId, role) {
-        const order = await this.prisma.order.findUnique({
+        const record = await this.prisma.medicalRecord.findUnique({
             where: { id },
             include: {
-                user: { select: { id: true, fullname: true, email: true } },
-                orderItems: { include: { product: true } },
+                pet: { include: { owner: true } },
+                doctor: { include: { user: true } },
             },
         });
-        if (!order)
-            throw new common_1.NotFoundException('Order tidak ditemukan');
-        if (order.userId !== userId && role !== client_1.Role.ADMIN)
+        if (!record) {
+            throw new common_1.NotFoundException('Rekam medis tidak ditemukan');
+        }
+        const isOwner = record.pet.userId === userId;
+        const isDoctor = record.doctor.userId === userId || record.doctorId === userId;
+        const isAdmin = role === client_1.Role.ADMIN;
+        if (!isOwner && !isDoctor && !isAdmin) {
             throw new common_1.ForbiddenException('Akses ditolak');
-        return order;
+        }
+        return record;
     }
     async updateStatus(id, status) {
         const validStatus = Object.values(client_1.OrderStatus);

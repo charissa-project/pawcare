@@ -22,6 +22,7 @@ import { multerConfig } from '../common/upload.config';
 
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { AddScheduleDto } from './dto/add-schedule.dto';
 
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
@@ -56,15 +57,15 @@ export class DoctorsController {
   }
 
   // ADD SCHEDULE
-  @Post('me/schedule')
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.DOCTOR)
-  addSchedule(
-    @GetUser('id') userId: number,
-    @Body() body: { day: string; startTime: string; endTime: string },
-  ) {
-    return this.doctorService.addSchedule(userId, body);
-  }
+@Post('me/schedule')
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.DOCTOR)
+addSchedule(
+  @GetUser('id') userId: number,
+  @Body() body: AddScheduleDto,  // ← pakai DTO
+) {
+  return this.doctorService.addSchedule(userId, body);
+}
 
   // DELETE SCHEDULE
   @Delete('me/schedule/:scheduleId')

@@ -53,14 +53,12 @@ export declare class DoctorsService {
     getSchedule(userId: number): Promise<{
         success: boolean;
         data: {
-            schedules: {
-                id: number;
-                day: string;
-                doctorId: number;
-                startTime: string;
-                endTime: string;
-            }[];
-        };
+            id: number;
+            day: string;
+            doctorId: number;
+            startTime: string;
+            endTime: string;
+        }[];
     }>;
     addSchedule(userId: number, body: {
         day: string;

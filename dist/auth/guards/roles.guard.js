@@ -13,27 +13,25 @@ exports.RolesGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const roles_decorator_1 = require("../decorators/roles.decorator");
+const client_1 = require("@prisma/client");
 let RolesGuard = class RolesGuard {
     reflector;
     constructor(reflector) {
         this.reflector = reflector;
     }
     canActivate(context) {
-        const roles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [
-            context.getHandler(),
-            context.getClass()
-        ]);
-        if (!roles) {
+        const requiredRoles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [context.getHandler(), context.getClass()]);
+        if (!requiredRoles)
             return true;
-        }
-        const request = context
-            .switchToHttp()
-            .getRequest();
+        const request = context.switchToHttp().getRequest();
         const user = request.user;
-        if (user.role === 'ADMIN') {
+        if (!user?.role) {
+            throw new common_1.ForbiddenException('Role tidak ditemukan');
+        }
+        if (user.role === client_1.Role.ADMIN) {
             return true;
         }
-        return roles.includes(user.role);
+        return requiredRoles.includes(user.role);
     }
 };
 exports.RolesGuard = RolesGuard;

@@ -6,6 +6,7 @@ import {
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { AddScheduleDto } from './dto/add-schedule.dto';
 
 @Injectable()
 export class DoctorsService {
@@ -104,10 +105,7 @@ export class DoctorsService {
 }
 
   // ADD SCHEDULE
-  async addSchedule(
-    userId: number,
-    body: { day: string; startTime: string; endTime: string },
-  ) {
+  async addSchedule(userId: number, body: AddScheduleDto) {
     const doctor = await this.prisma.doctor.findFirst({
       where: { userId: Number(userId) },
     });

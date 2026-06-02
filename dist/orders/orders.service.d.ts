@@ -94,37 +94,61 @@ export declare class OrdersService {
         paymentProof: string | null;
     })[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
-        user: {
-            fullname: string;
-            email: string;
-            id: number;
-        };
-        orderItems: ({
-            product: {
+        doctor: {
+            user: {
+                fullname: string;
+                email: string;
+                password: string;
+                role: import("@prisma/client").$Enums.Role;
                 id: number;
+                photoUrl: string | null;
                 createdAt: Date;
-                name: string;
-                description: string | null;
-                price: number;
-                stock: number;
-                category: import("@prisma/client").$Enums.ProductCategory;
-                imageUrl: string | null;
+                updatedAt: Date;
+            };
+        } & {
+            schedule: string;
+            id: number;
+            userId: number;
+            specialization: string;
+            experience: number;
+            rating: number | null;
+            isAvailable: boolean;
+        };
+        pet: {
+            owner: {
+                fullname: string;
+                email: string;
+                password: string;
+                role: import("@prisma/client").$Enums.Role;
+                id: number;
+                photoUrl: string | null;
+                createdAt: Date;
+                updatedAt: Date;
             };
         } & {
             id: number;
-            price: number;
-            productId: number;
-            quantity: number;
-            orderId: number;
-        })[];
+            photoUrl: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string;
+            userId: number;
+            species: string;
+            breed: string;
+            age: number;
+            gender: string;
+            weight: number;
+            healthStatus: string;
+            lastVaccine: Date | null;
+            nextVaccine: Date | null;
+        };
     } & {
         id: number;
         createdAt: Date;
-        userId: number;
-        status: import("@prisma/client").$Enums.OrderStatus;
-        totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
-        paymentProof: string | null;
+        doctorId: number;
+        petId: number;
+        diagnosis: string;
+        treatment: string;
+        notes: string | null;
     }>;
     updateStatus(id: number, status: OrderStatus): Promise<{
         orderItems: ({
