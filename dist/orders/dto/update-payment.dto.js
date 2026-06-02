@@ -18,7 +18,7 @@ class UpdatePaymentStatusDto {
 }
 exports.UpdatePaymentStatusDto = UpdatePaymentStatusDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: client_1.PaymentStatus, example: 'PAID' }),
+    (0, swagger_1.ApiProperty)({ enum: client_1.PaymentStatus, example: 'PAID', }),
     (0, class_validator_1.IsEnum)(client_1.PaymentStatus),
     __metadata("design:type", String)
 ], UpdatePaymentStatusDto.prototype, "paymentStatus", void 0);

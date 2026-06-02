@@ -1,6 +1,7 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { AddScheduleDto } from './dto/add-schedule.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 export declare class DoctorsService {
     private prisma;
     constructor(prisma: PrismaService);
@@ -87,7 +88,7 @@ export declare class DoctorsService {
         success: boolean;
         message: string;
     }>;
-    update(id: number, dto: any): Promise<{
+    update(id: number, dto: UpdateDoctorDto): Promise<{
         success: boolean;
         message: string;
         data: {

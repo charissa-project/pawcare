@@ -1,6 +1,7 @@
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { AddScheduleDto } from './dto/add-schedule.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 export declare class DoctorsController {
     private doctorService;
     constructor(doctorService: DoctorsService);
@@ -87,7 +88,7 @@ export declare class DoctorsController {
             isAvailable: boolean;
         };
     }>;
-    update(id: number, dto: any): Promise<{
+    update(id: number, dto: UpdateDoctorDto): Promise<{
         success: boolean;
         message: string;
         data: {
