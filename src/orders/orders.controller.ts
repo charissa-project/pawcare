@@ -11,6 +11,8 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 import { Role, OrderStatus } from '@prisma/client';
 import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
 import { UpdateOrderStatusDto } from './dto/update-order.dto'; // ← tambah import
+import { UploadPaymentProofDto } from './dto/upload-payment-proof.dto';
+
 
 @ApiBearerAuth() // ← tambah ini
 
@@ -74,6 +76,19 @@ verifyPayment(
   @Param('id', ParseIntPipe) id: number,
 ) {
   return this.ordersService.verifyPayment(id);
+}
+
+@Patch(':id/upload-proof')
+uploadProof(
+  @Param('id', ParseIntPipe) id: number,
+  @GetUser('id') userId: number,
+  @Body() dto: UploadPaymentProofDto,
+) {
+  return this.ordersService.uploadProof(
+    id,
+    userId,
+    dto.paymentProof,
+  );
 }
 
 }

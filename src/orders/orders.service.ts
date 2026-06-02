@@ -128,4 +128,29 @@ async verifyPayment(id: number) {
   });
 }
 
+async uploadProof(
+  id: number,
+  userId: number,
+  paymentProof: string,
+) {
+  const order = await this.prisma.order.findUnique({
+    where: { id },
+  });
+
+  if (!order) {
+    throw new NotFoundException('Order tidak ditemukan');
+  }
+
+  if (order.userId !== userId) {
+    throw new ForbiddenException('Akses ditolak');
+  }
+
+  return this.prisma.order.update({
+    where: { id },
+    data: {
+      paymentProof,
+    },
+  });
+}
+
 }
