@@ -14,15 +14,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
+const swagger_1 = require("@nestjs/swagger");
 const orders_service_1 = require("./orders.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
+const update_order_dto_1 = require("./dto/update-order.dto");
 const jwt_guard_1 = require("../auth/guards/jwt.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
-const swagger_1 = require("@nestjs/swagger");
-const update_order_dto_1 = require("./dto/update-order.dto");
+const upload_config_1 = require("../common/upload.config");
 let OrdersController = class OrdersController {
     ordersService;
     constructor(ordersService) {
@@ -48,6 +50,9 @@ let OrdersController = class OrdersController {
     }
     verifyPayment(id) {
         return this.ordersService.verifyPayment(id);
+    }
+    uploadProof(id, userId, file) {
+        return this.ordersService.uploadProof(id, userId, file);
     }
 };
 exports.OrdersController = OrdersController;
@@ -110,6 +115,28 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "verifyPayment", null);
+__decorate([
+    (0, common_1.Patch)(':id/upload-proof'),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                paymentProof: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('paymentProof', upload_config_1.multerConfig)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, get_user_decorator_1.GetUser)('id')),
+    __param(2, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "uploadProof", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),

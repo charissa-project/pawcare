@@ -127,6 +127,32 @@ let OrdersService = class OrdersService {
             },
         });
     }
+    async uploadProof(id, userId, file) {
+        if (!file) {
+            throw new common_1.BadRequestException('File tidak ditemukan');
+        }
+        const order = await this.prisma.order.findUnique({
+            where: { id },
+        });
+        if (!order) {
+            throw new common_1.NotFoundException('Order tidak ditemukan');
+        }
+        if (order.userId !== userId) {
+            throw new common_1.ForbiddenException('Akses ditolak');
+        }
+        const paymentProof = file.path;
+        const updated = await this.prisma.order.update({
+            where: { id },
+            data: { paymentProof },
+        });
+        return {
+            success: true,
+            message: 'Bukti transfer berhasil diupload',
+            data: {
+                paymentProof: updated.paymentProof,
+            },
+        };
+    }
 };
 exports.OrdersService = OrdersService;
 exports.OrdersService = OrdersService = __decorate([

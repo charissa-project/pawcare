@@ -1,7 +1,7 @@
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { Role } from '@prisma/client';
 import { UpdateOrderStatusDto } from './dto/update-order.dto';
+import { Role } from '@prisma/client';
 export declare class OrdersController {
     private readonly ordersService;
     constructor(ordersService: OrdersService);
@@ -172,5 +172,12 @@ export declare class OrdersController {
         totalPrice: number;
         paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+    }>;
+    uploadProof(id: number, userId: number, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            paymentProof: string | null;
+        };
     }>;
 }

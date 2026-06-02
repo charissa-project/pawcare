@@ -172,4 +172,11 @@ export declare class OrdersService {
         paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
     }>;
+    uploadProof(id: number, userId: number, file: Express.Multer.File): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            paymentProof: string | null;
+        };
+    }>;
 }

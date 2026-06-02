@@ -131,8 +131,12 @@ async verifyPayment(id: number) {
 async uploadProof(
   id: number,
   userId: number,
-  paymentProof: string,
+  file: Express.Multer.File,
 ) {
+  if (!file) {
+    throw new BadRequestException('File tidak ditemukan');
+  }
+
   const order = await this.prisma.order.findUnique({
     where: { id },
   });
@@ -145,12 +149,19 @@ async uploadProof(
     throw new ForbiddenException('Akses ditolak');
   }
 
-  return this.prisma.order.update({
-    where: { id },
-    data: {
-      paymentProof,
-    },
-  });
-}
+  const paymentProof = file.path;
 
+  const updated = await this.prisma.order.update({
+    where: { id },
+    data: { paymentProof },
+  });
+
+  return {
+    success: true,
+    message: 'Bukti transfer berhasil diupload',
+    data: {
+      paymentProof: updated.paymentProof,
+    },
+  };
+}
 }

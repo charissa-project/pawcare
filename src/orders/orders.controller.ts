@@ -1,17 +1,35 @@
 import {
-  Controller, Get, Post, Patch,
-  Body, Param, ParseIntPipe, UseGuards, 
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Body,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
+
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order.dto';
+
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
+
 import { Role, OrderStatus } from '@prisma/client';
-import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
-import { UpdateOrderStatusDto } from './dto/update-order.dto'; // ← tambah import
-import { UploadPaymentProofDto } from './dto/upload-payment-proof.dto';
+import { multerConfig } from '../common/upload.config';
 
 
 @ApiBearerAuth() // ← tambah ini
@@ -79,16 +97,25 @@ verifyPayment(
 }
 
 @Patch(':id/upload-proof')
+@ApiConsumes('multipart/form-data')
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      paymentProof: {
+        type: 'string',
+        format: 'binary',
+      },
+    },
+  },
+})
+@UseInterceptors(FileInterceptor('paymentProof', multerConfig))
 uploadProof(
   @Param('id', ParseIntPipe) id: number,
   @GetUser('id') userId: number,
-  @Body() dto: UploadPaymentProofDto,
+  @UploadedFile() file: Express.Multer.File,
 ) {
-  return this.ordersService.uploadProof(
-    id,
-    userId,
-    dto.paymentProof,
-  );
+  return this.ordersService.uploadProof(id, userId, file);
 }
 
 }
