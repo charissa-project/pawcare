@@ -1,63 +1,89 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { Role } from '@prisma/client';
-import { AppointmentStatus } from '@prisma/client';
-import { BadRequestException } from '@nestjs/common';
+import { Role, AppointmentStatus } from '@prisma/client';
 
 @Injectable()
 export class AppointmentsService {
   constructor(private prisma: PrismaService) {}
 
-async create(userId: number, dto: CreateAppointmentDto) {
-  const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
-  if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
-  if (pet.userId !== userId) throw new ForbiddenException('Akses ditolak');
+  async create(userId: number, dto: CreateAppointmentDto) {
+    const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
+    if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
+    if (pet.userId !== userId) throw new ForbiddenException('Akses ditolak');
 
-  const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
-  if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
+    const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
+    if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
 
-  return this.prisma.appointment.create({
-    data: {
-      petId: dto.petId,
-      doctorId: dto.doctorId,
-      appointmentDate: new Date(dto.appointmentDate),
-      type: dto.type as any,
-    },
-    include: {
-      pet: true,
-      doctor: { include: { user: true } },
-    },
-  });
-}
+    return this.prisma.appointment.create({
+      data: {
+        petId: dto.petId,
+        doctorId: dto.doctorId,
+        appointmentDate: new Date(dto.appointmentDate),
+        type: dto.type as any,
+        notes: dto.notes,
+      },
+      include: {
+        pet: true,
+        doctor: {
+          include: {
+            user: {
+              select: { id: true, fullname: true, email: true },
+            },
+          },
+        },
+      },
+    });
+  }
 
-// tambah di sini
-async findAll() {
-  return this.prisma.appointment.findMany({
-    include: {
-      pet: { include: { owner: true } },
-      doctor: { include: { user: true } },
-    },
-    orderBy: { appointmentDate: 'desc' },
-  });
-}
+  async findAll() {
+    return this.prisma.appointment.findMany({
+      include: {
+        pet: {
+          include: {
+            owner: {
+              select: { id: true, fullname: true, email: true, role: true },
+            },
+          },
+        },
+        doctor: {
+          include: {
+            user: {
+              select: { id: true, fullname: true, email: true },
+            },
+          },
+        },
+      },
+      orderBy: { appointmentDate: 'desc' },
+    });
+  }
 
-  // user: lihat appointment milik sendiri
   async findAllByUser(userId: number) {
     return this.prisma.appointment.findMany({
       where: {
         pet: { userId },
       },
       include: {
-        pet: true,
-        doctor: { include: { user: true } },
+        pet: {
+          include: {
+            owner: {
+              select: { id: true, fullname: true, email: true, role: true },
+            },
+          },
+        },
+        doctor: {
+          include: {
+            user: {
+              select: { id: true, fullname: true, email: true },
+            },
+          },
+        },
       },
       orderBy: { appointmentDate: 'desc' },
     });
   }
 
-  // doctor: lihat appointment yang ditangani
   async findAllByDoctor(userId: number) {
     const doctor = await this.prisma.doctor.findUnique({ where: { userId } });
     if (!doctor) throw new NotFoundException('Profil dokter tidak ditemukan');
@@ -65,8 +91,20 @@ async findAll() {
     return this.prisma.appointment.findMany({
       where: { doctorId: doctor.id },
       include: {
-        pet: { include: { owner: true } },
-        doctor: { include: { user: true } },
+        pet: {
+          include: {
+            owner: {
+              select: { id: true, fullname: true, email: true, role: true },
+            },
+          },
+        },
+        doctor: {
+          include: {
+            user: {
+              select: { id: true, fullname: true, email: true },
+            },
+          },
+        },
       },
       orderBy: { appointmentDate: 'desc' },
     });
@@ -76,8 +114,20 @@ async findAll() {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
       include: {
-        pet: { include: { owner: true } },
-        doctor: { include: { user: true } },
+        pet: {
+          include: {
+            owner: {
+              select: { id: true, fullname: true, email: true, role: true },
+            },
+          },
+        },
+        doctor: {
+          include: {
+            user: {
+              select: { id: true, fullname: true, email: true },
+            },
+          },
+        },
       },
     });
 
@@ -92,7 +142,6 @@ async findAll() {
     return appointment;
   }
 
-  // doctor/admin update status
   async updateStatus(id: number, userId: number, role: Role, dto: UpdateAppointmentDto) {
     const appointment = await this.findOne(id, userId, role);
 
@@ -104,18 +153,12 @@ async findAll() {
     return this.prisma.appointment.update({
       where: { id },
       data: {
-  appointmentDate: dto.appointmentDate
-    ? new Date(dto.appointmentDate)
-    : undefined,
-
-  status: dto.status
-    ? (dto.status as AppointmentStatus)
-    : undefined,
-},
+        appointmentDate: dto.appointmentDate ? new Date(dto.appointmentDate) : undefined,
+        status: dto.status ? (dto.status as AppointmentStatus) : undefined,
+      },
     });
   }
 
-  // user cancel appointment sendiri
   async cancel(id: number, userId: number) {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
@@ -133,16 +176,15 @@ async findAll() {
   }
 
   async update(id: number, userId: number, role: Role, dto: UpdateAppointmentDto) {
-  await this.findOne(id, userId, role);
+    await this.findOne(id, userId, role);
 
-  return this.prisma.appointment.update({
-    where: { id },
-    data: {
-      ...dto,
-      status: dto.status ? (dto.status as any) : undefined,
-      appointmentDate: dto.appointmentDate ? new Date(dto.appointmentDate) : undefined,
-    },
-  });
-}
-
+    return this.prisma.appointment.update({
+      where: { id },
+      data: {
+        ...dto,
+        status: dto.status ? (dto.status as any) : undefined,
+        appointmentDate: dto.appointmentDate ? new Date(dto.appointmentDate) : undefined,
+      },
+    });
+  }
 }
