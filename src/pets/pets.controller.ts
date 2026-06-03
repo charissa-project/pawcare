@@ -10,26 +10,41 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { multerConfig } from '../common/upload.config';
-import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+import { ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 
-@ApiBearerAuth() // ← tambah ini
-
+@ApiBearerAuth()
 @UseGuards(JwtGuard)
 @Controller('pets')
 export class PetsController {
   constructor(private readonly petsService: PetsService) {}
 
   @Post()
-@UseInterceptors(FileInterceptor('photo', multerConfig))
-create(
-  @GetUser('id') userId: number,
-  @Body() dto: CreatePetDto,
-  @UploadedFile() file: Express.Multer.File,
-) {
-  return this.petsService.create(userId, dto, file);
-}
+  @UseInterceptors(FileInterceptor('photo', multerConfig))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        species: { type: 'string' },
+        breed: { type: 'string' },
+        age: { type: 'number' },
+        gender: { type: 'string' },
+        weight: { type: 'number' },
+        healthStatus: { type: 'string' },
+        photo: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  create(
+    @GetUser('id') userId: number,
+    @Body() dto: CreatePetDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.petsService.create(userId, dto, file);
+  }
 
   @Get()
   findAll(@GetUser('id') userId: number) {
@@ -37,11 +52,11 @@ create(
   }
 
   @Get('all')
-@UseGuards(RolesGuard)
-@Roles('ADMIN', 'DOCTOR')
-findAllAdmin() {
-  return this.petsService.findAll();
-}
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'DOCTOR')
+  findAllAdmin() {
+    return this.petsService.findAll();
+  }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
@@ -62,9 +77,17 @@ findAllAdmin() {
     return this.petsService.remove(id, userId);
   }
 
-  // upload foto hewan
   @Patch(':id/photo')
   @UseInterceptors(FileInterceptor('photo', multerConfig))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        photo: { type: 'string', format: 'binary' },
+      },
+    },
+  })
   uploadPhoto(
     @Param('id', ParseIntPipe) id: number,
     @GetUser('id') userId: number,

@@ -1,98 +1,104 @@
-import {
-  Controller, Get, Post, Patch, Delete,
-  Body, Param, ParseIntPipe, UseGuards,
-  UseInterceptors, UploadedFile,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { PetsService } from './pets.service';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
-import { JwtGuard } from '../auth/guards/jwt.guard';
-import { GetUser } from '../auth/decorators/get-user.decorator';
-import { multerConfig } from '../common/upload.config';
-import { ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
+import { BadRequestException } from '@nestjs/common';
 
-@ApiBearerAuth()
-@UseGuards(JwtGuard)
-@Controller('pets')
-export class PetsController {
-  constructor(private readonly petsService: PetsService) {}
+@Injectable()
+export class PetsService {
+  constructor(private prisma: PrismaService) {}
 
-  @Post()
-  @UseInterceptors(FileInterceptor('photo', multerConfig))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        name: { type: 'string' },
-        species: { type: 'string' },
-        breed: { type: 'string' },
-        age: { type: 'number' },
-        gender: { type: 'string' },
-        weight: { type: 'number' },
-        healthStatus: { type: 'string' },
-        photo: { type: 'string', format: 'binary' },
-      },
+ async create(userId: number, dto: CreatePetDto, file?: Express.Multer.File) {
+  const photoUrl = file ? file.path : null;
+  
+  return this.prisma.pet.create({
+    data: {
+      ...dto,
+      photoUrl,
+      userId,
     },
-  })
-  create(
-    @GetUser('id') userId: number,
-    @Body() dto: CreatePetDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.petsService.create(userId, dto, file);
+  });
+}
+
+  async findAllByUser(userId: number) {
+    return this.prisma.pet.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
-  @Get()
-  findAll(@GetUser('id') userId: number) {
-    return this.petsService.findAllByUser(userId);
-  }
+  async findAll() {
+  return this.prisma.pet.findMany({
+    include: { owner: true },
+    orderBy: { createdAt: 'desc' },
+  });
+}
 
-  @Get('all')
-  @UseGuards(RolesGuard)
-  @Roles('ADMIN', 'DOCTOR')
-  findAllAdmin() {
-    return this.petsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
-    return this.petsService.findOne(id, userId);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') userId: number,
-    @Body() dto: UpdatePetDto,
-  ) {
-    return this.petsService.update(id, userId, dto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number, @GetUser('id') userId: number) {
-    return this.petsService.remove(id, userId);
-  }
-
-  @Patch(':id/photo')
-  @UseInterceptors(FileInterceptor('photo', multerConfig))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        photo: { type: 'string', format: 'binary' },
+  async findOne(id: number, userId: number) {
+    const pet = await this.prisma.pet.findUnique({
+      where: { id },
+      include: {
+        medicalRecords: {
+          include: { doctor: { include: { user: true } } },
+          orderBy: { createdAt: 'desc' },
+        },
       },
-    },
-  })
-  uploadPhoto(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') userId: number,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.petsService.updatePhoto(id, userId, file);
+    });
+
+    if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
+    if (pet.userId !== userId) throw new ForbiddenException('Akses ditolak');
+
+    return pet;
   }
+
+  async update(id: number, userId: number, dto: UpdatePetDto) {
+    await this.findOne(id, userId); // validasi kepemilikan
+
+    return this.prisma.pet.update({
+      where: { id },
+      data: {
+        ...dto,
+      },
+    });
+  }
+
+  async remove(id: number, userId: number) {
+  const pet = await this.findOne(id, userId);
+
+  await this.prisma.pet.delete({
+    where: { id },
+  });
+
+  return {
+    success: true,
+    message: 'Data pet berhasil dihapus',
+    data: pet,
+  };
+}
+
+async updatePhoto(
+  id: number,
+  userId: number,
+  file: Express.Multer.File,
+) {
+  if (!file) {
+    throw new BadRequestException('File tidak ditemukan');
+  }
+
+  await this.findOne(id, userId); // cek kepemilikan
+
+  const photoUrl = file.path;
+
+  const updated = await this.prisma.pet.update({
+    where: { id },
+    data: { photoUrl },
+  });
+
+  return {
+    data: {
+      photoUrl: updated.photoUrl,
+    },
+  };
+}
+
 }

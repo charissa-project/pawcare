@@ -13,6 +13,43 @@ exports.AppointmentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const client_1 = require("@prisma/client");
+const appointmentSelect = {
+    id: true,
+    petId: true,
+    doctorId: true,
+    appointmentDate: true,
+    type: true,
+    notes: true,
+    status: true,
+    pet: {
+        select: {
+            id: true,
+            name: true,
+            species: true,
+            breed: true,
+            age: true,
+            gender: true,
+            weight: true,
+            healthStatus: true,
+            photoUrl: true,
+            owner: {
+                select: { id: true, fullname: true, email: true, role: true },
+            },
+        },
+    },
+    doctor: {
+        select: {
+            id: true,
+            specialization: true,
+            experience: true,
+            schedule: true,
+            isAvailable: true,
+            user: {
+                select: { id: true, fullname: true, email: true },
+            },
+        },
+    },
+};
 let AppointmentsService = class AppointmentsService {
     prisma;
     constructor(prisma) {
@@ -33,32 +70,21 @@ let AppointmentsService = class AppointmentsService {
                 doctorId: dto.doctorId,
                 appointmentDate: new Date(dto.appointmentDate),
                 type: dto.type,
-                consultationFee: dto.consultationFee,
+                notes: dto.notes,
             },
-            include: {
-                pet: true,
-                doctor: { include: { user: true } },
-            },
+            select: appointmentSelect,
         });
     }
     async findAll() {
         return this.prisma.appointment.findMany({
-            include: {
-                pet: { include: { owner: true } },
-                doctor: { include: { user: true } },
-            },
+            select: appointmentSelect,
             orderBy: { appointmentDate: 'desc' },
         });
     }
     async findAllByUser(userId) {
         return this.prisma.appointment.findMany({
-            where: {
-                pet: { userId },
-            },
-            include: {
-                pet: true,
-                doctor: { include: { user: true } },
-            },
+            where: { pet: { userId } },
+            select: appointmentSelect,
             orderBy: { appointmentDate: 'desc' },
         });
     }
@@ -68,19 +94,27 @@ let AppointmentsService = class AppointmentsService {
             throw new common_1.NotFoundException('Profil dokter tidak ditemukan');
         return this.prisma.appointment.findMany({
             where: { doctorId: doctor.id },
-            include: {
-                pet: { include: { owner: true } },
-                doctor: { include: { user: true } },
-            },
+            select: appointmentSelect,
             orderBy: { appointmentDate: 'desc' },
         });
     }
     async findOne(id, userId, role) {
         const appointment = await this.prisma.appointment.findUnique({
             where: { id },
-            include: {
-                pet: { include: { owner: true } },
-                doctor: { include: { user: true } },
+            select: {
+                ...appointmentSelect,
+                pet: {
+                    select: {
+                        ...appointmentSelect.pet.select,
+                        userId: true,
+                    },
+                },
+                doctor: {
+                    select: {
+                        ...appointmentSelect.doctor.select,
+                        userId: true,
+                    },
+                },
             },
         });
         if (!appointment)
@@ -101,12 +135,8 @@ let AppointmentsService = class AppointmentsService {
         return this.prisma.appointment.update({
             where: { id },
             data: {
-                appointmentDate: dto.appointmentDate
-                    ? new Date(dto.appointmentDate)
-                    : undefined,
-                status: dto.status
-                    ? dto.status
-                    : undefined,
+                appointmentDate: dto.appointmentDate ? new Date(dto.appointmentDate) : undefined,
+                status: dto.status ? dto.status : undefined,
             },
         });
     }

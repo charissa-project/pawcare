@@ -47,9 +47,9 @@ export declare class MedicalRecordsService {
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     }>;
     findAll(): Promise<({
         doctor: {
@@ -104,9 +104,9 @@ export declare class MedicalRecordsService {
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     })[]>;
     findAllByUser(userId: number): Promise<({
         doctor: {
@@ -150,9 +150,9 @@ export declare class MedicalRecordsService {
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     })[]>;
     findByPet(petId: number, userId: number, role: Role): Promise<({
         doctor: {
@@ -180,9 +180,9 @@ export declare class MedicalRecordsService {
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     })[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
         doctor: {
@@ -237,9 +237,9 @@ export declare class MedicalRecordsService {
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     }>;
     update(id: number, userId: number, role: Role, dto: UpdateMedicalRecordDto): Promise<{
         doctor: {
@@ -283,17 +283,17 @@ export declare class MedicalRecordsService {
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     }>;
     remove(id: number, userId: number, role: Role): Promise<{
         id: number;
         createdAt: Date;
         doctorId: number;
         petId: number;
+        notes: string | null;
         diagnosis: string;
         treatment: string;
-        notes: string | null;
     }>;
 }
