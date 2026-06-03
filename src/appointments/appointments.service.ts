@@ -1,8 +1,46 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Role, AppointmentStatus } from '@prisma/client';
+
+const appointmentSelect = {
+  id: true,
+  petId: true,
+  doctorId: true,
+  appointmentDate: true,
+  type: true,
+  notes: true,
+  status: true,
+  pet: {
+    select: {
+      id: true,
+      name: true,
+      species: true,
+      breed: true,
+      age: true,
+      gender: true,
+      weight: true,
+      healthStatus: true,
+      photoUrl: true,
+      owner: {
+        select: { id: true, fullname: true, email: true, role: true },
+      },
+    },
+  },
+  doctor: {
+    select: {
+      id: true,
+      specialization: true,
+      experience: true,
+      schedule: true,
+      isAvailable: true,
+      user: {
+        select: { id: true, fullname: true, email: true },
+      },
+    },
+  },
+};
 
 @Injectable()
 export class AppointmentsService {
@@ -24,62 +62,21 @@ export class AppointmentsService {
         type: dto.type as any,
         notes: dto.notes,
       },
-      include: {
-        pet: true,
-        doctor: {
-          include: {
-            user: {
-              select: { id: true, fullname: true, email: true },
-            },
-          },
-        },
-      },
+      select: appointmentSelect,
     });
   }
 
   async findAll() {
     return this.prisma.appointment.findMany({
-      include: {
-        pet: {
-          include: {
-            owner: {
-              select: { id: true, fullname: true, email: true, role: true },
-            },
-          },
-        },
-        doctor: {
-          include: {
-            user: {
-              select: { id: true, fullname: true, email: true },
-            },
-          },
-        },
-      },
+      select: appointmentSelect,
       orderBy: { appointmentDate: 'desc' },
     });
   }
 
   async findAllByUser(userId: number) {
     return this.prisma.appointment.findMany({
-      where: {
-        pet: { userId },
-      },
-      include: {
-        pet: {
-          include: {
-            owner: {
-              select: { id: true, fullname: true, email: true, role: true },
-            },
-          },
-        },
-        doctor: {
-          include: {
-            user: {
-              select: { id: true, fullname: true, email: true },
-            },
-          },
-        },
-      },
+      where: { pet: { userId } },
+      select: appointmentSelect,
       orderBy: { appointmentDate: 'desc' },
     });
   }
@@ -90,22 +87,7 @@ export class AppointmentsService {
 
     return this.prisma.appointment.findMany({
       where: { doctorId: doctor.id },
-      include: {
-        pet: {
-          include: {
-            owner: {
-              select: { id: true, fullname: true, email: true, role: true },
-            },
-          },
-        },
-        doctor: {
-          include: {
-            user: {
-              select: { id: true, fullname: true, email: true },
-            },
-          },
-        },
-      },
+      select: appointmentSelect,
       orderBy: { appointmentDate: 'desc' },
     });
   }
@@ -113,19 +95,18 @@ export class AppointmentsService {
   async findOne(id: number, userId: number, role: Role) {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
-      include: {
+      select: {
+        ...appointmentSelect,
         pet: {
-          include: {
-            owner: {
-              select: { id: true, fullname: true, email: true, role: true },
-            },
+          select: {
+            ...appointmentSelect.pet.select,
+            userId: true, // butuh untuk cek ownership
           },
         },
         doctor: {
-          include: {
-            user: {
-              select: { id: true, fullname: true, email: true },
-            },
+          select: {
+            ...appointmentSelect.doctor.select,
+            userId: true, // butuh untuk cek ownership
           },
         },
       },
