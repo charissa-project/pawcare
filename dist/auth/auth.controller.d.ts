@@ -27,4 +27,8 @@ export declare class AuthController {
             };
         };
     }>;
+    logout(): {
+        success: boolean;
+        message: string;
+    };
 }

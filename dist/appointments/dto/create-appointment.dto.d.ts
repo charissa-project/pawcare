@@ -4,4 +4,5 @@ export declare class CreateAppointmentDto {
     appointmentDate: string;
     type: string;
     consultationFee?: number;
+    notes?: string;
 }

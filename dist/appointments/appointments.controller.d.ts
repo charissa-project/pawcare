@@ -5,7 +5,7 @@ import { Role } from '@prisma/client';
 export declare class AppointmentsController {
     private readonly appointmentsService;
     constructor(appointmentsService: AppointmentsService);
-    create(userId: number, dto: CreateAppointmentDto, file: Express.Multer.File): Promise<{
+    create(userId: number, dto: CreateAppointmentDto): Promise<{
         doctor: {
             user: {
                 fullname: string;
@@ -293,11 +293,14 @@ export declare class AppointmentsController {
         consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
-    uploadPhoto(id: number, userId: number, file: Express.Multer.File): Promise<{
-        success: boolean;
-        message: string;
-        data: {
-            photoUrl: string | null;
-        };
+    update(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
+        id: number;
+        photoUrl: string | null;
+        type: string;
+        doctorId: number;
+        petId: number;
+        appointmentDate: Date;
+        consultationFee: number | null;
+        status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
 }

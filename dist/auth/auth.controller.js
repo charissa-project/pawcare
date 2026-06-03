@@ -18,6 +18,8 @@ const auth_service_1 = require("./auth.service");
 const register_dto_1 = require("./dto/register.dto");
 const login_dto_1 = require("./dto/login.dto");
 const swagger_1 = require("@nestjs/swagger");
+const common_2 = require("@nestjs/common");
+const jwt_guard_1 = require("./guards/jwt.guard");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -28,6 +30,9 @@ let AuthController = class AuthController {
     }
     login(dto) {
         return this.authService.login(dto);
+    }
+    logout() {
+        return { success: true, message: 'Logout berhasil' };
     }
 };
 exports.AuthController = AuthController;
@@ -45,6 +50,13 @@ __decorate([
     __metadata("design:paramtypes", [login_dto_1.LoginDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('logout'),
+    (0, common_2.UseGuards)(jwt_guard_1.JwtGuard),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logout", null);
 exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('auth'),

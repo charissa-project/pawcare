@@ -22,17 +22,14 @@ const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const client_1 = require("@prisma/client");
-const common_2 = require("@nestjs/common");
-const platform_express_1 = require("@nestjs/platform-express");
-const upload_config_1 = require("../common/upload.config");
 const swagger_1 = require("@nestjs/swagger");
 let AppointmentsController = class AppointmentsController {
     appointmentsService;
     constructor(appointmentsService) {
         this.appointmentsService = appointmentsService;
     }
-    create(userId, dto, file) {
-        return this.appointmentsService.create(userId, dto, file);
+    create(userId, dto) {
+        return this.appointmentsService.create(userId, dto);
     }
     findAll() {
         return this.appointmentsService.findAll();
@@ -52,19 +49,17 @@ let AppointmentsController = class AppointmentsController {
     cancel(id, userId) {
         return this.appointmentsService.cancel(id, userId);
     }
-    uploadPhoto(id, userId, file) {
-        return this.appointmentsService.updatePhoto(id, userId, file);
+    update(id, userId, role, dto) {
+        return this.appointmentsService.update(id, userId, role, dto);
     }
 };
 exports.AppointmentsController = AppointmentsController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_2.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_appointment_dto_1.CreateAppointmentDto, Object]),
+    __metadata("design:paramtypes", [Number, create_appointment_dto_1.CreateAppointmentDto]),
     __metadata("design:returntype", void 0)
 ], AppointmentsController.prototype, "create", null);
 __decorate([
@@ -121,15 +116,15 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppointmentsController.prototype, "cancel", null);
 __decorate([
-    (0, common_1.Patch)(':id/photo'),
-    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
+    (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, get_user_decorator_1.GetUser)('id')),
-    __param(2, (0, common_2.UploadedFile)()),
+    __param(2, (0, get_user_decorator_1.GetUser)('role')),
+    __param(3, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:paramtypes", [Number, Number, String, update_appointment_dto_1.UpdateAppointmentDto]),
     __metadata("design:returntype", void 0)
-], AppointmentsController.prototype, "uploadPhoto", null);
+], AppointmentsController.prototype, "update", null);
 exports.AppointmentsController = AppointmentsController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),

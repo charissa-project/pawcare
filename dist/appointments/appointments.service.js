@@ -13,13 +13,12 @@ exports.AppointmentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const client_1 = require("@prisma/client");
-const common_2 = require("@nestjs/common");
 let AppointmentsService = class AppointmentsService {
     prisma;
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(userId, dto, file) {
+    async create(userId, dto) {
         const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
         if (!pet)
             throw new common_1.NotFoundException('Hewan tidak ditemukan');
@@ -28,7 +27,6 @@ let AppointmentsService = class AppointmentsService {
         const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
         if (!doctor)
             throw new common_1.NotFoundException('Dokter tidak ditemukan');
-        const photoUrl = file ? file.path : null;
         return this.prisma.appointment.create({
             data: {
                 petId: dto.petId,
@@ -36,7 +34,6 @@ let AppointmentsService = class AppointmentsService {
                 appointmentDate: new Date(dto.appointmentDate),
                 type: dto.type,
                 consultationFee: dto.consultationFee,
-                photoUrl,
             },
             include: {
                 pet: true,
@@ -129,27 +126,16 @@ let AppointmentsService = class AppointmentsService {
             data: { status: 'CANCELLED' },
         });
     }
-    async updatePhoto(id, userId, file) {
-        if (!file)
-            throw new common_2.BadRequestException('File tidak ditemukan');
-        const appointment = await this.prisma.appointment.findFirst({
-            where: {
-                id,
-                pet: { userId },
+    async update(id, userId, role, dto) {
+        await this.findOne(id, userId, role);
+        return this.prisma.appointment.update({
+            where: { id },
+            data: {
+                ...dto,
+                status: dto.status ? dto.status : undefined,
+                appointmentDate: dto.appointmentDate ? new Date(dto.appointmentDate) : undefined,
             },
         });
-        if (!appointment)
-            throw new common_1.NotFoundException('Appointment tidak ditemukan');
-        const photoUrl = file.path;
-        const updated = await this.prisma.appointment.update({
-            where: { id },
-            data: { photoUrl },
-        });
-        return {
-            success: true,
-            message: 'Foto gejala berhasil diupload',
-            data: { photoUrl: updated.photoUrl },
-        };
     }
 };
 exports.AppointmentsService = AppointmentsService;

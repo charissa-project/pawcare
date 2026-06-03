@@ -19,6 +19,7 @@ class CreateAppointmentDto {
     appointmentDate;
     type;
     consultationFee;
+    notes;
 }
 exports.CreateAppointmentDto = CreateAppointmentDto;
 __decorate([
@@ -51,4 +52,10 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateAppointmentDto.prototype, "consultationFee", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateAppointmentDto.prototype, "notes", void 0);
 //# sourceMappingURL=create-appointment.dto.js.map

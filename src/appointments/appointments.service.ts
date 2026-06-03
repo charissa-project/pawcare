@@ -10,15 +10,13 @@ import { BadRequestException } from '@nestjs/common';
 export class AppointmentsService {
   constructor(private prisma: PrismaService) {}
 
-async create(userId: number, dto: CreateAppointmentDto, file?: Express.Multer.File) {
+async create(userId: number, dto: CreateAppointmentDto) {
   const pet = await this.prisma.pet.findUnique({ where: { id: dto.petId } });
   if (!pet) throw new NotFoundException('Hewan tidak ditemukan');
   if (pet.userId !== userId) throw new ForbiddenException('Akses ditolak');
 
   const doctor = await this.prisma.doctor.findUnique({ where: { id: dto.doctorId } });
   if (!doctor) throw new NotFoundException('Dokter tidak ditemukan');
-
-  const photoUrl = file ? file.path : null;
 
   return this.prisma.appointment.create({
     data: {
@@ -27,7 +25,6 @@ async create(userId: number, dto: CreateAppointmentDto, file?: Express.Multer.Fi
       appointmentDate: new Date(dto.appointmentDate),
       type: dto.type as any,
       consultationFee: dto.consultationFee,
-      photoUrl,
     },
     include: {
       pet: true,
@@ -136,30 +133,17 @@ async findAll() {
     });
   }
 
-  async updatePhoto(id: number, userId: number, file: Express.Multer.File) {
-  if (!file) throw new BadRequestException('File tidak ditemukan');
+  async update(id: number, userId: number, role: Role, dto: UpdateAppointmentDto) {
+  await this.findOne(id, userId, role);
 
-  const appointment = await this.prisma.appointment.findFirst({
-    where: {
-      id,
-      pet: { userId },
+  return this.prisma.appointment.update({
+    where: { id },
+    data: {
+      ...dto,
+      status: dto.status ? (dto.status as any) : undefined,
+      appointmentDate: dto.appointmentDate ? new Date(dto.appointmentDate) : undefined,
     },
   });
-
-  if (!appointment) throw new NotFoundException('Appointment tidak ditemukan');
-
-  const photoUrl = file.path;
-
-  const updated = await this.prisma.appointment.update({
-    where: { id },
-    data: { photoUrl },
-  });
-
-  return {
-    success: true,
-    message: 'Foto gejala berhasil diupload',
-    data: { photoUrl: updated.photoUrl },
-  };
 }
 
 }

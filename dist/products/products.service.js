@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const common_2 = require("@nestjs/common");
 let ProductsService = class ProductsService {
     prisma;
     constructor(prisma) {
@@ -39,30 +38,22 @@ let ProductsService = class ProductsService {
             throw new common_1.NotFoundException('Produk tidak ditemukan');
         return product;
     }
-    async update(id, dto) {
+    async update(id, dto, file) {
         await this.findOne(id);
-        return this.prisma.product.update({ where: { id }, data: dto });
+        const data = {
+            ...dto,
+        };
+        if (file) {
+            data.imageUrl = file.path;
+        }
+        return this.prisma.product.update({
+            where: { id },
+            data,
+        });
     }
     async remove(id) {
         await this.findOne(id);
         return this.prisma.product.delete({ where: { id } });
-    }
-    async updatePhoto(id, file) {
-        if (!file)
-            throw new common_2.BadRequestException('File tidak ditemukan');
-        const product = await this.prisma.product.findUnique({ where: { id } });
-        if (!product)
-            throw new common_1.NotFoundException('Produk tidak ditemukan');
-        const imageUrl = file?.path;
-        const updated = await this.prisma.product.update({
-            where: { id },
-            data: { imageUrl },
-        });
-        return {
-            success: true,
-            message: 'Foto produk berhasil diupload',
-            data: { imageUrl: updated.imageUrl },
-        };
     }
 };
 exports.ProductsService = ProductsService;

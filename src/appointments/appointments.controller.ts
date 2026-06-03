@@ -7,9 +7,6 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { Role } from '@prisma/client';
-import { UseInterceptors, UploadedFile } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { multerConfig } from '../common/upload.config';
 import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
 
 @ApiBearerAuth() // ← tambah ini
@@ -20,14 +17,12 @@ export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
   
   // user buat appointment
-  @Post()
-@UseInterceptors(FileInterceptor('photo', multerConfig))
+@Post()
 create(
   @GetUser('id') userId: number,
   @Body() dto: CreateAppointmentDto,
-  @UploadedFile() file: Express.Multer.File,
 ) {
-  return this.appointmentsService.create(userId, dto, file);
+  return this.appointmentsService.create(userId, dto);
 }
 
 // admin lihat semua appointment
@@ -81,16 +76,14 @@ findAll() {
     return this.appointmentsService.cancel(id, userId);
   }
 
-  // tambahkan endpoint ini di dalam class AppointmentsController yang sudah ada
-
-@Patch(':id/photo')
-@UseInterceptors(FileInterceptor('photo', multerConfig))
-uploadPhoto(
+@Patch(':id')
+update(
   @Param('id', ParseIntPipe) id: number,
   @GetUser('id') userId: number,
-  @UploadedFile() file: Express.Multer.File,
+  @GetUser('role') role: Role,
+  @Body() dto: UpdateAppointmentDto,
 ) {
-  return this.appointmentsService.updatePhoto(id, userId, file);
+  return this.appointmentsService.update(id, userId, role, dto);
 }
 
 }

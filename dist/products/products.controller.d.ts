@@ -35,7 +35,7 @@ export declare class ProductsController {
         category: import("@prisma/client").$Enums.ProductCategory;
         imageUrl: string | null;
     }>;
-    update(id: number, dto: UpdateProductDto): Promise<{
+    update(id: number, dto: UpdateProductDto, file?: Express.Multer.File): Promise<{
         id: number;
         createdAt: Date;
         name: string;
@@ -54,12 +54,5 @@ export declare class ProductsController {
         stock: number;
         category: import("@prisma/client").$Enums.ProductCategory;
         imageUrl: string | null;
-    }>;
-    uploadPhoto(id: number, file: Express.Multer.File): Promise<{
-        success: boolean;
-        message: string;
-        data: {
-            imageUrl: string | null;
-        };
     }>;
 }

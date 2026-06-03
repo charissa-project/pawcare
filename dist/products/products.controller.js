@@ -39,14 +39,11 @@ let ProductsController = class ProductsController {
     findOne(id) {
         return this.productsService.findOne(id);
     }
-    update(id, dto) {
-        return this.productsService.update(id, dto);
+    update(id, dto, file) {
+        return this.productsService.update(id, dto, file);
     }
     remove(id) {
         return this.productsService.remove(id);
-    }
-    uploadPhoto(id, file) {
-        return this.productsService.updatePhoto(id, file);
     }
 };
 exports.ProductsController = ProductsController;
@@ -55,6 +52,26 @@ __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
     (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                name: { type: 'string' },
+                price: { type: 'number' },
+                stock: { type: 'number' },
+                category: {
+                    type: 'string',
+                    enum: ['MAKANAN', 'SUPLEMEN', 'AKSESORIS'],
+                },
+                description: { type: 'string' },
+                image: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_2.UploadedFile)()),
     __metadata("design:type", Function),
@@ -79,10 +96,32 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                name: { type: 'string' },
+                price: { type: 'number' },
+                stock: { type: 'number' },
+                category: {
+                    type: 'string',
+                    enum: ['MAKANAN', 'SUPLEMEN', 'AKSESORIS'],
+                },
+                description: { type: 'string' },
+                image: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    }),
+    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_2.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_product_dto_1.UpdateProductDto]),
+    __metadata("design:paramtypes", [Number, update_product_dto_1.UpdateProductDto, Object]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "update", null);
 __decorate([
@@ -94,29 +133,6 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "remove", null);
-__decorate([
-    (0, common_1.Patch)(':id/photo'),
-    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
-    (0, common_1.ApiConsumes)('multipart/form-data'),
-    (0, common_1.ApiBody)({
-        schema: {
-            type: 'object',
-            properties: {
-                image: {
-                    type: 'string',
-                    format: 'binary',
-                },
-            },
-        },
-    }),
-    (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, common_2.UploadedFile)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "uploadPhoto", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('products'),
