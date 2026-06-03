@@ -65,7 +65,6 @@ model Appointment {
   type            String
   consultationFee Float?
   status          AppointmentStatus @default(PENDING)
-  photoUrl        String?
   notes           String?
   doctor          Doctor            @relation(fields: [doctorId], references: [id])
   pet             Pet               @relation(fields: [petId], references: [id])
