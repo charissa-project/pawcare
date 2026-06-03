@@ -1,6 +1,14 @@
 import {
-  Controller, Get, Post, Patch, Delete,
-  Body, Param, ParseIntPipe, UseGuards, Query,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -12,7 +20,11 @@ import { Role, ProductCategory } from '@prisma/client';
 import { UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../common/upload.config';
-import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 
 @ApiBearerAuth() // ← tambah ini
 
@@ -63,6 +75,20 @@ create(
 @Patch(':id/photo')
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(Role.ADMIN)
+
+@ApiConsumes('multipart/form-data')
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      image: {
+        type: 'string',
+        format: 'binary',
+      },
+    },
+  },
+})
+
 @UseInterceptors(FileInterceptor('image', multerConfig))
 uploadPhoto(
   @Param('id', ParseIntPipe) id: number,

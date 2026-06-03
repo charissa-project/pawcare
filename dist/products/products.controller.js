@@ -98,6 +98,18 @@ __decorate([
     (0, common_1.Patch)(':id/photo'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
+    (0, common_1.ApiConsumes)('multipart/form-data'),
+    (0, common_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                image: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    }),
     (0, common_2.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', upload_config_1.multerConfig)),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_2.UploadedFile)()),
