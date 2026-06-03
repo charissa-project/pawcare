@@ -33,10 +33,30 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   // admin buat produk
-  @Post()
+@Post()
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(Role.ADMIN)
 @UseInterceptors(FileInterceptor('image', multerConfig))
+@ApiConsumes('multipart/form-data')
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      price: { type: 'number' },
+      stock: { type: 'number' },
+      category: {
+        type: 'string',
+        enum: ['MAKANAN', 'SUPLEMEN', 'GROOMING', 'AKSESORIS'],
+      },
+      description: { type: 'string' },
+      image: {
+        type: 'string',
+        format: 'binary',
+      },
+    },
+  },
+})
 create(
   @Body() dto: CreateProductDto,
   @UploadedFile() file: Express.Multer.File,
