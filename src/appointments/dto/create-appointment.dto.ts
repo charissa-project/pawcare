@@ -23,7 +23,6 @@ export class CreateAppointmentDto {
   type: string;
 
   @ApiProperty({ required: false })
-@IsOptional()
 @IsString()
 notes?: string;
 }
