@@ -47,7 +47,7 @@ export class ProductsController {
       stock: { type: 'number' },
       category: {
         type: 'string',
-        enum: ['MAKANAN', 'SUPLEMEN', 'GROOMING', 'AKSESORIS'],
+        enum: ['MAKANAN', 'SUPLEMEN', 'AKSESORIS'],
       },
       description: { type: 'string' },
       image: {
