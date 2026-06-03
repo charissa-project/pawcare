@@ -14,8 +14,6 @@ export class PetsService {
   return this.prisma.pet.create({
     data: {
       ...dto,
-      lastVaccine: dto.lastVaccine ? new Date(dto.lastVaccine) : null,
-      nextVaccine: dto.nextVaccine ? new Date(dto.nextVaccine) : null,
       photoUrl,
       userId,
     },
@@ -60,8 +58,6 @@ export class PetsService {
       where: { id },
       data: {
         ...dto,
-        lastVaccine: dto.lastVaccine ? new Date(dto.lastVaccine) : undefined,
-        nextVaccine: dto.nextVaccine ? new Date(dto.nextVaccine) : undefined,
       },
     });
   }

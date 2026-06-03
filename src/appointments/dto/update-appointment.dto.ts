@@ -24,10 +24,4 @@ export class UpdateAppointmentDto {
   @IsString()
   @IsIn(['VIDEO_CALL', 'CHAT'])
   type?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @Transform(({ value }) => parseFloat(value))
-  @IsNumber()
-  consultationFee?: number;
 }

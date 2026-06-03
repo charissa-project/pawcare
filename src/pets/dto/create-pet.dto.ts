@@ -32,14 +32,4 @@ export class CreatePetDto {
   @ApiProperty()
   @IsString()
   healthStatus: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsDateString()
-  lastVaccine?: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsDateString()
-  nextVaccine?: string;
 }
