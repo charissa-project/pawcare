@@ -33,33 +33,30 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: number, dto: UpdateProductDto) {
-    await this.findOne(id);
-    return this.prisma.product.update({ where: { id }, data: dto });
+async update(
+  id: number,
+  dto: UpdateProductDto,
+  file?: Express.Multer.File,
+) {
+  await this.findOne(id);
+
+  const data: any = {
+    ...dto,
+  };
+
+  if (file) {
+    data.imageUrl = file.path;
   }
+
+  return this.prisma.product.update({
+    where: { id },
+    data,
+  });
+}
 
   async remove(id: number) {
     await this.findOne(id);
     return this.prisma.product.delete({ where: { id } });
   }
 
-  async updatePhoto(id: number, file: Express.Multer.File) {
-  if (!file) throw new BadRequestException('File tidak ditemukan');
-
-  const product = await this.prisma.product.findUnique({ where: { id } });
-  if (!product) throw new NotFoundException('Produk tidak ditemukan');
-
- const imageUrl = file?.path;
- 
-  const updated = await this.prisma.product.update({
-    where: { id },
-    data: { imageUrl },
-  });
-
-  return {
-    success: true,
-    message: 'Foto produk berhasil diupload',
-    data: { imageUrl: updated.imageUrl },
-  };
-}
 }

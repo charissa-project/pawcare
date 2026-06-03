@@ -55,24 +55,7 @@ create(
     return this.productsService.findOne(id);
   }
 
-  // admin update & hapus produk
   @Patch(':id')
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateProductDto) {
-    return this.productsService.update(id, dto);
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.productsService.remove(id);
-  }
-
-  // tambahkan endpoint ini di dalam class ProductsController yang sudah ada
-
-@Patch(':id/photo')
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(Role.ADMIN)
 
@@ -81,6 +64,14 @@ create(
   schema: {
     type: 'object',
     properties: {
+      name: { type: 'string' },
+      price: { type: 'number' },
+      stock: { type: 'number' },
+      category: {
+        type: 'string',
+        enum: ['MAKANAN', 'SUPLEMEN', 'GROOMING', 'AKSESORIS'],
+      },
+      description: { type: 'string' },
       image: {
         type: 'string',
         format: 'binary',
@@ -90,11 +81,20 @@ create(
 })
 
 @UseInterceptors(FileInterceptor('image', multerConfig))
-uploadPhoto(
+update(
   @Param('id', ParseIntPipe) id: number,
-  @UploadedFile() file: Express.Multer.File,
+  @Body() dto: UpdateProductDto,
+  @UploadedFile() file?: Express.Multer.File,
 ) {
-  return this.productsService.updatePhoto(id, file);
+  return this.productsService.update(id, dto, file);
 }
+
+  @Delete(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.remove(id);
+  }
+
 
 }
