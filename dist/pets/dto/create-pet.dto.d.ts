@@ -6,6 +6,4 @@ export declare class CreatePetDto {
     gender: string;
     weight: number;
     healthStatus: string;
-    lastVaccine?: string;
-    nextVaccine?: string;
 }

@@ -49,8 +49,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     }>;
     findAll(): Promise<({
         doctor: {
@@ -107,8 +107,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     })[]>;
     findMine(userId: number): Promise<({
         doctor: {
@@ -154,8 +154,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     })[]>;
     findByDoctor(userId: number): Promise<({
         doctor: {
@@ -212,8 +212,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     })[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
         doctor: {
@@ -270,8 +270,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     }>;
     updateStatus(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
         id: number;
@@ -280,8 +280,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     }>;
     cancel(id: number, userId: number): Promise<{
         id: number;
@@ -290,8 +290,8 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     }>;
     update(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
         id: number;
@@ -300,7 +300,7 @@ export declare class AppointmentsController {
         doctorId: number;
         petId: number;
         appointmentDate: Date;
-        consultationFee: number | null;
         status: import("@prisma/client").$Enums.AppointmentStatus;
+        consultationFee: number | null;
     }>;
 }

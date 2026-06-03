@@ -24,7 +24,6 @@ async create(userId: number, dto: CreateAppointmentDto) {
       doctorId: dto.doctorId,
       appointmentDate: new Date(dto.appointmentDate),
       type: dto.type as any,
-      consultationFee: dto.consultationFee,
     },
     include: {
       pet: true,

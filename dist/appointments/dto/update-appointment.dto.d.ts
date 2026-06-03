@@ -3,5 +3,4 @@ export declare class UpdateAppointmentDto {
     appointmentDate?: string;
     notes?: string;
     type?: string;
-    consultationFee?: number;
 }

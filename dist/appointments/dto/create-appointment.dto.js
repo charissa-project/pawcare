@@ -18,7 +18,6 @@ class CreateAppointmentDto {
     doctorId;
     appointmentDate;
     type;
-    consultationFee;
     notes;
 }
 exports.CreateAppointmentDto = CreateAppointmentDto;
@@ -45,13 +44,6 @@ __decorate([
     (0, class_validator_1.IsIn)(['VIDEO_CALL', 'CHAT']),
     __metadata("design:type", String)
 ], CreateAppointmentDto.prototype, "type", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateAppointmentDto.prototype, "consultationFee", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),

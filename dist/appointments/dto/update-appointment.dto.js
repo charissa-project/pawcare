@@ -11,14 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateAppointmentDto = void 0;
 const class_validator_1 = require("class-validator");
-const class_transformer_1 = require("class-transformer");
 const swagger_1 = require("@nestjs/swagger");
 class UpdateAppointmentDto {
     status;
     appointmentDate;
     notes;
     type;
-    consultationFee;
 }
 exports.UpdateAppointmentDto = UpdateAppointmentDto;
 __decorate([
@@ -47,11 +45,4 @@ __decorate([
     (0, class_validator_1.IsIn)(['VIDEO_CALL', 'CHAT']),
     __metadata("design:type", String)
 ], UpdateAppointmentDto.prototype, "type", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_transformer_1.Transform)(({ value }) => parseFloat(value)),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], UpdateAppointmentDto.prototype, "consultationFee", void 0);
 //# sourceMappingURL=update-appointment.dto.js.map
