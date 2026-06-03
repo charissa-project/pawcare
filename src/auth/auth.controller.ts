@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth } from '@nestjs/swagger'; // ← tambah import
+import { UseGuards } from '@nestjs/common';
+import { JwtGuard } from './guards/jwt.guard';
 
 @ApiBearerAuth() // ← tambah ini
 
