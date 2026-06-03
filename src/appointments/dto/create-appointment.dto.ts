@@ -27,4 +27,9 @@ export class CreateAppointmentDto {
   @Type(() => Number) // 👈 add this too
   @IsNumber()
   consultationFee?: number;
+
+  @ApiProperty({ required: false })
+@IsOptional()
+@IsString()
+notes?: string;
 }

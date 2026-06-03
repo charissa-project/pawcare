@@ -99,7 +99,8 @@ model Appointment {
   appointmentDate DateTime
   type            String
   consultationFee Float?
-  photoUrl        String? // <-- tambah ini (foto gejala)
+  photoUrl        String?
+  notes           String?           // ← tambah ini
   status          AppointmentStatus @default(PENDING)
 
   pet    Pet    @relation(fields: [petId], references: [id])
