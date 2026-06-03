@@ -33,4 +33,10 @@ export class AuthController {
    return this.authService.login(dto)
  }
 
+ @Post('logout')
+@UseGuards(JwtGuard)
+logout() {
+  return { success: true, message: 'Logout berhasil' };
+}
+
 }
