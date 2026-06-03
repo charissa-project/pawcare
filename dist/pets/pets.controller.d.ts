@@ -4,11 +4,182 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 export declare class PetsController {
     private readonly petsService;
     constructor(petsService: PetsService);
-    create(userId: number, dto: CreatePetDto, file: Express.Multer.File): any;
-    findAll(userId: number): any;
-    findAllAdmin(): any;
-    findOne(id: number, userId: number): any;
-    update(id: number, userId: number, dto: UpdatePetDto): any;
-    remove(id: number, userId: number): any;
-    uploadPhoto(id: number, userId: number, file: Express.Multer.File): any;
+    create(userId: number, dto: CreatePetDto, file: Express.Multer.File): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        photoUrl: string | null;
+        name: string;
+        userId: number;
+        species: string;
+        breed: string;
+        age: number;
+        gender: string;
+        weight: number;
+        healthStatus: string;
+        lastVaccine: Date | null;
+        nextVaccine: Date | null;
+    }>;
+    findAll(userId: number): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        photoUrl: string | null;
+        name: string;
+        userId: number;
+        species: string;
+        breed: string;
+        age: number;
+        gender: string;
+        weight: number;
+        healthStatus: string;
+        lastVaccine: Date | null;
+        nextVaccine: Date | null;
+    }[]>;
+    findAllAdmin(): Promise<({
+        owner: {
+            fullname: string;
+            email: string;
+            password: string;
+            role: import("@prisma/client").$Enums.Role;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            photoUrl: string | null;
+        };
+    } & {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        photoUrl: string | null;
+        name: string;
+        userId: number;
+        species: string;
+        breed: string;
+        age: number;
+        gender: string;
+        weight: number;
+        healthStatus: string;
+        lastVaccine: Date | null;
+        nextVaccine: Date | null;
+    })[]>;
+    findOne(id: number, userId: number): Promise<{
+        medicalRecords: ({
+            doctor: {
+                user: {
+                    fullname: string;
+                    email: string;
+                    password: string;
+                    role: import("@prisma/client").$Enums.Role;
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    photoUrl: string | null;
+                };
+            } & {
+                schedule: string;
+                id: number;
+                userId: number;
+                specialization: string;
+                experience: number;
+                rating: number | null;
+                isAvailable: boolean;
+            };
+        } & {
+            id: number;
+            createdAt: Date;
+            doctorId: number;
+            petId: number;
+            diagnosis: string;
+            treatment: string;
+            notes: string | null;
+        })[];
+    } & {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        photoUrl: string | null;
+        name: string;
+        userId: number;
+        species: string;
+        breed: string;
+        age: number;
+        gender: string;
+        weight: number;
+        healthStatus: string;
+        lastVaccine: Date | null;
+        nextVaccine: Date | null;
+    }>;
+    update(id: number, userId: number, dto: UpdatePetDto): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        photoUrl: string | null;
+        name: string;
+        userId: number;
+        species: string;
+        breed: string;
+        age: number;
+        gender: string;
+        weight: number;
+        healthStatus: string;
+        lastVaccine: Date | null;
+        nextVaccine: Date | null;
+    }>;
+    remove(id: number, userId: number): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            medicalRecords: ({
+                doctor: {
+                    user: {
+                        fullname: string;
+                        email: string;
+                        password: string;
+                        role: import("@prisma/client").$Enums.Role;
+                        id: number;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        photoUrl: string | null;
+                    };
+                } & {
+                    schedule: string;
+                    id: number;
+                    userId: number;
+                    specialization: string;
+                    experience: number;
+                    rating: number | null;
+                    isAvailable: boolean;
+                };
+            } & {
+                id: number;
+                createdAt: Date;
+                doctorId: number;
+                petId: number;
+                diagnosis: string;
+                treatment: string;
+                notes: string | null;
+            })[];
+        } & {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            photoUrl: string | null;
+            name: string;
+            userId: number;
+            species: string;
+            breed: string;
+            age: number;
+            gender: string;
+            weight: number;
+            healthStatus: string;
+            lastVaccine: Date | null;
+            nextVaccine: Date | null;
+        };
+    }>;
+    uploadPhoto(id: number, userId: number, file: Express.Multer.File): Promise<{
+        data: {
+            photoUrl: string | null;
+        };
+    }>;
 }

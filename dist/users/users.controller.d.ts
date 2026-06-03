@@ -22,8 +22,8 @@ export declare class UsersController {
             email: string;
             role: import("@prisma/client").$Enums.Role;
             id: number;
-            photoUrl: string | null;
             createdAt: Date;
+            photoUrl: string | null;
         };
     }>;
     uploadPhoto(userId: number, file: Express.Multer.File): Promise<{

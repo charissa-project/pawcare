@@ -8,140 +8,94 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PetsController = void 0;
+exports.PetsService = void 0;
 const common_1 = require("@nestjs/common");
-const platform_express_1 = require("@nestjs/platform-express");
-const pets_service_1 = require("./pets.service");
-const create_pet_dto_1 = require("./dto/create-pet.dto");
-const update_pet_dto_1 = require("./dto/update-pet.dto");
-const jwt_guard_1 = require("../auth/guards/jwt.guard");
-const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
-const upload_config_1 = require("../common/upload.config");
-const swagger_1 = require("@nestjs/swagger");
-const roles_guard_1 = require("../auth/guards/roles.guard");
-const roles_decorator_1 = require("../auth/decorators/roles.decorator");
-let PetsController = class PetsController {
-    petsService;
-    constructor(petsService) {
-        this.petsService = petsService;
+const prisma_service_1 = require("../prisma/prisma.service");
+const common_2 = require("@nestjs/common");
+let PetsService = class PetsService {
+    prisma;
+    constructor(prisma) {
+        this.prisma = prisma;
     }
-    create(userId, dto, file) {
-        return this.petsService.create(userId, dto, file);
+    async create(userId, dto, file) {
+        const photoUrl = file ? file.path : null;
+        return this.prisma.pet.create({
+            data: {
+                ...dto,
+                photoUrl,
+                userId,
+            },
+        });
     }
-    findAll(userId) {
-        return this.petsService.findAllByUser(userId);
+    async findAllByUser(userId) {
+        return this.prisma.pet.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+        });
     }
-    findAllAdmin() {
-        return this.petsService.findAll();
+    async findAll() {
+        return this.prisma.pet.findMany({
+            include: { owner: true },
+            orderBy: { createdAt: 'desc' },
+        });
     }
-    findOne(id, userId) {
-        return this.petsService.findOne(id, userId);
+    async findOne(id, userId) {
+        const pet = await this.prisma.pet.findUnique({
+            where: { id },
+            include: {
+                medicalRecords: {
+                    include: { doctor: { include: { user: true } } },
+                    orderBy: { createdAt: 'desc' },
+                },
+            },
+        });
+        if (!pet)
+            throw new common_1.NotFoundException('Hewan tidak ditemukan');
+        if (pet.userId !== userId)
+            throw new common_1.ForbiddenException('Akses ditolak');
+        return pet;
     }
-    update(id, userId, dto) {
-        return this.petsService.update(id, userId, dto);
+    async update(id, userId, dto) {
+        await this.findOne(id, userId);
+        return this.prisma.pet.update({
+            where: { id },
+            data: {
+                ...dto,
+            },
+        });
     }
-    remove(id, userId) {
-        return this.petsService.remove(id, userId);
+    async remove(id, userId) {
+        const pet = await this.findOne(id, userId);
+        await this.prisma.pet.delete({
+            where: { id },
+        });
+        return {
+            success: true,
+            message: 'Data pet berhasil dihapus',
+            data: pet,
+        };
     }
-    uploadPhoto(id, userId, file) {
-        return this.petsService.updatePhoto(id, userId, file);
+    async updatePhoto(id, userId, file) {
+        if (!file) {
+            throw new common_2.BadRequestException('File tidak ditemukan');
+        }
+        await this.findOne(id, userId);
+        const photoUrl = file.path;
+        const updated = await this.prisma.pet.update({
+            where: { id },
+            data: { photoUrl },
+        });
+        return {
+            data: {
+                photoUrl: updated.photoUrl,
+            },
+        };
     }
 };
-exports.PetsController = PetsController;
-__decorate([
-    (0, common_1.Post)(),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
-    (0, swagger_1.ApiConsumes)('multipart/form-data'),
-    (0, swagger_1.ApiBody)({
-        schema: {
-            type: 'object',
-            properties: {
-                name: { type: 'string' },
-                species: { type: 'string' },
-                breed: { type: 'string' },
-                age: { type: 'number' },
-                gender: { type: 'string' },
-                weight: { type: 'number' },
-                healthStatus: { type: 'string' },
-                photo: { type: 'string', format: 'binary' },
-            },
-        },
-    }),
-    __param(0, (0, get_user_decorator_1.GetUser)('id')),
-    __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFile)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_pet_dto_1.CreatePetDto, Object]),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "create", null);
-__decorate([
-    (0, common_1.Get)(),
-    __param(0, (0, get_user_decorator_1.GetUser)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)('all'),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('ADMIN', 'DOCTOR'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "findAllAdmin", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, get_user_decorator_1.GetUser)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, get_user_decorator_1.GetUser)('id')),
-    __param(2, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, update_pet_dto_1.UpdatePetDto]),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "update", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, get_user_decorator_1.GetUser)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "remove", null);
-__decorate([
-    (0, common_1.Patch)(':id/photo'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
-    (0, swagger_1.ApiConsumes)('multipart/form-data'),
-    (0, swagger_1.ApiBody)({
-        schema: {
-            type: 'object',
-            properties: {
-                photo: { type: 'string', format: 'binary' },
-            },
-        },
-    }),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, get_user_decorator_1.GetUser)('id')),
-    __param(2, (0, common_1.UploadedFile)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Object]),
-    __metadata("design:returntype", void 0)
-], PetsController.prototype, "uploadPhoto", null);
-exports.PetsController = PetsController = __decorate([
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
-    (0, common_1.Controller)('pets'),
-    __metadata("design:paramtypes", [typeof (_a = typeof pets_service_1.PetsService !== "undefined" && pets_service_1.PetsService) === "function" ? _a : Object])
-], PetsController);
+exports.PetsService = PetsService;
+exports.PetsService = PetsService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], PetsService);
 //# sourceMappingURL=pets.service.js.map

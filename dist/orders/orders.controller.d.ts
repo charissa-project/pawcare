@@ -31,8 +31,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     }>;
     findMine(userId: number): Promise<({
         orderItems: ({
@@ -59,8 +59,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     })[]>;
     findAll(): Promise<({
         user: {
@@ -92,8 +92,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     })[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
         user: {
@@ -125,8 +125,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     }>;
     updateStatus(id: number, body: UpdateOrderStatusDto): Promise<{
         orderItems: ({
@@ -153,8 +153,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     }>;
     cancel(id: number, userId: number): Promise<{
         id: number;
@@ -162,8 +162,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     }>;
     updatePaymentStatus(id: number, body: UpdatePaymentStatusDto): Promise<{
         id: number;
@@ -171,8 +171,8 @@ export declare class OrdersController {
         userId: number;
         status: import("@prisma/client").$Enums.OrderStatus;
         totalPrice: number;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         paymentProof: string | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
     }>;
     uploadProof(id: number, userId: number, file: Express.Multer.File): Promise<{
         success: boolean;
@@ -209,8 +209,8 @@ export declare class OrdersController {
             userId: number;
             status: import("@prisma/client").$Enums.OrderStatus;
             totalPrice: number;
-            paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
             paymentProof: string | null;
+            paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         };
     }>;
 }

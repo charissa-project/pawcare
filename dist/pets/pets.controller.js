@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PetsController = void 0;
 const common_1 = require("@nestjs/common");
@@ -56,6 +55,22 @@ exports.PetsController = PetsController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                name: { type: 'string' },
+                species: { type: 'string' },
+                breed: { type: 'string' },
+                age: { type: 'number' },
+                gender: { type: 'string' },
+                weight: { type: 'number' },
+                healthStatus: { type: 'string' },
+                photo: { type: 'string', format: 'binary' },
+            },
+        },
+    }),
     __param(0, (0, get_user_decorator_1.GetUser)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.UploadedFile)()),
@@ -106,6 +121,15 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id/photo'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('photo', upload_config_1.multerConfig)),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                photo: { type: 'string', format: 'binary' },
+            },
+        },
+    }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, get_user_decorator_1.GetUser)('id')),
     __param(2, (0, common_1.UploadedFile)()),
@@ -117,6 +141,6 @@ exports.PetsController = PetsController = __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Controller)('pets'),
-    __metadata("design:paramtypes", [typeof (_a = typeof pets_service_1.PetsService !== "undefined" && pets_service_1.PetsService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [pets_service_1.PetsService])
 ], PetsController);
 //# sourceMappingURL=pets.controller.js.map

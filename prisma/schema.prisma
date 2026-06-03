@@ -6,6 +6,164 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        Int       @id @default(autoincrement())
+  fullname  String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  photoUrl  String?
+  cart      Cart?
+  comments  Comment[]
+  doctor    Doctor?
+  orders    Order[]
+  pets      Pet[]
+  posts     Post[]
+}
+
+model Doctor {
+  id             Int             @id @default(autoincrement())
+  userId         Int             @unique
+  specialization String
+  experience     Int
+  schedule       String
+  rating         Float?
+  isAvailable    Boolean         @default(true)
+  appointments   Appointment[]
+  user           User            @relation(fields: [userId], references: [id])
+  medicalRecords MedicalRecord[]
+  schedules      Schedule[]
+}
+
+model Pet {
+  id             Int             @id @default(autoincrement())
+  userId         Int
+  name           String
+  species        String
+  breed          String
+  age            Int
+  gender         String
+  weight         Float
+  healthStatus   String
+  lastVaccine    DateTime?
+  nextVaccine    DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  photoUrl       String?
+  appointments   Appointment[]
+  medicalRecords MedicalRecord[]
+  owner          User            @relation(fields: [userId], references: [id])
+}
+
+model Appointment {
+  id              Int               @id @default(autoincrement())
+  petId           Int
+  doctorId        Int
+  appointmentDate DateTime
+  type            String
+  consultationFee Float?
+  status          AppointmentStatus @default(PENDING)
+  photoUrl        String?
+  notes           String?
+  doctor          Doctor            @relation(fields: [doctorId], references: [id])
+  pet             Pet               @relation(fields: [petId], references: [id])
+}
+
+model MedicalRecord {
+  id        Int      @id @default(autoincrement())
+  petId     Int
+  doctorId  Int
+  diagnosis String
+  treatment String
+  notes     String?
+  createdAt DateTime @default(now())
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  pet       Pet      @relation(fields: [petId], references: [id])
+}
+
+model Product {
+  id          Int             @id @default(autoincrement())
+  name        String
+  price       Float
+  category    ProductCategory
+  description String?
+  createdAt   DateTime        @default(now())
+  imageUrl    String?
+  stock       Int             @default(0)
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  totalPrice    Float
+  createdAt     DateTime      @default(now())
+  paymentProof  String?
+  paymentStatus PaymentStatus @default(PENDING)
+  status        OrderStatus   @default(PENDING)
+  user          User          @relation(fields: [userId], references: [id])
+  orderItems    OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  content   String
+  likes     Int       @default(0)
+  createdAt DateTime  @default(now())
+  imageUrl  String?
+  comments  Comment[]
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  userId    Int
+  content   String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Schedule {
+  id        Int    @id @default(autoincrement())
+  doctorId  Int
+  day       String
+  startTime String
+  endTime   String
+  doctor    Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model Cart {
+  id     Int        @id @default(autoincrement())
+  userId Int        @unique
+  user   User       @relation(fields: [userId], references: [id])
+  items  CartItem[]
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
 enum Role {
   ADMIN
   DOCTOR
@@ -36,178 +194,4 @@ enum ProductCategory {
   MAKANAN
   SUPLEMEN
   AKSESORIS
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  fullname  String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  photoUrl  String? // <-- tambah ini
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  doctor   Doctor?
-  pets     Pet[]
-  orders   Order[]
-  posts    Post[]
-  comments Comment[]
-  cart     Cart?
-}
-
-model Doctor {
-  id             Int     @id @default(autoincrement())
-  userId         Int     @unique
-  specialization String
-  experience     Int
-  schedule       String
-  rating         Float?
-  isAvailable    Boolean @default(true)
-
-  user           User            @relation(fields: [userId], references: [id])
-  appointments   Appointment[]
-  medicalRecords MedicalRecord[]
-  schedules      Schedule[]
-}
-
-model Pet {
-  id           Int       @id @default(autoincrement())
-  userId       Int
-  name         String
-  species      String
-  breed        String
-  age          Int
-  gender       String
-  weight       Float
-  healthStatus String
-  photoUrl     String? // <-- tambah ini
-  lastVaccine  DateTime?
-  nextVaccine  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  owner          User            @relation(fields: [userId], references: [id])
-  appointments   Appointment[]
-  medicalRecords MedicalRecord[]
-}
-
-model Appointment {
-  id              Int               @id @default(autoincrement())
-  petId           Int
-  doctorId        Int
-  appointmentDate DateTime
-  type            String
-  consultationFee Float?
-  photoUrl        String?
-  notes           String?           // ← tambah ini
-  status          AppointmentStatus @default(PENDING)
-
-  pet    Pet    @relation(fields: [petId], references: [id])
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-}
-
-model MedicalRecord {
-  id        Int      @id @default(autoincrement())
-  petId     Int
-  doctorId  Int
-  diagnosis String
-  treatment String
-  notes     String?
-  createdAt DateTime @default(now())
-
-  pet    Pet    @relation(fields: [petId], references: [id])
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-}
-
-model Product {
-  id          Int             @id @default(autoincrement())
-  name        String
-  price       Float
-  stock       Int             @default(0) // ← tambah ini
-  category    ProductCategory
-  description String?
-  imageUrl    String?
-  createdAt   DateTime        @default(now())
-
-  orderItems OrderItem[]
-  cartItems  CartItem[]
-}
-
-model Order {
-  id         Int   @id @default(autoincrement())
-  userId     Int
-  totalPrice Float
-
-  paymentStatus PaymentStatus @default(PENDING)
-  status        OrderStatus   @default(PENDING)
-
-  paymentProof String?
-
-  createdAt DateTime @default(now())
-
-  user       User        @relation(fields: [userId], references: [id])
-  orderItems OrderItem[]
-}
-
-model OrderItem {
-  id        Int   @id @default(autoincrement())
-  orderId   Int
-  productId Int
-  quantity  Int
-  price     Float
-
-  order   Order   @relation(fields: [orderId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  content   String   @db.Text
-  imageUrl  String? // <-- tambah ini
-  likes     Int      @default(0)
-  createdAt DateTime @default(now())
-
-  user     User      @relation(fields: [userId], references: [id])
-  comments Comment[]
-}
-
-model Comment {
-  id        Int      @id @default(autoincrement())
-  postId    Int
-  userId    Int
-  content   String
-  createdAt DateTime @default(now())
-
-  post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id])
-}
-
-model Schedule {
-  id        Int    @id @default(autoincrement())
-  doctorId  Int
-  day       String
-  startTime String
-  endTime   String
-
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-}
-
-model Cart {
-  id     Int @id @default(autoincrement())
-  userId Int @unique
-
-  user  User       @relation(fields: [userId], references: [id])
-  items CartItem[]
-}
-
-model CartItem {
-  id        Int @id @default(autoincrement())
-  cartId    Int
-  productId Int
-  quantity  Int
-
-  cart    Cart    @relation(fields: [cartId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
 }

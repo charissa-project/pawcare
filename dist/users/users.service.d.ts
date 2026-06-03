@@ -22,8 +22,8 @@ export declare class UsersService {
             email: string;
             role: import("@prisma/client").$Enums.Role;
             id: number;
-            photoUrl: string | null;
             createdAt: Date;
+            photoUrl: string | null;
         };
     }>;
     create(dto: CreateUserDto): Promise<{

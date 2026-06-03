@@ -6,14 +6,42 @@ export declare class AppointmentsController {
     private readonly appointmentsService;
     constructor(appointmentsService: AppointmentsService);
     create(userId: number, dto: CreateAppointmentDto): Promise<{
+        doctor: {
+            user: {
+                fullname: string;
+                email: string;
+                id: number;
+            };
+            schedule: string;
+            id: number;
+            specialization: string;
+            experience: number;
+            isAvailable: boolean;
+        };
+        pet: {
+            id: number;
+            photoUrl: string | null;
+            name: string;
+            species: string;
+            breed: string;
+            age: number;
+            gender: string;
+            weight: number;
+            healthStatus: string;
+            owner: {
+                fullname: string;
+                email: string;
+                role: import("@prisma/client").$Enums.Role;
+                id: number;
+            };
+        };
         id: number;
-        photoUrl: string | null;
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
         status: import("@prisma/client").$Enums.AppointmentStatus;
-        consultationFee: number | null;
     }>;
     findAll(): Promise<{
         doctor: {
@@ -49,8 +77,8 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
-        notes: never;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }[]>;
     findMine(userId: number): Promise<{
@@ -87,8 +115,8 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
-        notes: never;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }[]>;
     findByDoctor(userId: number): Promise<{
@@ -125,8 +153,8 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
-        notes: never;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }[]>;
     findOne(id: number, userId: number, role: Role): Promise<{
@@ -165,8 +193,8 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
-        notes: never;
         status: import("@prisma/client").$Enums.AppointmentStatus;
     }>;
     updateStatus(id: number, userId: number, role: Role, dto: UpdateAppointmentDto): Promise<{
@@ -175,6 +203,7 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
         status: import("@prisma/client").$Enums.AppointmentStatus;
         consultationFee: number | null;
@@ -185,6 +214,7 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
         status: import("@prisma/client").$Enums.AppointmentStatus;
         consultationFee: number | null;
@@ -195,6 +225,7 @@ export declare class AppointmentsController {
         type: string;
         doctorId: number;
         petId: number;
+        notes: string | null;
         appointmentDate: Date;
         status: import("@prisma/client").$Enums.AppointmentStatus;
         consultationFee: number | null;
